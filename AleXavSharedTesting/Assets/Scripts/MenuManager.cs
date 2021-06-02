@@ -10,8 +10,20 @@ public class MenuManager : MonoBehaviour
     public GameObject SettingsMenu;
     public GameObject FirstStartMainMenu;
     public SaveManager SaveManager;
+    public UnityEngine.UI.Slider musicSlider;
+    public UnityEngine.UI.Slider sfxSlider;
     public bool DebugStart = false;
-    
+
+    public static MenuManager mm;
+    public void Setup()
+    {
+        mm = this;
+    }
+
+    public static MenuManager Instance()
+    {
+        return mm;
+    }
     //loads the right main menu based on whether it's the first time the game is played or not
     public void loadMainMenu()
     {
@@ -56,5 +68,23 @@ public class MenuManager : MonoBehaviour
     public void FromLevelSelectToLevel(TMPro.TextMeshProUGUI levelName)
     {
         LevelManager.LoadLevel(levelName.text);
+    }
+    public void MusicVolumeWidgetChanged(float volume)
+    {
+        SaveManager.SaveMusicVolume(volume);
+        AudioManager.Instance().SetMusicVolume(volume);
+    }
+    public void SfxVolumeWidgetChanged(float volume)
+    {
+        SaveManager.SaveSfxVolume(volume);
+        AudioManager.Instance().SetSfxVolume(volume);
+    }
+    public void changeMusicVolumeWidgetValue(float value)
+    {
+        musicSlider.SetValueWithoutNotify(value);
+    }
+    public void changeSfxVolumeWidgetValue(float value)
+    {
+        sfxSlider.SetValueWithoutNotify(value);
     }
 }
