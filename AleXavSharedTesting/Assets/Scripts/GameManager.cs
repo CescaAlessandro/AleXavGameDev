@@ -13,14 +13,21 @@ public class GameManager : MonoBehaviour
     public List<GameObject> spawnPoints;
     private List<Flux> idleFluxes;
     public static GameManager gm;
+    public Sprite[] livesSprites = new Sprite[3];
+    public SpriteRenderer livesIndicator;
 
     //timers
     private float depletionTimer;
     private bool depletionTimerIsRunning;
+    private int maxLives = 3;
+    private int lives;
+
 
     void Start()
     {
         gm = this;
+
+        lives = maxLives;
 
         MapUtility.LowerPins = new List<Pin>();
         MapUtility.UpperPins = new List<Pin>();
@@ -102,7 +109,7 @@ public class GameManager : MonoBehaviour
 
             if (flux.requestTimer >= 5)
             {
-                Debug.Log("Vita Persa");
+                LoseLives(1);
                 flux.requestTimer = 0;
             }
         }
@@ -124,7 +131,23 @@ public class GameManager : MonoBehaviour
         Debug.Log("Start depletion");
         depletionTimerIsRunning = true;
     }
+    public void LoseLives(int amount)
+    {
+        Debug.Log("loseLife: " + lives);
+        lives -= amount;
+        if (lives > 0)
+        {
+            livesIndicator.sprite = livesSprites[lives - 1];
+        }
+        else
+        {
+            GameOver();
+        }
+    }
+    public void GameOver()
+    {
 
+    }
     //spawn fluxes on random pins with a fixed delay between them
     private float fluxSpawnDelay = 20;
     IEnumerator spawnRandomFluxesForever()
