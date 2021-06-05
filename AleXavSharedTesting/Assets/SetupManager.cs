@@ -10,7 +10,6 @@ public class SetupManager : MonoBehaviour
 
     void Start()
     {
-        DontDestroyOnLoad(this);
         am.Setup();
         mm.Setup();
         sm.Setup();

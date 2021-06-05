@@ -7,21 +7,22 @@ public class GameManager : MonoBehaviour
 {
     public GameObject fluxPrefab;
     public List<GameObject> spawnPoints;
+    public Sprite[] livesSprites = new Sprite[3];
+    public SpriteRenderer livesIndicator;
+
     private int firstPinIndex = 0;
     private int lastPinIndex = 4;
     private Flux[] idleFluxes;
+    private int maxLives = 3;
+    private int lives;
     static GameManager gm;
-
-    public AudioManager am;
-    public SaveManager sm;
-    public MenuManager mm;
 
     void Start()
     {
-        Debug.Log("hoga");
         gm = this;
 
         idleFluxes = new Flux[lastPinIndex + 1];
+        lives = maxLives;
         StartCoroutine(spawnRandomFluxesForever());
     }
     public static GameManager Instance()
@@ -40,11 +41,26 @@ public class GameManager : MonoBehaviour
         //TODO
     }
 
+    public void LoseLives(int amount)
+    {
+        Debug.Log("loseLife: " + lives);
+        lives -= amount;
+        if (lives > 1)
+        {
+            livesIndicator.sprite = livesSprites[lives];
+        }
+        else
+        {
+            GameOver();
+        }
+    }
+    public void GameOver()
+    {
 
-
+    }
 
     //spawn fluxes on random pins with a fixed delay between them
-    private float fluxSpawnDelay = 1;
+    private float fluxSpawnDelay = 5;
     IEnumerator spawnRandomFluxesForever()
     {
         while (true)
@@ -81,6 +97,7 @@ public class GameManager : MonoBehaviour
         Assert.IsNull(idleFluxes[flux.index], "Flux arrived at a pin already occupied");
         idleFluxes[flux.index] = flux;
         AudioManager.Instance().PlayZap();
+        LoseLives(1);
     }
     //Function used by fluxes to notify the game manager that they are depleted
     public void FluxDepleted(Flux flux)
