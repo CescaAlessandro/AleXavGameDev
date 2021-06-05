@@ -13,6 +13,7 @@ public class SaveManager : MonoBehaviour
     {
         //Add loading saves here
         sm = this;
+        
         menuManager.loadMainMenu();
         float musVol = PlayerPrefs.GetFloat("MusicVolume",1f);
         float sfxVol = PlayerPrefs.GetFloat("SfxVolume",1f);

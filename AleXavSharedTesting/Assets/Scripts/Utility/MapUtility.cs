@@ -2,16 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 public static class MapUtility
 {
     public static bool IsChipWiring { get; set; } = false;
 
-    public static List<Pin> Pins { get; set; }
+    public static List<Pin> UpperPins { get; set; }
+    public static List<Pin> LowerPins { get; set; }
     public static List<Cable> Cables { get; set; }
 
-    public static float range = 10;
+    public static float range = 100;
 
     public static void SetWiring(bool flag)
     {
@@ -47,15 +49,30 @@ public static class MapUtility
     //se false => resituisce tupla con posizione fake e falso
     public static Tuple<bool, Pin> IsChipNearPin(Vector3 position)
     {
-        if (Pins != null)
+        var pins = UpperPins.Union(LowerPins).ToList();
+
+        if (pins != null)
         {
             //N.B.: Pin child(0) = attachment
-            var pinFound = Pins.FirstOrDefault(pinPosition => Vector3.Distance(pinPosition.Instance.transform.GetChild(0).position, position) < range);
+            var pinFound = pins.FirstOrDefault(pinPosition => Vector3.Distance(pinPosition.Instance.transform.GetChild(0).position, position) < range);
 
             if (pinFound != null)
                 return new Tuple<bool, Pin>(true, pinFound);
             return new Tuple<bool, Pin>(false, null);
         }
         return new Tuple<bool, Pin>(false, null);
+    }
+
+    public static List<GameObject> GetAllObjectsOnlyInScene()
+    {
+        List<GameObject> objectsInScene = new List<GameObject>();
+
+        foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[])
+        {
+            if (!EditorUtility.IsPersistent(go.transform.root.gameObject) && !(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave))
+                objectsInScene.Add(go);
+        }
+
+        return objectsInScene;
     }
 }

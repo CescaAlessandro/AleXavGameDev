@@ -7,3 +7,11 @@ public enum PinType
     Lower,
     Upper
 }
+
+public enum FluxLifeState
+{
+    Idle,
+    Moving,
+    Depleting,
+    Depleted
+}

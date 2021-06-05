@@ -8,7 +8,7 @@ public class AudioManager : MonoBehaviour
     public float zapMaxVolume = 0.001f;
     public AudioSource music;
     public static AudioManager am;
-    
+
     public void Setup()
     {
         am = this;
@@ -23,6 +23,11 @@ public class AudioManager : MonoBehaviour
     {
         electricZap.loop = false;
         electricZap.Play();
+    }
+    public void StopZap()
+    {
+        if(electricZap.isPlaying)
+            electricZap.Stop();
     }
     public void SetMusicVolume(float volume)
     {

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SetupManager : MonoBehaviour
@@ -10,8 +8,8 @@ public class SetupManager : MonoBehaviour
 
     void Start()
     {
-        am.Setup();
-        mm.Setup();
-        sm.Setup();
+        am.Setup();
+        mm.Setup();
+        sm.Setup();
     }
 }
