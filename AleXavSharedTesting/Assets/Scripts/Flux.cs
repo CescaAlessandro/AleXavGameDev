@@ -14,10 +14,12 @@ public class Flux : MonoBehaviour
     public float arrivalAcceptanceMargin;
     public float scaleAcceptanceLevel;
     public int index;
+    public float requestTimer;
     private FluxLifeState state = FluxLifeState.Moving;
     void Start()
     {
         this.transform.LookAt(destination);
+        requestTimer = 0;
     }
     // Based on which state the flux is either does nothing or moves towards the destination or depletes the trail
     void Update()
@@ -28,10 +30,7 @@ public class Flux : MonoBehaviour
                 break;
             case FluxLifeState.Moving:
                 if ((destination - trailScaler.transform.position).magnitude > arrivalAcceptanceMargin)
-                {
                     this.transform.position += (destination - this.transform.position).normalized * speed * Time.deltaTime;
-
-                }
                 else
                 {
                     tip.SetActive(false);
@@ -41,9 +40,7 @@ public class Flux : MonoBehaviour
                 break;
             case FluxLifeState.Depleting: 
                 if (trailScaler.transform.localScale.z > scaleAcceptanceLevel)
-                {
                     trailScaler.transform.localScale = trailScaler.transform.localScale - new Vector3(0, 0, scalingSpeed) * Time.deltaTime;
-                }
                 else
                 {
                     state = FluxLifeState.Idle;
@@ -59,12 +56,4 @@ public class Flux : MonoBehaviour
     {
         state = FluxLifeState.Depleting;
     }
-    private enum FluxLifeState
-        {
-            Idle,
-            Moving,
-            Depleting,
-            Depleted
-        }
-
 }

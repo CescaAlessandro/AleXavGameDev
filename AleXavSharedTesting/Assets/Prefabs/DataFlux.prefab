@@ -107,7 +107,7 @@ Transform:
   m_GameObject: {fileID: 7810289677318505576}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -140}
-  m_LocalScale: {x: 0.5, y: 2, z: 1}
+  m_LocalScale: {x: 5, y: 20, z: 10}
   m_Children:
   - {fileID: 7810289677529375599}
   - {fileID: 7810289677467942747}
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destination: {x: 0, y: 0, z: -65}
-  speed: 2
+  speed: 40
   scalingSpeed: 0.1
   color: {r: 0, g: 0, b: 0, a: 0}
   trailScaler: {fileID: 7810289677467942744}
@@ -135,7 +135,7 @@ MonoBehaviour:
   tip: {fileID: 7810289677529375596}
   arrivalAcceptanceMargin: 1
   scaleAcceptanceLevel: 0.03
-  atDest: 0
+  index: 0
 --- !u!1 &7810289677467942744
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,7 +20,6 @@ public class MouseManager : MonoBehaviour
     {
         if (pickedUpObject != null)
         {
-
             Vector3 MouseworldPoint = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 65.0f));
             Debug.Log(MouseworldPoint);
             pickedUpObject.transform.position = grid.GetCellCenterWorld(grid.WorldToCell(new Vector3(MouseworldPoint.x, pickedUpObject.transform.position.y, MouseworldPoint.z)));
@@ -29,7 +28,6 @@ public class MouseManager : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
-                Debug.Log("yey");
                 Ray m_ray = camera.ScreenPointToRay(Input.mousePosition);
                 RaycastHit m_hit;
                 bool result = Physics.Raycast(m_ray, out m_hit);
@@ -48,7 +46,5 @@ public class MouseManager : MonoBehaviour
             Instantiate(block, grid.GetCellCenterWorld(grid.WorldToCell(m_hit.point)),Quaternion.identity,grid.transform);
         }
         */
-
     }
-
 }
