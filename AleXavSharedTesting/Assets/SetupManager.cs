@@ -10,6 +10,6 @@ public class SetupManager : MonoBehaviour
     {
         am.Setup();
         mm.Setup();
-        sm.Setup();
+        sm.Setup();
     }
 }

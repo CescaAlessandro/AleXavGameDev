@@ -24,9 +24,19 @@ public class TrailManager : MonoBehaviour
 
         foreach (var cable in MapUtility.Cables)
         {
-            //aggiorno e salvo la posizione del cavo solo se questo è maneggiato da Cip
+            //aggiorno e salvo la posizione del cavo solo se questo ï¿½ maneggiato da Cip
             if (cable.IsConnectedToCip)
             {
+                var trail = cable.Instance.GetComponent<TrailRenderer>();
+                var positions = new Vector3[trail.positionCount];
+                trail.GetPositions(positions);
+                var positionsList = positions.ToList();
+
+                positionsList.Remove(target.transform.position);
+
+                trail.Clear();
+                trail.AddPositions(positionsList.ToArray());
+
                 cable.Instance.transform.position = new Vector3(target.transform.position.x, cable.Instance.transform.position.y, target.transform.position.z);
                 var newPosition = new Tuple<float, float>(cable.Instance.transform.position.x, cable.Instance.transform.position.z);
                 cable.AddPosition(newPosition);
