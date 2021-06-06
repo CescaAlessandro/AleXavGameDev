@@ -42,13 +42,26 @@ public class ChipController : MonoBehaviour
             if (MapUtility.IsChipWiring && MapUtility.Cables.Count >= 2)
             {
                 var startPosition = new Tuple<float, float>(transform.position.x, transform.position.z);
-                var finishPosition = new Tuple<float, float>(currentPosition.x, currentPosition.z);
+                var finishPosition = new Tuple<float, float>(currentPosition.x, transform.position.z);
 
                 if (!MapUtility.LookForCollision(startPosition, finishPosition))
-                    transform.position = currentPosition;
+                {
+                    transform.position = new Vector3(currentPosition.x, transform.position.y, transform.position.z);
+                    TrailManager.Instance().updateCable();
+                    startPosition = new Tuple<float, float>(transform.position.x, transform.position.z);
+                    finishPosition = new Tuple<float, float>(transform.position.x, currentPosition.z);
+                    if (!MapUtility.LookForCollision(startPosition, finishPosition))
+                    {
+                        transform.position = new Vector3(transform.position.x, transform.position.y, currentPosition.z);
+                        TrailManager.Instance().updateCable();
+                    }
+                }
             }
             else
-                transform.position = currentPosition;
+            {
+                transform.position = new Vector3(currentPosition.x, transform.position.y, currentPosition.z);
+                TrailManager.Instance().updateCable();
+            }
 
             if (Input.GetMouseButtonUp(0))
                 pickedUpObject = null;
@@ -74,7 +87,7 @@ public class ChipController : MonoBehaviour
                 gameObject.transform.position = pin.AttachmentPoint.Item1;
 
                 var cable = MapUtility.Cables.First(cable => cable.IsConnectedToCip);
-                cable.Instance.transform.position = pin.AttachmentPoint.Item1;
+                cable.Instance.transform.position = pin.AttachmentPoint.Item1 + new Vector3(0, 10, 0) ;
                 cable.Instance.transform.rotation = pin.AttachmentPoint.Item2;
                 cable.IsConnectedToCip = false;
 
