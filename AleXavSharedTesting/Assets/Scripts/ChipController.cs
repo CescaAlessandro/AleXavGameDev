@@ -77,9 +77,12 @@ public class ChipController : MonoBehaviour
                 cable.Instance.transform.position = pin.AttachmentPoint.Item1;
                 cable.Instance.transform.rotation = pin.AttachmentPoint.Item2;
                 cable.IsConnectedToCip = false;
-
+                
                 MapUtility.SetWiring(false);
                 pin.IsConnected = true;
+                pin.CableConnected = cable;
+
+                GameManager.Instance().CheckForPossibleDepletion(pin);
             }
 
             if (!MapUtility.IsChipWiring && pin.Type.Equals(PinType.Upper) && !pin.IsConnected)
@@ -88,7 +91,7 @@ public class ChipController : MonoBehaviour
                 cablePrefab.transform.position = pin.AttachmentPoint.Item1;
 
                 var prefabInstance = Instantiate(cablePrefab);
-                prefabInstance.GetComponent<Renderer>().material.color = UnityEngine.Random.ColorHSV();
+                prefabInstance.GetComponent<Renderer>().material.color = pin.Instance.GetComponent<Renderer>().material.color;
 
                 var newCable = new Cable()
                 {
@@ -100,6 +103,7 @@ public class ChipController : MonoBehaviour
 
                 MapUtility.SetWiring(true);
                 pin.IsConnected = true;
+                pin.CableConnected = newCable;
             }
         }
     }

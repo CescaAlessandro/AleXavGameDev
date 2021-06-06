@@ -87,8 +87,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        CheckForPossibleDepletion();
-
         if (depletionTimerIsRunning)
         {
             if (depletionTimer <= 3)
@@ -171,7 +169,7 @@ public class GameManager : MonoBehaviour
     }
 
     //Starts depletion of the flux on the pin given as input index
-    public void StartFluxDepeletion(Flux flux)
+    public void StartFluxDepletion(Flux flux)
     {
         flux.startDepletion();
         idleFluxes.Remove(flux);
@@ -181,22 +179,8 @@ public class GameManager : MonoBehaviour
     //Function used by fluxes to notify the manager that they arrived at the destination
     public void FluxArrivedAtDestination(Flux flux)
     {
-        var uPin = MapUtility.UpperPins.First(pin => pin.Index == flux.index);
-        var lPin = MapUtility.LowerPins.First(pin => pin.Index == flux.index);
-
-        //in futuro si pu� pensare ad una disposizione dispari di pin sulla mappa...
-        if (uPin.IsConnected && lPin.IsConnected)
-        {
-            StartFluxDepeletion(flux);
-            //AudioManager.Instance().StopZap();
-        }
-        else
-        {
-            //idleFluxes.Insert(flux.index, flux);
-            Debug.Log("Flusso in attesa");
-            idleFluxes.Add(flux);
-            //AudioManager.Instance().PlayZap();
-        }
+        idleFluxes.Add(flux);
+        CheckForPossibleDepletionAtArrival(flux);
     }
 
     //Function used by fluxes to notify the game manager that they are depleted
@@ -205,17 +189,31 @@ public class GameManager : MonoBehaviour
         GameObject.Destroy(flux.gameObject);
     }
 
-    public void CheckForPossibleDepletion()
+    public void CheckForPossibleDepletion(Pin lPin)
     {
-        foreach (var uPinConnected in MapUtility.UpperPins.Where(pin => pin.IsConnected))
-        {
-            var possibleFluxWaiting = idleFluxes.FirstOrDefault(flux => flux.index == uPinConnected.Index);
-            if (possibleFluxWaiting != null)
-                Debug.Log("Flusso in attesa");
+        var uPin = MapUtility.UpperPins.First(pin => pin.CableConnected == lPin.CableConnected);
 
-            if (MapUtility.LowerPins.First(pin => pin.Index == uPinConnected.Index).IsConnected &&
-                possibleFluxWaiting != null)
-                StartFluxDepeletion(possibleFluxWaiting);
+        var possibleFluxWaiting = idleFluxes.FirstOrDefault(flux => flux.index == uPin.Index);
+
+        if(possibleFluxWaiting != null)
+        {
+            if (lPin.Instance.GetComponent<Renderer>().material.color == uPin.Instance.GetComponent<Renderer>().material.color)
+                StartFluxDepletion(possibleFluxWaiting);
+        }
+    }
+    public void CheckForPossibleDepletionAtArrival(Flux flux)
+    {
+        var uPin = MapUtility.UpperPins.First(pin => pin.Index == flux.index);
+
+        if (uPin.IsConnected)
+        {
+            var possibleLPin = MapUtility.LowerPins.FirstOrDefault(pin => pin.CableConnected == uPin.CableConnected);
+
+            if(possibleLPin != null)
+            {
+                if (possibleLPin.Instance.GetComponent<Renderer>().material.color == uPin.Instance.GetComponent<Renderer>().material.color)
+                    StartFluxDepletion(flux);
+            }
         }
     }
 }

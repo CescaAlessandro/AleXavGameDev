@@ -8,6 +8,7 @@ public class Pin
     public GameObject Instance { get; set; }
     public PinType Type { get; set; }
     public bool IsConnected { get; set; }
+    public Cable CableConnected { get; set; }
     public int Index { get; set; }
     public Tuple<Vector3,Quaternion> FluxSpawnPoint { get; set; }
     public Tuple<Vector3,Quaternion> AttachmentPoint { get; set; }
