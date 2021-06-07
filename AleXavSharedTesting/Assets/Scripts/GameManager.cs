@@ -82,6 +82,12 @@ public class GameManager : MonoBehaviour
         depletionTimerIsRunning = false;
         depletionTimer = 0;
         idleFluxes = new List<Flux>();
+        MapUtility.setCollisionMap(200, -500, true);
+        MapUtility.setCollisionMap(0, -500, true);
+        MapUtility.setCollisionMap(-200, -500, true);
+        MapUtility.setCollisionMap(200, 500, true);
+        MapUtility.setCollisionMap(0, 500, true);
+        MapUtility.setCollisionMap(-200, 500, true);
         StartCoroutine(spawnRandomFluxesForever());
     }
 
@@ -131,7 +137,7 @@ public class GameManager : MonoBehaviour
     }
     public void LoseLives(int amount)
     {
-        Debug.Log("loseLife: " + lives);
+        //Debug.Log("loseLife: " + lives);
         lives -= amount;
         if (lives > 0)
         {
@@ -161,7 +167,7 @@ public class GameManager : MonoBehaviour
     //spawn a flux that will arrive on the pin corresponding to the index passed
     public void SpawnFluxIndex(int index)
     {
-        var pin = MapUtility.UpperPins.FirstOrDefault(pin => pin.Index == index);
+        var pin = MapUtility.UpperPins.FirstOrDefault(pinA => pinA.Index == index);
 
         GameObject inst = GameObject.Instantiate(fluxPrefab, pin.FluxSpawnPoint.Item1, pin.FluxSpawnPoint.Item2, this.transform);
         inst.GetComponent<Flux>().index = index;

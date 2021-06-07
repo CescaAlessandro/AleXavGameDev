@@ -11,6 +11,7 @@ public class ChipController : MonoBehaviour
     public float gridSize = 1f;
     public GameObject cablePrefab;
     public Grid grid;
+    private Vector3 lastMovementStart = new Vector3(-1, -1, -1);
 
     void Start()
     {
@@ -39,28 +40,47 @@ public class ChipController : MonoBehaviour
             //Cip sta maneggiando un cavo 
             //AND
             //è presente più di un cavo sulla mappa
-            if (MapUtility.IsChipWiring && MapUtility.Cables.Count >= 2)
+            if (MapUtility.IsChipWiring )//&& MapUtility.Cables.Count >= 2)
             {
                 var startPosition = new Tuple<float, float>(transform.position.x, transform.position.z);
-                var finishPosition = new Tuple<float, float>(currentPosition.x, transform.position.z);
+                var finishPosition = new Tuple<float, float>(currentPosition.x, currentPosition.z);
 
-                if (!MapUtility.LookForCollision(startPosition, finishPosition))
+                if (!TrailManager.Instance().isLastMove(new Vector3(finishPosition.Item1,0,finishPosition.Item2)))
                 {
-                    transform.position = new Vector3(currentPosition.x, transform.position.y, transform.position.z);
-                    TrailManager.Instance().updateCable();
-                    startPosition = new Tuple<float, float>(transform.position.x, transform.position.z);
-                    finishPosition = new Tuple<float, float>(transform.position.x, currentPosition.z);
                     if (!MapUtility.LookForCollision(startPosition, finishPosition))
                     {
-                        transform.position = new Vector3(transform.position.x, transform.position.y, currentPosition.z);
-                        TrailManager.Instance().updateCable();
+                        if (startPosition.Item1 != finishPosition.Item1 && startPosition.Item2 != finishPosition.Item2)
+                        {
+                            transform.position = new Vector3(currentPosition.x, transform.position.y, currentPosition.z);
+                            var cable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
+                            cable.Instance.transform.position = transform.position;
+                            TrailManager.Instance().cableUpdate();
+                            MapUtility.setCollisionMap(currentPosition.x, currentPosition.z, true);
+                            MapUtility.setCollisionMap(currentPosition.x+100, currentPosition.z, true);
+                        }
+                        else
+                        {
+                            transform.position = new Vector3(currentPosition.x, transform.position.y, currentPosition.z);
+                            var cable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
+                            cable.Instance.transform.position = transform.position;
+                            TrailManager.Instance().cableUpdate();
+                            MapUtility.setCollisionMap(currentPosition.x, currentPosition.z, true);
+                        }
                     }
+                }
+                else
+                {
+                    MapUtility.setCollisionMap(transform.position.x, transform.position.z, false);
+                    transform.position = new Vector3(currentPosition.x, transform.position.y, currentPosition.z);
+                    var cable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
+                    cable.Instance.transform.position = transform.position;
+                    TrailManager.Instance().cableUpdate();
+                   
                 }
             }
             else
             {
                 transform.position = new Vector3(currentPosition.x, transform.position.y, currentPosition.z);
-                TrailManager.Instance().updateCable();
             }
 
             if (Input.GetMouseButtonUp(0))
@@ -84,10 +104,10 @@ public class ChipController : MonoBehaviour
 
             if (MapUtility.IsChipWiring && pin.Type.Equals(PinType.Lower) && !pin.IsConnected)
             {
-                gameObject.transform.position = pin.AttachmentPoint.Item1;
+                
 
-                var cable = MapUtility.Cables.First(cable => cable.IsConnectedToCip);
-                cable.Instance.transform.position = pin.AttachmentPoint.Item1 + new Vector3(0, 10, 0) ;
+                var cable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
+                cable.Instance.transform.position = pin.AttachmentPoint.Item1 + new Vector3(0, 0, 0) ;
                 cable.Instance.transform.rotation = pin.AttachmentPoint.Item2;
                 cable.IsConnectedToCip = false;
                 
@@ -100,12 +120,10 @@ public class ChipController : MonoBehaviour
 
             if (!MapUtility.IsChipWiring && pin.Type.Equals(PinType.Upper) && !pin.IsConnected)
             {
-                gameObject.transform.position = pin.AttachmentPoint.Item1;
+                gameObject.transform.position = new Vector3(pin.AttachmentPoint.Item1.x, 0, pin.AttachmentPoint.Item1.z);
                 cablePrefab.transform.position = pin.AttachmentPoint.Item1;
-
                 var prefabInstance = Instantiate(cablePrefab);
                 prefabInstance.GetComponent<Renderer>().material.color = pin.Instance.GetComponent<Renderer>().material.color;
-
                 var newCable = new Cable()
                 {
                     Instance = prefabInstance,
@@ -117,6 +135,7 @@ public class ChipController : MonoBehaviour
                 MapUtility.SetWiring(true);
                 pin.IsConnected = true;
                 pin.CableConnected = newCable;
+                TrailManager.Instance().cableUpdate();
             }
         }
     }

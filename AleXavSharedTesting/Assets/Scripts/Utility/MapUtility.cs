@@ -14,12 +14,13 @@ public static class MapUtility
     public static List<Cable> Cables { get; set; }
 
     public static float range = 100;
+    private static bool[,] collisionMap = new bool[11, 9];
 
     public static void SetWiring(bool flag)
     {
         IsChipWiring = flag;
     }
-
+    /*
     public static bool LookForCollision(Tuple<float, float> start, Tuple<float, float> finish)
     {
         bool result = false;
@@ -43,11 +44,102 @@ public static class MapUtility
 
         return result;
     }
+    */
+    public static bool LookForCollision(Tuple<float, float> start, Tuple<float, float> finish)
+    {
+        var startMapConvertionX = Math.Round(((-start.Item1) + 400) / 100,0);
+        var startMapConvertionY = Math.Round(((start.Item2) + 500) / 100,0);
+        var finishMapConvertionX = Math.Round(((-finish.Item1) + 400) / 100,0);
+        var finishMapConvertionY = Math.Round(((finish.Item2) + 500) / 100,0);
+        //Debug.Log(finishMapConvertionY);
+        //Debug.Log(startMapConvertionY);
+        //Debug.Log("");
+        /*
+        for(int i= 0; i< 11; i++)
+        {
+            for(int j = 0; j < 9; j++)
+            {
+                Debug.Log(collisionMap[i, j]);
+            }
+            Debug.Log("");
 
-    //controlla se Chip è vicino ad un pin
-    //se vero => resituisce tupla con posizione pin e true
-    //se false => resituisce tupla con posizione fake e falso
-    public static Tuple<bool, Pin> IsChipNearPin(Vector3 position)
+        }
+        Debug.Log(""); Debug.Log("");
+        */
+        double currentX = startMapConvertionX;
+        double currentY = startMapConvertionY;
+        while (currentX != finishMapConvertionX || currentY != finishMapConvertionY )
+        {
+            if(currentY == finishMapConvertionY)
+            {
+                if (currentX < finishMapConvertionX)
+                {
+                    currentX++;
+                }
+                else
+                {
+                    currentX--;
+                }
+                if (collisionMap[(int)Math.Round(startMapConvertionY, 0), (int)Math.Round(currentX, 0)])
+                {
+                    /*
+                    string str = "";
+                    for (int i = 0; i < 11; i++)
+                    {
+
+                        for (int j = 0; j < 9; j++)
+                        {
+                            str += collisionMap[i, j];
+                            str += " ";
+                        }
+                        Debug.Log(str);
+                        str = "";
+                    }
+                    Debug.Log("");
+                    */
+                    return true;
+                }
+            }
+            else
+            {
+                if (currentY < finishMapConvertionY)
+                {
+                    Debug.Log(currentY);
+                    currentY++;
+                }
+                else
+                {
+                    currentY--;
+                }
+                //Debug.Log((int)Math.Round(currentY, 0));
+                //Debug.Log((int)Math.Round(finishMapConvertionX, 0));
+                if (collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(startMapConvertionX, 0)])
+                {
+                    /*
+                    string str = "";
+                    for (int i = 0; i < 11; i++)
+                    {
+
+                        for (int j = 0; j < 9; j++)
+                        {
+                            str += collisionMap[i, j];
+                            str += " ";
+                        }
+                        Debug.Log(str);
+                        str = "";
+                    }
+                    Debug.Log("");
+                    */
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+        //controlla se Chip è vicino ad un pin
+        //se vero => resituisce tupla con posizione pin e true
+        //se false => resituisce tupla con posizione fake e falso
+        public static Tuple<bool, Pin> IsChipNearPin(Vector3 position)
     {
         var pins = UpperPins.Union(LowerPins).ToList();
 
@@ -62,7 +154,12 @@ public static class MapUtility
         }
         return new Tuple<bool, Pin>(false, null);
     }
-
+    public static void setCollisionMap(float x,float y, bool value)
+    {
+        var MapConvertionX = ((-x) + 400) / 100;
+        var MapConvertionY = (y + 500) / 100;
+        collisionMap[(int)Math.Round(MapConvertionY, 0), (int)Math.Round(MapConvertionX, 0)] = value;
+    }
     public static List<GameObject> GetAllObjectsOnlyInScene()
     {
         List<GameObject> objectsInScene = new List<GameObject>();
