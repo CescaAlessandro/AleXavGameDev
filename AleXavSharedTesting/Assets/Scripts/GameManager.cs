@@ -82,6 +82,8 @@ public class GameManager : MonoBehaviour
         depletionTimerIsRunning = false;
         depletionTimer = 0;
         idleFluxes = new List<Flux>();
+
+
         MapUtility.setCollisionMap(200, -500, true);
         MapUtility.setCollisionMap(0, -500, true);
         MapUtility.setCollisionMap(-200, -500, true);

@@ -154,12 +154,14 @@ public static class MapUtility
         }
         return new Tuple<bool, Pin>(false, null);
     }
+
     public static void setCollisionMap(float x,float y, bool value)
     {
         var MapConvertionX = ((-x) + 400) / 100;
         var MapConvertionY = (y + 500) / 100;
         collisionMap[(int)Math.Round(MapConvertionY, 0), (int)Math.Round(MapConvertionX, 0)] = value;
     }
+
     public static List<GameObject> GetAllObjectsOnlyInScene()
     {
         List<GameObject> objectsInScene = new List<GameObject>();
