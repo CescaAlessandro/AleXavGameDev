@@ -123,6 +123,25 @@ public class TrailManager : MonoBehaviour
         }
         return false;
     }
+
+    public void UpdateCablePointsOnDetach()
+    {
+        var cable = MapUtility.Cables.First(cable => cable.IsConnectedToCip);
+        var trail = cable.Instance.GetComponent<TrailRenderer>();
+        var positions = new Vector3[trail.positionCount];
+        trail.GetPositions(positions);
+        var positionsList = positions.ToList();
+
+        //rimuovo l'ultimo punto e porto Chip sul penultimo
+        positionsList.Remove(positionsList.Last());
+        target.transform.position = positionsList.Last();
+
+        trail.Clear();
+        trail.AddPositions(positionsList.ToArray());
+        var positionas = new Vector3[trail.positionCount];
+        trail.GetPositions(positionas);
+    }
+
     public void addAtBeginning()
     {
 

@@ -8,6 +8,9 @@ using UnityEngine;
 public static class MapUtility
 {
     public static bool IsChipWiring { get; set; } = false;
+    //flag per prevenire che un cavo scollegato venga riattaccato subito 
+    //(se Chip è nelle vicinanze del LowerPin con cui ha appena interagito)
+    public static bool PreventReattaching { get; set; } = false;
 
     public static List<Pin> UpperPins { get; set; }
     public static List<Pin> LowerPins { get; set; }
@@ -97,6 +100,7 @@ public static class MapUtility
                     }
                     Debug.Log("");
                     */
+
                     return true;
                 }
             }
@@ -104,7 +108,7 @@ public static class MapUtility
             {
                 if (currentY < finishMapConvertionY)
                 {
-                    Debug.Log(currentY);
+                    //Debug.Log(currentY);
                     currentY++;
                 }
                 else
@@ -130,6 +134,7 @@ public static class MapUtility
                     }
                     Debug.Log("");
                     */
+                    //PrintCollisionMap();
                     return true;
                 }
             }
@@ -139,7 +144,7 @@ public static class MapUtility
         //controlla se Chip è vicino ad un pin
         //se vero => resituisce tupla con posizione pin e true
         //se false => resituisce tupla con posizione fake e falso
-        public static Tuple<bool, Pin> IsChipNearPin(Vector3 position)
+        public static Tuple<bool, Pin> IsPositionNearPin(Vector3 position)
     {
         var pins = UpperPins.Union(LowerPins).ToList();
 
@@ -173,5 +178,24 @@ public static class MapUtility
         }
 
         return objectsInScene;
+    }
+
+    //per debug...
+    public static void PrintCollisionMap()
+    {
+        var matrix = "";
+        for(int i = 0; i<11; i++)
+        {
+            var line = "";
+            for (int j = 0; j < 9; j++)
+            {
+                if(collisionMap[i, j])
+                    line = line + "[x]";
+                else
+                    line = line + "[-]";
+            }
+            matrix = matrix + line + '\n';
+        }
+        Debug.Log(matrix);
     }
 }
