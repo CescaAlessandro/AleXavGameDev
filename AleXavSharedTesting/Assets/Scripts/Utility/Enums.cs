@@ -15,3 +15,18 @@ public enum FluxLifeState
     Depleting,
     Depleted
 }
+
+public enum DialogInstance
+{
+    Welcome,
+    Joke,
+    Mistake,
+    Pissed,
+    RedeemYourself,
+    GoalReached,
+    GoToUpperPin,
+    GoToLowerPin,
+    GoToLowerPinSavagePartOne,
+    GoToLowerPinSavagePartTwo,
+    SecondTutorial
+}

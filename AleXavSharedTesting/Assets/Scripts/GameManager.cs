@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public static GameManager gm;
     public Sprite[] livesSprites = new Sprite[3];
     public SpriteRenderer livesIndicator;
+    public bool preventLoosingLife;
+    public bool preventFluxSpawning;
 
     //timers
     private float depletionTimer;
@@ -90,7 +92,9 @@ public class GameManager : MonoBehaviour
         MapUtility.setCollisionMap(200, 500, true);
         MapUtility.setCollisionMap(0, 500, true);
         MapUtility.setCollisionMap(-200, 500, true);
-        StartCoroutine(spawnRandomFluxesForever());
+
+        if(!preventFluxSpawning)
+            StartCoroutine(spawnRandomFluxesForever());
     }
 
     void Update()
@@ -115,7 +119,8 @@ public class GameManager : MonoBehaviour
 
             if (flux.requestTimer >= 5)
             {
-                LoseLives(1);
+                if(!preventLoosingLife)
+                    LoseLives(1);
                 flux.requestTimer = 0;
             }
         }

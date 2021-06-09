@@ -29,3 +29,15 @@ public class Cable
         }
     }
 }
+
+public class Dialog
+{
+    public Dialog(string text, bool flag)
+    {
+        this.Text = text;
+        this.AlreadyShowed = flag;
+    }
+    public string Text { get; set; }
+
+    public bool AlreadyShowed { get; set; } = false;
+}
