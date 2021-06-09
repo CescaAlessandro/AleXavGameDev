@@ -69,9 +69,8 @@ public static class MapUtility
         }
         Debug.Log(""); Debug.Log("");
         */
-        float currentX = (float)startMapConvertionX;
-        float currentY = (float)startMapConvertionY;
-        bool[,] mapClone = (bool[,])collisionMap.Clone();
+        double currentX = startMapConvertionX;
+        double currentY = startMapConvertionY;
         while (currentX != finishMapConvertionX || currentY != finishMapConvertionY )
         {
             if(currentY == finishMapConvertionY)
@@ -84,7 +83,7 @@ public static class MapUtility
                 {
                     currentX--;
                 }
-                if (collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)])
+                if (collisionMap[(int)Math.Round(startMapConvertionY, 0), (int)Math.Round(currentX, 0)])
                 {
                     /*
                     string str = "";
@@ -102,25 +101,14 @@ public static class MapUtility
                     Debug.Log("");
                     */
 
-                    PrintCollisionMap();
-                    if (TrailManager.Instance().isLastMove(new Vector3(((currentX*100)-400)*(-1f),0,(currentY*100)-500)))
-                    {
-                        mapClone[(int)Math.Round(currentY,0), (int)Math.Round(currentX,0)] = false;
-                    }
-                    else{
-                        return true;
-                    }
-                }
-                else
-                {
-                    mapClone[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)] = true;
+                    return true;
                 }
             }
             else
             {
                 if (currentY < finishMapConvertionY)
                 {
-                    //Debug.Log(finishMapConvertionY);
+                    //Debug.Log(currentY);
                     currentY++;
                 }
                 else
@@ -129,7 +117,7 @@ public static class MapUtility
                 }
                 //Debug.Log((int)Math.Round(currentY, 0));
                 //Debug.Log((int)Math.Round(finishMapConvertionX, 0));
-                if (collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)])
+                if (collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(startMapConvertionX, 0)])
                 {
                     /*
                     string str = "";
@@ -146,16 +134,11 @@ public static class MapUtility
                     }
                     Debug.Log("");
                     */
-                    PrintCollisionMap();
+                    //PrintCollisionMap();
                     return true;
-                }
-                else
-                {
-                    mapClone[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)] = true;
                 }
             }
         }
-        collisionMap = mapClone;
         return false;
     }
         //controlla se Chip è vicino ad un pin
