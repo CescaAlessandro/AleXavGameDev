@@ -19,9 +19,9 @@ public class TrailManager : MonoBehaviour
     {
         return tm;
     }
-    // Called when Chip moves
+    // Update is called once per frame
     public void cableUpdate() {
-        Debug.Log("new");
+
         foreach (var cable in MapUtility.Cables)
         {
             //aggiorno e salvo la posizione del cavo solo se questo � maneggiato da Cip
@@ -47,19 +47,16 @@ public class TrailManager : MonoBehaviour
                     }
                     else if (positionsList.Last().x != target.transform.position.x && positionsList.Last().z != target.transform.position.z)
                     {
-                        addAllBetween(positionsList.Last(), new Vector3(positionsList.Last().x, positionsList.Last().y, target.transform.position.z),positionsList);
-                        addAllBetween(positionsList.Last(), new Vector3(target.transform.position.x, positionsList.Last().y, positionsList.Last().z), positionsList);
+                        positionsList.Add(new Vector3(positionsList.Last().x, positionsList.Last().y, target.transform.position.z));
+                        positionsList.Add(new Vector3(target.transform.position.x, positionsList.Last().y, positionsList.Last().z));
                     }
                     else if (positionsList.Last().x != target.transform.position.x)
                     {
-                        addAllBetween(positionsList.Last(), new Vector3(target.transform.position.x, positionsList.Last().y, positionsList.Last().z), positionsList);
+                        positionsList.Add(new Vector3(target.transform.position.x, positionsList.Last().y, positionsList.Last().z));
                     }
                     else if (positionsList.Last().z != target.transform.position.z)
                     {
-                        foreach (var vec in positionsList)
-                               Debug.Log(vec);
-                        Debug.Log("");
-                        addAllBetween(positionsList.Last(), new Vector3(positionsList.Last().x, positionsList.Last().y, target.transform.position.z), positionsList);
+                        positionsList.Add(new Vector3(positionsList.Last().x, positionsList.Last().y, target.transform.position.z));
                     }
                     else
                     {
@@ -70,17 +67,16 @@ public class TrailManager : MonoBehaviour
                 {
                     if (positionsList.Last().x != target.transform.position.x && positionsList.Last().z != target.transform.position.z)
                     {
-                        addAllBetween(positionsList.Last(), new Vector3(positionsList.Last().x, positionsList.Last().y, target.transform.position.z), positionsList);
-                        addAllBetween(positionsList.Last(), new Vector3(target.transform.position.x, positionsList.Last().y, positionsList.Last().z), positionsList);
+                        positionsList.Add(new Vector3(positionsList.Last().x, positionsList.Last().y, target.transform.position.z));
+                        positionsList.Add(new Vector3(target.transform.position.x, positionsList.Last().y, positionsList.Last().z));
                     }
                     else if (positionsList.Last().x != target.transform.position.x)
                     {
-                        addAllBetween(positionsList.Last(), new Vector3(target.transform.position.x, positionsList.Last().y, positionsList.Last().z), positionsList);
+                        positionsList.Add(new Vector3(target.transform.position.x, positionsList.Last().y, positionsList.Last().z));
                     }
                     else if (positionsList.Last().z != target.transform.position.z)
                     {
-                        Debug.Log(target.transform.position);
-                        addAllBetween(positionsList.Last(), new Vector3(positionsList.Last().x, positionsList.Last().y, target.transform.position.z), positionsList);
+                        positionsList.Add(new Vector3(positionsList.Last().x, positionsList.Last().y, target.transform.position.z));
                     }
                     else
                     {
@@ -146,60 +142,8 @@ public class TrailManager : MonoBehaviour
         trail.GetPositions(positionas);
     }
 
-    public void addAllBetween(Vector3 last,Vector3 dest, List<Vector3> list)
+    public void addAtBeginning()
     {
-        var xCurrent = last.x;
-        var yCurrent = last.z;
-        if (last.x == dest.x)
-        {
-            if (yCurrent < dest.z)
-            {
-                yCurrent += 100;
-            }
-            else
-            {
-                yCurrent -= 100;
-            }
-            while(yCurrent != dest.z)
-            {
-                list.Add(new Vector3(xCurrent, 0, yCurrent));
-                if (yCurrent < dest.z)
-                {
 
-                    yCurrent += 100;
-                }
-                else
-                {
-                    yCurrent -= 100;
-                }
-            }
-        }
-        else if(last.z == dest.z)
-        {
-            if (xCurrent < dest.z)
-            {
-                xCurrent += 100;
-            }
-            else
-            {
-                xCurrent -= 100;
-            }
-            while (xCurrent != dest.x)
-            {
-                list.Add(new Vector3(xCurrent, 0, yCurrent));
-                if (xCurrent < dest.x)
-                {
-                    xCurrent += 100;
-                }
-                else
-                {
-                    xCurrent -= 100;
-                }
-            }
-        }
-        else
-        {
-            Debug.LogError("Diagonal Movemnet not allowed here");
-        }
     }
 }
