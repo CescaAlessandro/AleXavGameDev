@@ -888,6 +888,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 82ce087798fda6649b9f107090941ebf, type: 3}
   - {fileID: 21300000, guid: 08c644e19cecf3b43bdebe7c54f47c09, type: 3}
   livesIndicator: {fileID: 712802282}
+  preventLoosingLife: 0
+  preventFluxSpawning: 0
 --- !u!4 &733605520
 Transform:
   m_ObjectHideFlags: 0
@@ -1890,7 +1892,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5849247237929074677, guid: 6aa48eceee0239240aa201f0e9cf6382, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6aa48eceee0239240aa201f0e9cf6382, type: 3}
