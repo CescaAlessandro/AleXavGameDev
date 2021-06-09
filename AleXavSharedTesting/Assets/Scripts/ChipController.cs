@@ -56,8 +56,8 @@ public class ChipController : MonoBehaviour
                             var cable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
                             cable.Instance.transform.position = transform.position;
                             TrailManager.Instance().cableUpdate();
-                            MapUtility.setCollisionMap(currentPosition.x, currentPosition.z, true);
-                            MapUtility.setCollisionMap(currentPosition.x+100, currentPosition.z, true);
+                            //MapUtility.setCollisionMap(currentPosition.x, currentPosition.z, true);
+                            //MapUtility.setCollisionMap(currentPosition.x+100, currentPosition.z, true);
                         }
                         else
                         {
@@ -65,12 +65,12 @@ public class ChipController : MonoBehaviour
                             var cable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
                             cable.Instance.transform.position = transform.position;
                             TrailManager.Instance().cableUpdate();
-                            MapUtility.setCollisionMap(currentPosition.x, currentPosition.z, true);
+                            //MapUtility.setCollisionMap(currentPosition.x, currentPosition.z, true);
                         }
                     }
                     else
                     {
-                        //Debug.Log("Collision found.");
+                        Debug.Log("Collision found.");
                     }
                 }
                 else
@@ -123,7 +123,7 @@ public class ChipController : MonoBehaviour
                         //Chip si porta ad una casella rispettivamente sotto il pin 
                         gameObject.transform.position = new Vector3(pin.AttachmentPoint.Item1.x, 0, pin.AttachmentPoint.Item1.z + 150);
 
-                        MapUtility.setCollisionMap(pin.CableConnected.Instance.transform.position.x, pin.CableConnected.Instance.transform.position.z, false);
+                        //MapUtility.setCollisionMap(pin.CableConnected.Instance.transform.position.x, pin.CableConnected.Instance.transform.position.z, false);
                         MapUtility.SetWiring(false);
                         pin.IsConnected = false;
 

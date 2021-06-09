@@ -126,7 +126,7 @@ public class TrailManager : MonoBehaviour
 
     public void UpdateCablePointsOnDetach()
     {
-        var cable = MapUtility.Cables.First(cable => cable.IsConnectedToCip);
+        var cable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
         var trail = cable.Instance.GetComponent<TrailRenderer>();
         var positions = new Vector3[trail.positionCount];
         trail.GetPositions(positions);
