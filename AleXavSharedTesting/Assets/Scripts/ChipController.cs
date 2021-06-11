@@ -116,7 +116,7 @@ public class ChipController : MonoBehaviour
                         pin.IsConnected = true;
                         pin.CableConnected = cable;
 
-                        GameManager.Instance().CheckForPossibleDepletion(pin);
+                        AudioManager.Instance().PlayAttachDetach();
                     }
                     else if(MapUtility.IsChipWiring && pin.Type.Equals(PinType.Upper) && pin.IsConnected) //distruggi cavo
                     {
@@ -130,6 +130,8 @@ public class ChipController : MonoBehaviour
                         UnityEngine.Object.Destroy(pin.CableConnected.Instance);
                         MapUtility.Cables.Remove(pin.CableConnected);
                         pin.CableConnected = null;
+
+                        AudioManager.Instance().PlayAttachDetach();
                     }
                     else if (!MapUtility.IsChipWiring && pin.Type.Equals(PinType.Upper) && !pin.IsConnected)
                     {
@@ -149,6 +151,8 @@ public class ChipController : MonoBehaviour
                         pin.IsConnected = true;
                         pin.CableConnected = newCable;
                         TrailManager.Instance().cableUpdate();
+
+                        AudioManager.Instance().PlayAttachDetach();
                     }
                     else if (!MapUtility.IsChipWiring && pin.Type.Equals(PinType.Lower) && pin.IsConnected) //stacca cavo
                     {
@@ -160,6 +164,10 @@ public class ChipController : MonoBehaviour
                         pin.CableConnected.IsConnectedToCip = true;
                         TrailManager.Instance().UpdateCablePointsOnDetach();
                         pin.CableConnected.Instance.transform.position = gameObject.transform.position;
+
+                        GameManager.Instance().CheckForPossibleDepletionPauses(pin);
+
+                        AudioManager.Instance().PlayAttachDetach();
                     }
                 }                         
             }   

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Flux : MonoBehaviour
@@ -27,6 +28,7 @@ public class Flux : MonoBehaviour
         switch (state)
         {
             case FluxLifeState.Idle:
+                //GameManager.Instance().CheckForPossibleDepletionAtArrival(this);
                 break;
             case FluxLifeState.Moving:
                 if ((destination - trailScaler.transform.position).magnitude > arrivalAcceptanceMargin)
@@ -38,16 +40,17 @@ public class Flux : MonoBehaviour
                     GameManager.Instance().FluxArrivedAtDestination(this);
                 }
                 break;
-            case FluxLifeState.Depleting: 
-                if (trailScaler.transform.localScale.z > scaleAcceptanceLevel)
-                    trailScaler.transform.localScale = trailScaler.transform.localScale - new Vector3(0, 0, scalingSpeed) * Time.deltaTime;
-                else
-                {
-                    state = FluxLifeState.Idle;
-                    GameManager.Instance().FluxDepleted(this);
-                }
+            case FluxLifeState.Depleting:
+                    if (trailScaler.transform.localScale.z > scaleAcceptanceLevel)
+                        trailScaler.transform.localScale = trailScaler.transform.localScale - new Vector3(0, 0, scalingSpeed) * Time.deltaTime;
+                    else
+                    {
+                        state = FluxLifeState.Depleted;
+                        GameManager.Instance().FluxDepleted(this);
+                    }
                 break;
             case FluxLifeState.Depleted:
+                Debug.Log("Finish depletion");
                 break;
         }
     }
@@ -55,5 +58,12 @@ public class Flux : MonoBehaviour
     public void startDepletion()
     {
         state = FluxLifeState.Depleting;
+        Debug.Log("Start depletion");
+    }
+
+    public void pauseDepletion()
+    {
+        state = FluxLifeState.Idle;
+        Debug.Log("Stop depletion");
     }
 }
