@@ -184,21 +184,25 @@ public static class MapUtility
     //per debug...
     public static void PrintCollisionMap()
     {
-        /*
+        
         var matrix = "";
         for(int i = 0; i<11; i++)
         {
             var line = "";
             for (int j = 0; j < 9; j++)
             {
-                if(collisionMap[i, j].)
-                    line = line + "[x]";
+                if(collisionMap[i, j].collidesFromAbove)
+                    line = line + "[A]";
+                else if (collisionMap[i, j].collidesFromLeft)
+                {
+                    line = line + "[B]";
+                }
                 else
-                    line = line + "[-]";
+                    line = line + "[C]";
             }
             matrix = matrix + line + '\n';
         }
         Debug.Log(matrix);
-        */
+        
     }
 }

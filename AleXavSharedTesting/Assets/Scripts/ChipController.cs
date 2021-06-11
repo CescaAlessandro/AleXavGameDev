@@ -92,6 +92,7 @@ public class ChipController : MonoBehaviour
                     {
                         //Chip si porta ad una casella rispettivamente sotto il pin 
                         //gameObject.transform.position = new Vector3(pin.AttachmentPoint.Item1.x, 0, pin.AttachmentPoint.Item1.z + 150);
+                        Debug.Log("AAAAAAAAA");
                         MapUtility.setCollisionMap(gameObject.transform.position.x, gameObject.transform.position.y, CollisionEntity.getNoCollisionEntity());
                         MapUtility.SetWiring(false);
                         pin.IsConnected = false;
@@ -118,7 +119,7 @@ public class ChipController : MonoBehaviour
                         pin.IsConnected = true;
                         pin.CableConnected = newCable;
                         TrailManager.Instance().addPoint(cablePrefab.transform.position);
-                        MapUtility.setCollisionMap(pin.AttachmentPoint.Item1.x, pin.AttachmentPoint.Item1.z, CollisionEntity.getNoCollisionEntity());
+                        MapUtility.setCollisionMap(cablePrefab.transform.position.x, cablePrefab.transform.position.z, CollisionEntity.getFullCollisionEntity());
                     }
                     else if (!MapUtility.IsChipWiring && pin.Type.Equals(PinType.Lower) && pin.IsConnected) //stacca cavo
                     {

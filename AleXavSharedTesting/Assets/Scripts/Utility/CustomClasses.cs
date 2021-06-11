@@ -73,10 +73,10 @@ public class CollisionEntity
         ent.collidesFromBelow = true;
         ent.collidesFromLeft = true;
         ent.collidesFromRight = true;
-        ent.canBeExitedAbove = false;
-        ent.canBeExitedBelow = false;
-        ent.canBeExitedLeft = false;
-        ent.canBeExitedRight = false;
+        ent.canBeExitedAbove = true;
+        ent.canBeExitedBelow = true;
+        ent.canBeExitedLeft = true;
+        ent.canBeExitedRight = true;
         return ent;
     }
     public static CollisionEntity getVerticalCollisionEntity()
