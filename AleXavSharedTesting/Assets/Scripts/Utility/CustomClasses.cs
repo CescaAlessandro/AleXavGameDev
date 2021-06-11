@@ -48,6 +48,10 @@ public class CollisionEntity
     public bool collidesFromBelow;
     public bool collidesFromLeft;
     public bool collidesFromRight;
+    public bool canBeExitedAbove;
+    public bool canBeExitedBelow;
+    public bool canBeExitedLeft;
+    public bool canBeExitedRight;
 
     public static CollisionEntity getNoCollisionEntity()
     {
@@ -56,6 +60,10 @@ public class CollisionEntity
         ent.collidesFromBelow = false;
         ent.collidesFromLeft = false;
         ent.collidesFromRight = false;
+        ent.canBeExitedAbove = true;
+        ent.canBeExitedBelow = true;
+        ent.canBeExitedLeft = true;
+        ent.canBeExitedRight = true;
         return ent;
     }
     public static CollisionEntity getFullCollisionEntity()
@@ -65,6 +73,10 @@ public class CollisionEntity
         ent.collidesFromBelow = true;
         ent.collidesFromLeft = true;
         ent.collidesFromRight = true;
+        ent.canBeExitedAbove = false;
+        ent.canBeExitedBelow = false;
+        ent.canBeExitedLeft = false;
+        ent.canBeExitedRight = false;
         return ent;
     }
     public static CollisionEntity getVerticalCollisionEntity()
@@ -116,6 +128,10 @@ public class CollisionEntity
         collidesFromLeft = false;
         collidesFromRight = false;
     }
+    public virtual Vector3 PassingThroughModifications(directions dir)
+    {
+        return new Vector3(0, 0, 0);
+    }
 }
 public class Bridge : CollisionEntity
 {
@@ -133,18 +149,34 @@ public class Bridge : CollisionEntity
             case directions.Top:
                 collidesFromAbove = true;
                 collidesFromBelow = true;
+                canBeExitedAbove = true;
+                canBeExitedBelow = true;
+                canBeExitedLeft = false;
+                canBeExitedRight = false;
                 break;
             case directions.Bottom:
                 collidesFromAbove = true;
                 collidesFromBelow = true;
+                canBeExitedAbove = true;
+                canBeExitedBelow = true;
+                canBeExitedLeft = false;
+                canBeExitedRight = false;
                 break;
             case directions.Left:
                 collidesFromLeft = true;
                 collidesFromRight = true;
+                canBeExitedAbove = false;
+                canBeExitedBelow = false;
+                canBeExitedLeft = true;
+                canBeExitedRight = true;
                 break;
             case directions.Right:
                 collidesFromLeft = true;
                 collidesFromRight = true;
+                canBeExitedAbove = false;
+                canBeExitedBelow = false;
+                canBeExitedLeft = true;
+                canBeExitedRight = true;
                 break;
             default:
                 break;
@@ -174,8 +206,15 @@ public class Bridge : CollisionEntity
                 break;
         }
     }
-    public Vector3 PassingThroughModifications(directions dir)
+    public override Vector3 PassingThroughModifications(directions dir)
     {
-        return new Vector3(0, 100, 0);
+        if (dir == directions.Bottom || dir == directions.Top)
+        {
+            return new Vector3(0, 100, 0);
+        }
+        else
+        {
+            return new Vector3(0, 0, 0);
+        }
     }
 }

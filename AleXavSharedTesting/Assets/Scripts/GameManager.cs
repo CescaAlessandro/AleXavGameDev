@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour
 
         lives = maxLives;
 
+
+
         MapUtility.LowerPins = new List<Pin>();
         MapUtility.UpperPins = new List<Pin>();
 
@@ -85,13 +87,14 @@ public class GameManager : MonoBehaviour
         depletionTimer = 0;
         idleFluxes = new List<Flux>();
 
-
-        MapUtility.setCollisionMap(200, -500, true);
-        MapUtility.setCollisionMap(0, -500, true);
-        MapUtility.setCollisionMap(-200, -500, true);
-        MapUtility.setCollisionMap(200, 500, true);
-        MapUtility.setCollisionMap(0, 500, true);
-        MapUtility.setCollisionMap(-200, 500, true);
+        MapUtility.collisionMapBaseSetup();
+        MapUtility.setCollisionMap(200, -500, CollisionEntity.getFullCollisionEntity());
+        MapUtility.setCollisionMap(0, -500, CollisionEntity.getFullCollisionEntity());
+        MapUtility.setCollisionMap(-200, -500, CollisionEntity.getFullCollisionEntity());
+        MapUtility.setCollisionMap(200, 500, CollisionEntity.getFullCollisionEntity());
+        MapUtility.setCollisionMap(0, 500, CollisionEntity.getFullCollisionEntity());
+        MapUtility.setCollisionMap(-200, 500, CollisionEntity.getFullCollisionEntity());
+        MapUtility.setCollisionMap(200, 200, new Bridge());
 
         if(!preventFluxSpawning)
             StartCoroutine(spawnRandomFluxesForever());
