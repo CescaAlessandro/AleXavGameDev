@@ -91,8 +91,9 @@ public class ChipController : MonoBehaviour
                     else if(MapUtility.IsChipWiring && pin.Type.Equals(PinType.Upper) && pin.IsConnected) //distruggi cavo
                     {
                         //Chip si porta ad una casella rispettivamente sotto il pin 
+                        MapUtility.setCollisionMap(gameObject.transform.position.x, gameObject.transform.position.z, CollisionEntity.getNoCollisionEntity());
                         gameObject.transform.position = new Vector3(pin.AttachmentPoint.Item1.x, 0, pin.AttachmentPoint.Item1.z + 150);
-                        MapUtility.setCollisionMap(gameObject.transform.position.x, gameObject.transform.position.y, CollisionEntity.getNoCollisionEntity());
+
 
                         MapUtility.SetWiring(false);
                         pin.IsConnected = false;
