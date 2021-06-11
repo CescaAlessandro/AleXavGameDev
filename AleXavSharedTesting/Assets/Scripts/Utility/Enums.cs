@@ -30,3 +30,10 @@ public enum DialogInstance
     GoToLowerPinSavagePartTwo,
     SecondTutorial
 }
+public enum directions
+{
+    Top,
+    Bottom,
+    Left,
+    Right
+}

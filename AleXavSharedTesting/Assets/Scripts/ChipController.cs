@@ -9,7 +9,6 @@ public class ChipController : MonoBehaviour
     public float gridSize = 1f;
     public GameObject cablePrefab;
     public Grid grid;
-    private Vector3 lastMovementStart = new Vector3(-1, -1, -1);
 
     void Start()
     {
@@ -38,65 +37,36 @@ public class ChipController : MonoBehaviour
             //Cip sta maneggiando un cavo 
             //AND
             //è presente più di un cavo sulla mappa
-            if (MapUtility.IsChipWiring)//&& MapUtility.Cables.Count >= 2)
+            if (currentPosition.x != transform.position.x || currentPosition.z != transform.position.z)
             {
-                if (!MapUtility.IsPositionNearPin(gameObject.transform.position).Item1)
-                    MapUtility.PreventReattaching = false;
-
-                var startPosition = new Tuple<float, float>(transform.position.x, transform.position.z);
-                var finishPosition = new Tuple<float, float>(currentPosition.x, currentPosition.z);
-
-                if (!TrailManager.Instance().isLastMove(new Vector3(finishPosition.Item1,0,finishPosition.Item2)))
+                if (MapUtility.IsChipWiring)//&& MapUtility.Cables.Count >= 2)
                 {
-                    if (!MapUtility.LookForCollision(startPosition, finishPosition))
+                    if (!MapUtility.IsPositionNearPin(gameObject.transform.position).Item1)
+                        MapUtility.PreventReattaching = false;
+
+                    var startPosition = new Tuple<float, float>(transform.position.x, transform.position.z);
+                    var finishPosition = new Tuple<float, float>(currentPosition.x, currentPosition.z);
+
+                    var finalPosition = MapUtility.GetBestFinalLocationForMovement(startPosition, finishPosition);
+                    transform.position = finalPosition;
+                    var cable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
+                    cable.Instance.transform.position = finalPosition;
+                }
+                else
+                {
+                    //durante il drag, se Chip è vicino ad un pin (e non sta collegando) viene automaticamente attaccato a quest'ultimo
+                    //(drop on mobile)
+                    if (MapUtility.IsPositionNearPin(currentPosition).Item1)
                     {
-                        if (startPosition.Item1 != finishPosition.Item1 && startPosition.Item2 != finishPosition.Item2)
-                        {
-                            transform.position = new Vector3(currentPosition.x, transform.position.y, currentPosition.z);
-                            var cable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
-                            cable.Instance.transform.position = transform.position;
-                            TrailManager.Instance().cableUpdate();
-                            //MapUtility.setCollisionMap(currentPosition.x, currentPosition.z, true);
-                            //MapUtility.setCollisionMap(currentPosition.x+100, currentPosition.z, true);
-                        }
-                        else
-                        {
-                            transform.position = new Vector3(currentPosition.x, transform.position.y, currentPosition.z);
-                            var cable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
-                            cable.Instance.transform.position = transform.position;
-                            TrailManager.Instance().cableUpdate();
-                            //MapUtility.setCollisionMap(currentPosition.x, currentPosition.z, true);
-                        }
+                        var pin = MapUtility.IsPositionNearPin(currentPosition).Item2;
+                        gameObject.transform.position = new Vector3(pin.AttachmentPoint.Item1.x, 0, pin.AttachmentPoint.Item1.z);
                     }
                     else
                     {
-                        Debug.Log("Collision found.");
+                        transform.position = new Vector3(currentPosition.x, transform.position.y, currentPosition.z);
                     }
                 }
-                else
-                {
-                    MapUtility.setCollisionMap(transform.position.x, transform.position.z, false);
-                    transform.position = new Vector3(currentPosition.x, transform.position.y, currentPosition.z);
-                    var cable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
-                    cable.Instance.transform.position = transform.position;
-                    TrailManager.Instance().cableUpdate();
-                }
             }
-            else
-            {
-                //durante il drag, se Chip è vicino ad un pin (e non sta collegando) viene automaticamente attaccato a quest'ultimo
-                //(drop on mobile)
-                if (MapUtility.IsPositionNearPin(currentPosition).Item1)
-                {
-                    var pin = MapUtility.IsPositionNearPin(currentPosition).Item2;
-                    gameObject.transform.position = new Vector3(pin.AttachmentPoint.Item1.x, 0, pin.AttachmentPoint.Item1.z);
-                }
-                else
-                {
-                    transform.position = new Vector3(currentPosition.x, transform.position.y, currentPosition.z);
-                }
-            }
-
             if (Input.GetMouseButtonUp(0))
             {
                 pickedUpObject = null;
@@ -121,9 +91,8 @@ public class ChipController : MonoBehaviour
                     else if(MapUtility.IsChipWiring && pin.Type.Equals(PinType.Upper) && pin.IsConnected) //distruggi cavo
                     {
                         //Chip si porta ad una casella rispettivamente sotto il pin 
-                        gameObject.transform.position = new Vector3(pin.AttachmentPoint.Item1.x, 0, pin.AttachmentPoint.Item1.z + 150);
-
-                        //MapUtility.setCollisionMap(pin.CableConnected.Instance.transform.position.x, pin.CableConnected.Instance.transform.position.z, false);
+                        //gameObject.transform.position = new Vector3(pin.AttachmentPoint.Item1.x, 0, pin.AttachmentPoint.Item1.z + 150);
+                        MapUtility.setCollisionMap(gameObject.transform.position.x, gameObject.transform.position.y, false);
                         MapUtility.SetWiring(false);
                         pin.IsConnected = false;
 
@@ -148,7 +117,8 @@ public class ChipController : MonoBehaviour
                         MapUtility.SetWiring(true);
                         pin.IsConnected = true;
                         pin.CableConnected = newCable;
-                        TrailManager.Instance().cableUpdate();
+                        TrailManager.Instance().addPoint(cablePrefab.transform.position);
+                        MapUtility.setCollisionMap(pin.AttachmentPoint.Item1.x, pin.AttachmentPoint.Item1.z, true);
                     }
                     else if (!MapUtility.IsChipWiring && pin.Type.Equals(PinType.Lower) && pin.IsConnected) //stacca cavo
                     {
@@ -176,4 +146,5 @@ public class ChipController : MonoBehaviour
             }
         }
     }
+
 }

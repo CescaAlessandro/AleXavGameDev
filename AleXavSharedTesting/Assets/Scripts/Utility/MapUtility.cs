@@ -23,140 +23,89 @@ public static class MapUtility
     {
         IsChipWiring = flag;
     }
-    /*
-    public static bool LookForCollision(Tuple<float, float> start, Tuple<float, float> finish)
+
+    public static Vector3 GetBestFinalLocationForMovement(Tuple<float, float> start, Tuple<float, float> finish)
     {
-        bool result = false;
+        var startMapConvertionX = (int)Math.Round(((-start.Item1) + 400) / 100,0);
+        var startMapConvertionY = (int)Math.Round(((start.Item2) + 500) / 100,0);
+        var finishMapConvertionX = (int)Math.Round(((-finish.Item1) + 400) / 100,0);
+        var finishMapConvertionY = (int)Math.Round(((finish.Item2) + 500) / 100,0);
 
-        var cablesNotConnected = Cables.Where(cable => !cable.IsConnectedToCip).ToList();
-
-        foreach (var cable in cablesNotConnected)
-        {
-            foreach (var position in cable.WirePositions)
-            {
-                var AB = Math.Sqrt((finish.Item1 - start.Item1) * (finish.Item1 - start.Item1) + (finish.Item2 - start.Item2) * (finish.Item2 - start.Item2));
-                var AP = Math.Sqrt((position.Item1 - start.Item1) * (position.Item1 - start.Item1) + (position.Item2 - start.Item2) * (position.Item2 - start.Item2));
-                var PB = Math.Sqrt((finish.Item1 - position.Item1) * (finish.Item1 - position.Item1) + (finish.Item2 - position.Item2) * (finish.Item2 - position.Item2));
-                if (AB == AP + PB)
-                {
-                    result = true;
-                    return result;
-                }
-            }
-        }
-
-        return result;
-    }
-    */
-    public static bool LookForCollision(Tuple<float, float> start, Tuple<float, float> finish)
-    {
-        var startMapConvertionX = Math.Round(((-start.Item1) + 400) / 100,0);
-        var startMapConvertionY = Math.Round(((start.Item2) + 500) / 100,0);
-        var finishMapConvertionX = Math.Round(((-finish.Item1) + 400) / 100,0);
-        var finishMapConvertionY = Math.Round(((finish.Item2) + 500) / 100,0);
-        //Debug.Log(finishMapConvertionY);
-        //Debug.Log(startMapConvertionY);
-        //Debug.Log("");
-        /*
-        for(int i= 0; i< 11; i++)
-        {
-            for(int j = 0; j < 9; j++)
-            {
-                Debug.Log(collisionMap[i, j]);
-            }
-            Debug.Log("");
-
-        }
-        Debug.Log(""); Debug.Log("");
-        */
         float currentX = (float)startMapConvertionX;
         float currentY = (float)startMapConvertionY;
         bool[,] mapClone = (bool[,])collisionMap.Clone();
-        while (currentX != finishMapConvertionX || currentY != finishMapConvertionY )
+        List<Vector3> newPoints = new List<Vector3>();
+        Vector3 bestLocation = new Vector3(start.Item1, 0, start.Item2);
+        while(currentY != finishMapConvertionY)
         {
-            if(currentY == finishMapConvertionY)
+            var lastY = currentY;
+            if (currentY < finishMapConvertionY)
             {
-                if (currentX < finishMapConvertionX)
+                //Debug.Log(finishMapConvertionY);
+                currentY++;
+            }
+            else
+            {
+                currentY--;
+            }
+            if (collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)])
+            {
+                PrintCollisionMap();
+                if(TrailManager.Instance().isLastMove(new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500)))
                 {
-                    currentX++;
+                    collisionMap[(int)Math.Round(lastY, 0), (int)Math.Round(currentX, 0)] = false;
+                    TrailManager.Instance().removeLastPoint();
+                    bestLocation = new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500);
                 }
-                else
                 {
-                    currentX--;
-                }
-                if (collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)])
-                {
-                    /*
-                    string str = "";
-                    for (int i = 0; i < 11; i++)
-                    {
-
-                        for (int j = 0; j < 9; j++)
-                        {
-                            str += collisionMap[i, j];
-                            str += " ";
-                        }
-                        Debug.Log(str);
-                        str = "";
-                    }
-                    Debug.Log("");
-                    */
-
-                    PrintCollisionMap();
-                    if (TrailManager.Instance().isLastMove(new Vector3(((currentX*100)-400)*(-1f),0,(currentY*100)-500)))
-                    {
-                        mapClone[(int)Math.Round(currentY,0), (int)Math.Round(currentX,0)] = false;
-                    }
-                    else{
-                        return true;
-                    }
-                }
-                else
-                {
-                    mapClone[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)] = true;
+                    return bestLocation;
                 }
             }
             else
             {
-                if (currentY < finishMapConvertionY)
-                {
-                    //Debug.Log(finishMapConvertionY);
-                    currentY++;
-                }
-                else
-                {
-                    currentY--;
-                }
-                //Debug.Log((int)Math.Round(currentY, 0));
-                //Debug.Log((int)Math.Round(finishMapConvertionX, 0));
-                if (collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)])
-                {
-                    /*
-                    string str = "";
-                    for (int i = 0; i < 11; i++)
-                    {
-
-                        for (int j = 0; j < 9; j++)
-                        {
-                            str += collisionMap[i, j];
-                            str += " ";
-                        }
-                        Debug.Log(str);
-                        str = "";
-                    }
-                    Debug.Log("");
-                    */
-                    PrintCollisionMap();
-                    return true;
-                }
-                else
-                {
-                    mapClone[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)] = true;
-                }
+                collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)] = true;
+                TrailManager.Instance().addPoint(new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500));
+                bestLocation = new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500);
+                Debug.Log(new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500));
             }
         }
-        collisionMap = mapClone;
-        return false;
+        while (currentX != finishMapConvertionX)
+        {
+            var lastX = currentX;
+            if (currentX < finishMapConvertionX)
+            {
+                currentX++;
+            }
+            else
+            {
+                currentX--;
+            }
+            if (collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)])
+            {
+
+                PrintCollisionMap();
+                Debug.Log(TrailManager.Instance().getLastMove());
+                if (TrailManager.Instance().isLastMove(new Vector3(((currentX * 100) - 400) * (-1f), 0, (currentY * 100) - 500)))
+                {
+                    collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(lastX, 0)] = false;
+                    TrailManager.Instance().removeLastPoint();
+                    bestLocation = new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500);
+                }
+                else
+                {
+                    return bestLocation;
+                }
+            }
+            else
+            {
+                collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)] = true;
+                TrailManager.Instance().addPoint(new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500));
+                bestLocation = new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500);
+            }
+        }
+        PrintCollisionMap();
+        Debug.Assert(bestLocation == new Vector3(finish.Item1, 0, finish.Item2),"Target Position not reached");
+        return bestLocation;
     }
         //controlla se Chip è vicino ad un pin
         //se vero => resituisce tupla con posizione pin e true
@@ -214,5 +163,51 @@ public static class MapUtility
             matrix = matrix + line + '\n';
         }
         Debug.Log(matrix);
+    }
+
+
+    public class CollisionEntity
+    {
+        public bool collidesFromAbove;
+        public bool collidesFromBelow;
+        public bool collidesFromLeft;
+        public bool collidesFromRight;
+
+        static CollisionEntity getNoCollisionEntity()
+        {
+            var ent = new CollisionEntity();
+            ent.collidesFromAbove = false;
+            ent.collidesFromBelow = false;
+            ent.collidesFromLeft = false;
+            ent.collidesFromRight = false;
+            return ent;
+        }
+        static CollisionEntity getFullCollisionEntity()
+        {
+            var ent = new CollisionEntity();
+            ent.collidesFromAbove = true;
+            ent.collidesFromBelow = true;
+            ent.collidesFromLeft = true;
+            ent.collidesFromRight = true;
+            return ent;
+        }
+        static CollisionEntity getVerticalCollisionEntity()
+        {
+            var ent = new CollisionEntity();
+            ent.collidesFromAbove = true;
+            ent.collidesFromBelow = true;
+            ent.collidesFromLeft = false;
+            ent.collidesFromRight = false;
+            return ent;
+        }
+        static CollisionEntity getHorizontalCollisionEntity()
+        {
+            var ent = new CollisionEntity();
+            ent.collidesFromAbove = false;
+            ent.collidesFromBelow = false;
+            ent.collidesFromLeft = true;
+            ent.collidesFromRight = true;
+            return ent;
+        }
     }
 }
