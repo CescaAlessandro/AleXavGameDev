@@ -18,17 +18,36 @@ public enum FluxLifeState
 
 public enum DialogInstance
 {
-    Welcome,
+    #region General
+    GoalReached,
     Joke,
     Mistake,
+    #endregion
+    #region FirstLevel
+    Welcome,
     Pissed,
     RedeemYourself,
-    GoalReached,
     GoToUpperPin,
     GoToLowerPin,
     GoToLowerPinSavagePartOne,
     GoToLowerPinSavagePartTwo,
-    SecondTutorial
+    #endregion
+    #region SecondLevel
+    WelcomeAgain,
+    CanDetach,
+    CreateBlue,
+    Attach,
+    Detach,
+    Remove,
+    NoTimeToLose,
+    LongDay,
+    ISaidBlue,
+    OkBlue,
+    BadTime,
+    WasteTime,
+    RepeatForPink,
+    IAmRuler,
+    #endregion
 }
 public enum directions
 {

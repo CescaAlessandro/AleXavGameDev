@@ -9,7 +9,7 @@ public static class MapUtility
 {
     public static bool IsChipWiring { get; set; } = false;
     //flag per prevenire che un cavo scollegato venga riattaccato subito 
-    //(se Chip è nelle vicinanze del LowerPin con cui ha appena interagito)
+    //(se Chip ï¿½ nelle vicinanze del LowerPin con cui ha appena interagito)
     public static bool PreventReattaching { get; set; } = false;
 
     public static List<Pin> UpperPins { get; set; }
@@ -142,7 +142,7 @@ public static class MapUtility
         Debug.Log(bestLocation);
         return bestLocation;
     }
-        //controlla se Chip è vicino ad un pin
+        //controlla se Chip ï¿½ vicino ad un pin
         //se vero => resituisce tupla con posizione pin e true
         //se false => resituisce tupla con posizione fake e falso
         public static Tuple<bool, Pin> IsPositionNearPin(Vector3 position)

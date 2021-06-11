@@ -36,7 +36,7 @@ public class ChipController : MonoBehaviour
             //eventuali collisioni vanno controllate solo se 
             //Cip sta maneggiando un cavo 
             //AND
-            //è presente più di un cavo sulla mappa
+            //ï¿½ presente piï¿½ di un cavo sulla mappa
             if (currentPosition.x != transform.position.x || currentPosition.z != transform.position.z)
             {
                 if (MapUtility.IsChipWiring)//&& MapUtility.Cables.Count >= 2)
@@ -54,7 +54,7 @@ public class ChipController : MonoBehaviour
                 }
                 else
                 {
-                    //durante il drag, se Chip è vicino ad un pin (e non sta collegando) viene automaticamente attaccato a quest'ultimo
+                    //durante il drag, se Chip ï¿½ vicino ad un pin (e non sta collegando) viene automaticamente attaccato a quest'ultimo
                     //(drop on mobile)
                     if (MapUtility.IsPositionNearPin(currentPosition).Item1)
                     {
@@ -86,20 +86,22 @@ public class ChipController : MonoBehaviour
                         pin.IsConnected = true;
                         pin.CableConnected = cable;
 
-                        GameManager.Instance().CheckForPossibleDepletion(pin);
+                        AudioManager.Instance().PlayAttachDetach();
                     }
                     else if(MapUtility.IsChipWiring && pin.Type.Equals(PinType.Upper) && pin.IsConnected) //distruggi cavo
                     {
                         //Chip si porta ad una casella rispettivamente sotto il pin 
-                        //gameObject.transform.position = new Vector3(pin.AttachmentPoint.Item1.x, 0, pin.AttachmentPoint.Item1.z + 150);
-                        Debug.Log("AAAAAAAAA");
+                        gameObject.transform.position = new Vector3(pin.AttachmentPoint.Item1.x, 0, pin.AttachmentPoint.Item1.z + 150);
                         MapUtility.setCollisionMap(gameObject.transform.position.x, gameObject.transform.position.y, CollisionEntity.getNoCollisionEntity());
+
                         MapUtility.SetWiring(false);
                         pin.IsConnected = false;
 
                         UnityEngine.Object.Destroy(pin.CableConnected.Instance);
                         MapUtility.Cables.Remove(pin.CableConnected);
                         pin.CableConnected = null;
+
+                        AudioManager.Instance().PlayAttachDetach();
                     }
                     else if (!MapUtility.IsChipWiring && pin.Type.Equals(PinType.Upper) && !pin.IsConnected)
                     {
@@ -120,6 +122,7 @@ public class ChipController : MonoBehaviour
                         pin.CableConnected = newCable;
                         TrailManager.Instance().addPoint(cablePrefab.transform.position);
                         MapUtility.setCollisionMap(cablePrefab.transform.position.x, cablePrefab.transform.position.z, CollisionEntity.getFullCollisionEntity());
+                        AudioManager.Instance().PlayAttachDetach();
                     }
                     else if (!MapUtility.IsChipWiring && pin.Type.Equals(PinType.Lower) && pin.IsConnected) //stacca cavo
                     {
@@ -131,6 +134,10 @@ public class ChipController : MonoBehaviour
                         pin.CableConnected.IsConnectedToCip = true;
                         TrailManager.Instance().UpdateCablePointsOnDetach();
                         pin.CableConnected.Instance.transform.position = gameObject.transform.position;
+
+                        GameManager.Instance().CheckForPossibleDepletionPauses(pin);
+
+                        AudioManager.Instance().PlayAttachDetach();
                     }
                 }                         
             }   

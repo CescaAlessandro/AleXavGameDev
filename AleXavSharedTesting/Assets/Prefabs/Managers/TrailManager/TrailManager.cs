@@ -19,10 +19,9 @@ public class TrailManager : MonoBehaviour
     {
         return tm;
     }
-    // Called when Chip moves
-    public void cableUpdate()
-    {
-        Debug.Log("new");
+    // Update is called once per frame
+    public void cableUpdate() {
+
         foreach (var cable in MapUtility.Cables)
         {
             //aggiorno e salvo la posizione del cavo solo se questo � maneggiato da Cip
@@ -48,19 +47,16 @@ public class TrailManager : MonoBehaviour
                     }
                     else if (positionsList.Last().x != target.transform.position.x && positionsList.Last().z != target.transform.position.z)
                     {
-                        addAllBetween(positionsList.Last(), new Vector3(positionsList.Last().x, positionsList.Last().y, target.transform.position.z), positionsList);
-                        addAllBetween(positionsList.Last(), new Vector3(target.transform.position.x, positionsList.Last().y, positionsList.Last().z), positionsList);
+                        positionsList.Add(new Vector3(positionsList.Last().x, positionsList.Last().y, target.transform.position.z));
+                        positionsList.Add(new Vector3(target.transform.position.x, positionsList.Last().y, positionsList.Last().z));
                     }
                     else if (positionsList.Last().x != target.transform.position.x)
                     {
-                        addAllBetween(positionsList.Last(), new Vector3(target.transform.position.x, positionsList.Last().y, positionsList.Last().z), positionsList);
+                        positionsList.Add(new Vector3(target.transform.position.x, positionsList.Last().y, positionsList.Last().z));
                     }
                     else if (positionsList.Last().z != target.transform.position.z)
                     {
-                        //foreach (var vec in positionsList)
-                        //       Debug.Log(vec);
-                        //Debug.Log("");
-                        addAllBetween(positionsList.Last(), new Vector3(positionsList.Last().x, positionsList.Last().y, target.transform.position.z), positionsList);
+                        positionsList.Add(new Vector3(positionsList.Last().x, positionsList.Last().y, target.transform.position.z));
                     }
                     else
                     {
@@ -71,17 +67,16 @@ public class TrailManager : MonoBehaviour
                 {
                     if (positionsList.Last().x != target.transform.position.x && positionsList.Last().z != target.transform.position.z)
                     {
-                        addAllBetween(positionsList.Last(), new Vector3(positionsList.Last().x, positionsList.Last().y, target.transform.position.z), positionsList);
-                        addAllBetween(positionsList.Last(), new Vector3(target.transform.position.x, positionsList.Last().y, positionsList.Last().z), positionsList);
+                        positionsList.Add(new Vector3(positionsList.Last().x, positionsList.Last().y, target.transform.position.z));
+                        positionsList.Add(new Vector3(target.transform.position.x, positionsList.Last().y, positionsList.Last().z));
                     }
                     else if (positionsList.Last().x != target.transform.position.x)
                     {
-                        addAllBetween(positionsList.Last(), new Vector3(target.transform.position.x, positionsList.Last().y, positionsList.Last().z), positionsList);
+                        positionsList.Add(new Vector3(target.transform.position.x, positionsList.Last().y, positionsList.Last().z));
                     }
                     else if (positionsList.Last().z != target.transform.position.z)
                     {
-                        Debug.Log(target.transform.position);
-                        addAllBetween(positionsList.Last(), new Vector3(positionsList.Last().x, positionsList.Last().y, target.transform.position.z), positionsList);
+                        positionsList.Add(new Vector3(positionsList.Last().x, positionsList.Last().y, target.transform.position.z));
                     }
                     else
                     {
@@ -131,7 +126,7 @@ public class TrailManager : MonoBehaviour
 
     public void UpdateCablePointsOnDetach()
     {
-        var cable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
+        var cable = MapUtility.Cables.First(cable => cable.IsConnectedToCip);
         var trail = cable.Instance.GetComponent<TrailRenderer>();
         var positions = new Vector3[trail.positionCount];
         trail.GetPositions(positions);
@@ -147,70 +142,9 @@ public class TrailManager : MonoBehaviour
         trail.GetPositions(positionas);
     }
 
-    public void addAllBetween(Vector3 last, Vector3 dest, List<Vector3> list)
+    public void addAtBeginning()
     {
-        var xCurrent = last.x;
-        var yCurrent = last.z;
-        if (last.x == dest.x)
-        {
-            int a = 0;
-            do
-            {
-                a++;
-                Debug.Log(yCurrent % 100);
-                Debug.Log("b");
-                if (yCurrent < dest.z)
-                {
 
-                    yCurrent += 100;
-                }
-                else
-                {
-                    yCurrent -= 100;
-                }
-                if (yCurrent < -500)
-                    yCurrent = -500;
-                if (yCurrent > 500)
-                    yCurrent = 500;
-                list.Add(new Vector3(xCurrent, 0, yCurrent));
-                if (a == 12)
-                {
-                    Debug.LogError("Infinite Loop");
-                }
-            } while ((int)yCurrent / 100 != (int)dest.z / 100 && a < 12);
-        }
-        else if (last.z == dest.z)
-        {
-            int a = 0;
-            do
-            {
-                a++;
-                Debug.Log("c");
-                if (xCurrent < dest.x)
-                {
-                    xCurrent += 100;
-                }
-                else
-                {
-                    xCurrent -= 100;
-                }
-                if (xCurrent < -400)
-                    xCurrent = -400;
-                if (xCurrent > 400)
-                    xCurrent = 400;
-
-
-                list.Add(new Vector3(xCurrent, 0, yCurrent));
-                if (a == 12)
-                {
-                    Debug.LogError("Infinite Loop");
-                }
-            } while ((int)xCurrent / 100 != (int)dest.x / 100 && a < 12);
-        }
-        else
-        {
-            Debug.LogError("Diagonal Movemnet not allowed here");
-        }
     }
     public void addPoints(List<Vector3> newPoints)
     {

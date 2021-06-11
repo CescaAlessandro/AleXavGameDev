@@ -8,21 +8,23 @@ using UnityEngine.Assertions;
 
 public class GameManager : MonoBehaviour
 {
+    private List<Flux> idleFluxes;
+    private List<Flux> depletioningFluxes;
+
     public GameObject fluxPrefab;
     //spawnPoints presi dagli attachment dello scenario, andr� tolto
     public List<GameObject> spawnPoints;
-    private List<Flux> idleFluxes;
-    public static GameManager gm;
     public Sprite[] livesSprites = new Sprite[3];
     public SpriteRenderer livesIndicator;
     public bool preventLoosingLife;
     public bool preventFluxSpawning;
 
     //timers
-    private float depletionTimer;
-    private bool depletionTimerIsRunning;
     private int maxLives = 3;
     private int lives;
+
+
+    public static GameManager gm;
 
 
     void Start()
@@ -82,10 +84,8 @@ public class GameManager : MonoBehaviour
             MapUtility.UpperPins.Add(pinInstance);
             pinIndex++;
         }
-
-        depletionTimerIsRunning = false;
-        depletionTimer = 0;
         idleFluxes = new List<Flux>();
+        depletioningFluxes = new List<Flux>();
 
         MapUtility.collisionMapBaseSetup();
         MapUtility.setCollisionMap(200, -500, CollisionEntity.getFullCollisionEntity());
@@ -102,22 +102,13 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (depletionTimerIsRunning)
-        {
-            if (depletionTimer <= 3)
-            {
-                depletionTimer += Time.deltaTime;
-            }
-            else
-            {
-                Debug.Log("Finish depletion");
-                depletionTimer = 0;
-                depletionTimerIsRunning = false;
-            }
-        }
+        foreach (var lPin in MapUtility.LowerPins.Where(pin => pin.IsConnected))
+            CheckForPossibleDepletion(lPin);
 
         foreach (var flux in idleFluxes)
         {
+            AudioManager.Instance().PlayZap();
+
             flux.requestTimer += Time.deltaTime;
 
             if (flux.requestTimer >= 5)
@@ -142,8 +133,7 @@ public class GameManager : MonoBehaviour
     //logic to decide what to do on flux depletion
     private void onFluxDepletion()
     {
-        Debug.Log("Start depletion");
-        depletionTimerIsRunning = true;
+
     }
     public void LoseLives(int amount)
     {
@@ -152,6 +142,7 @@ public class GameManager : MonoBehaviour
         if (lives > 0)
         {
             livesIndicator.sprite = livesSprites[lives - 1];
+            AudioManager.Instance().PlayLoseLife();
         }
         else
         {
@@ -160,7 +151,7 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
-
+        Debug.Log("GameOver");
     }
     //spawn fluxes on random pins with a fixed delay between them
     private float fluxSpawnDelay = 20;
@@ -170,6 +161,7 @@ public class GameManager : MonoBehaviour
         {
             int ranInd = UnityEngine.Random.Range(0, MapUtility.UpperPins.Count);
             SpawnFluxIndex(ranInd);
+            Debug.Log("Spawned at index: " + ranInd);
             yield return new WaitForSeconds(fluxSpawnDelay);
         }
     }
@@ -188,8 +180,22 @@ public class GameManager : MonoBehaviour
     public void StartFluxDepletion(Flux flux)
     {
         flux.startDepletion();
+        AudioManager.Instance().StopZap();
+        AudioManager.Instance().PlayStartDownload();
         idleFluxes.Remove(flux);
-        onFluxDepletion();
+        depletioningFluxes.Add(flux);
+        //onFluxDepletion();
+    }
+
+    //Pauses depletion of the flux when the cable is detached somewhere
+    public void PauseFluxDepletion(Flux flux)
+    {
+        flux.pauseDepletion();
+        AudioManager.Instance().StopStartDownload();
+        if (!idleFluxes.Contains(flux))
+            idleFluxes.Add(flux);
+        if(depletioningFluxes.Contains(flux))
+            depletioningFluxes.Remove(flux);
     }
 
     //Function used by fluxes to notify the manager that they arrived at the destination
@@ -202,6 +208,7 @@ public class GameManager : MonoBehaviour
     //Function used by fluxes to notify the game manager that they are depleted
     public void FluxDepleted(Flux flux)
     {
+        depletioningFluxes.Remove(flux);
         GameObject.Destroy(flux.gameObject);
     }
 
@@ -213,23 +220,42 @@ public class GameManager : MonoBehaviour
 
         if(possibleFluxWaiting != null)
         {
-            if (lPin.Instance.GetComponent<Renderer>().material.color == uPin.Instance.GetComponent<Renderer>().material.color)
+            var fluxDepletingSameIndex = depletioningFluxes.FirstOrDefault(flux => flux.index == possibleFluxWaiting.index);
+
+            if (lPin.Instance.GetComponent<Renderer>().material.color == uPin.Instance.GetComponent<Renderer>().material.color &&
+                fluxDepletingSameIndex == null)
                 StartFluxDepletion(possibleFluxWaiting);
         }
     }
-    public void CheckForPossibleDepletionAtArrival(Flux flux)
+    public void CheckForPossibleDepletionAtArrival(Flux arrivalFlux)
     {
-        var uPin = MapUtility.UpperPins.First(pin => pin.Index == flux.index);
+        var uPin = MapUtility.UpperPins.First(pin => pin.Index == arrivalFlux.index);
 
         if (uPin.IsConnected)
         {
             var possibleLPin = MapUtility.LowerPins.FirstOrDefault(pin => pin.CableConnected == uPin.CableConnected);
 
-            if(possibleLPin != null)
+
+            if(possibleLPin != null && possibleLPin.IsConnected)
             {
-                if (possibleLPin.Instance.GetComponent<Renderer>().material.color == uPin.Instance.GetComponent<Renderer>().material.color)
-                    StartFluxDepletion(flux);
+                var fluxDepletingSameIndex = depletioningFluxes.FirstOrDefault(flux => flux.index == arrivalFlux.index);
+
+                if (possibleLPin.Instance.GetComponent<Renderer>().material.color == uPin.Instance.GetComponent<Renderer>().material.color &&
+                    fluxDepletingSameIndex == null)
+                    StartFluxDepletion(arrivalFlux);
             }
+        }
+    }
+
+    public void CheckForPossibleDepletionPauses(Pin lPin)
+    {
+        var uPin = MapUtility.UpperPins.FirstOrDefault(pin => pin.CableConnected == lPin.CableConnected);
+        if(uPin != null)
+        {
+            var possibleDepletingFlux = depletioningFluxes.FirstOrDefault(flux => flux.index == uPin.Index);
+
+            if (possibleDepletingFlux != null)
+                PauseFluxDepletion(possibleDepletingFlux);
         }
     }
 }

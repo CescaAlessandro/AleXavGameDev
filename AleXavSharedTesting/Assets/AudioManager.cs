@@ -5,6 +5,11 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public AudioSource electricZap;
+    public AudioSource lifeLoss;
+    //todo: da inserire
+    public AudioSource gameOver;
+    public AudioSource startDownload;
+    public AudioSource attachDetach;
     public float zapMaxVolume = 0.001f;
     public AudioSource music;
     public static AudioManager am;
@@ -22,12 +27,35 @@ public class AudioManager : MonoBehaviour
     public void PlayZap()
     {
         electricZap.loop = false;
-        electricZap.Play();
+
+        if (!electricZap.isPlaying)
+            electricZap.Play();
+    }
+    public void PlayAttachDetach()
+    {
+        attachDetach.loop = false;
+
+        attachDetach.Play();
     }
     public void StopZap()
     {
         if(electricZap.isPlaying)
             electricZap.Stop();
+    }
+    public void PlayStartDownload()
+    {
+        startDownload.loop = false;
+        startDownload.Play();
+    }
+    public void StopStartDownload()
+    {
+        if(startDownload.isPlaying)
+            startDownload.Stop();
+    }
+    public void PlayLoseLife()
+    {
+        lifeLoss.loop = false;
+        lifeLoss.Play();
     }
     public void SetMusicVolume(float volume)
     {
