@@ -31,6 +31,13 @@ public class AudioManager : MonoBehaviour
         if (!electricZap.isPlaying)
             electricZap.Play();
     }
+    public void PlayLoopZap()
+    {
+        electricZap.loop = true;
+
+        if (!electricZap.isPlaying)
+            electricZap.Play();
+    }
     public void PlayAttachDetach()
     {
         attachDetach.loop = false;

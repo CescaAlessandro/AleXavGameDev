@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PinType 
+public enum PinType
 {
     Lower,
     Upper
@@ -22,8 +22,10 @@ public enum DialogInstance
     GoalReached,
     Joke,
     Mistake,
+    BeautifulDay,
     #endregion
     #region FirstLevel
+    Presentation,
     Welcome,
     Pissed,
     RedeemYourself,
@@ -31,6 +33,7 @@ public enum DialogInstance
     GoToLowerPin,
     GoToLowerPinSavagePartOne,
     GoToLowerPinSavagePartTwo,
+    SkippedTutorial,
     #endregion
     #region SecondLevel
     WelcomeAgain,
@@ -47,6 +50,24 @@ public enum DialogInstance
     WasteTime,
     RepeatForPink,
     IAmRuler,
+    #endregion
+    #region ThirdLevel
+    WelcomeThird,
+    ExplanationPartOne,
+    ExplanationPartTwo,
+    ExplanationPartThree,
+    ExplanationPartFour,
+    ExplanationPartFive,
+    ExplanationPartSix,
+    ExplanationPartSeven,
+    ExplanationPartEight,
+    HereItIs,
+    WhatAreYouWaitingFor,
+    KindaSus,
+    NotScared,
+    ByTheWay,
+    DailyGoal,
+    ALotTime,
     #endregion
 }
 public enum directions

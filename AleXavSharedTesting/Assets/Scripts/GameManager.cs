@@ -19,21 +19,19 @@ public class GameManager : MonoBehaviour
     public bool preventLoosingLife;
     public bool preventFluxSpawning;
 
-    //timers
     private int maxLives = 3;
     private int lives;
+    private int numberFluxesDepleteded;
 
 
     public static GameManager gm;
-
 
     void Start()
     {
         gm = this;
 
         lives = maxLives;
-
-
+        numberFluxesDepleteded = 0;
 
         MapUtility.LowerPins = new List<Pin>();
         MapUtility.UpperPins = new List<Pin>();
@@ -125,6 +123,11 @@ public class GameManager : MonoBehaviour
         return gm;
     }
 
+    public int GetNumberFluxesDepleteded()
+    {
+        return this.numberFluxesDepleteded;
+    }
+
     //logic to decide what to do on flux arrival
     private void onFluxArrival()
     {
@@ -209,6 +212,7 @@ public class GameManager : MonoBehaviour
     public void FluxDepleted(Flux flux)
     {
         depletioningFluxes.Remove(flux);
+        numberFluxesDepleteded++;
         GameObject.Destroy(flux.gameObject);
     }
 
