@@ -464,7 +464,7 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ALotTime];
         }
 
-        if(GameManager.Instance().GetNumberFluxesDepleteded() == 3)
+        if(GameManager.Instance().GetNumberFluxesDepleteded() == 3 && dialogFlowState != -1)
         {
             spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];

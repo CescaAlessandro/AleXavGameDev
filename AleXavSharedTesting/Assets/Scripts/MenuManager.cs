@@ -36,6 +36,12 @@ public class MenuManager : MonoBehaviour
     {
         return mm;
     }
+
+    public bool GetMenusStatus()
+    {
+        return LevelFailedMenu.activeSelf || LevelCompleteMenu.activeSelf;
+    }
+
     //loads the right main menu based on whether it's the first time the game is played or not
     public void loadMainMenu()
     {
@@ -81,6 +87,7 @@ public class MenuManager : MonoBehaviour
     }
     public void FromLevelSelectToLevel(TMPro.TextMeshProUGUI levelName)
     {
+        Time.timeScale = 1;
         LevelSelectMenu.SetActive(false);
         LevelManager.LoadLevel(levelName.text);
     }
@@ -148,6 +155,7 @@ public class MenuManager : MonoBehaviour
     {
         Time.timeScale = 1;
         LevelFailedMenu.SetActive(false);
+        loadMainMenu();
         LevelManager.LoadLevel("MenuScene");
     }
     public void FromLevelFailedToRestartLevel()

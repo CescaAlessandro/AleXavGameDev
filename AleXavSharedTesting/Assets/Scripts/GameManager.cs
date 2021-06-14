@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !MenuManager.Instance().GetMenusStatus())
             MenuManager.Instance().LoadPauseMenu();
 
         foreach (var lPin in MapUtility.LowerPins.Where(pin => pin.IsConnected))
