@@ -6,19 +6,30 @@ public class AudioManager : MonoBehaviour
 {
     public AudioSource electricZap;
     public AudioSource lifeLoss;
-    //todo: da inserire
-    public AudioSource gameOver;
     public AudioSource startDownload;
     public AudioSource attachDetach;
     public float zapMaxVolume = 0.001f;
     public AudioSource music;
     public static AudioManager am;
 
+
+    //todo: da inserire
+    public AudioSource gameOver;
+    public AudioSource levelCompleted;
+    public AudioSource buttonPressed;
+
     public void Setup()
     {
-        am = this;
         DontDestroyOnLoad(this);
-        //music.Play();
+
+        if (am == null)
+        {
+            am = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     public static AudioManager Instance()
     {

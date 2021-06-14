@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,7 +30,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         gm = this;
-
         lives = maxLives;
         numberFluxesDepleteded = 0;
 
@@ -100,6 +100,9 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            MenuManager.Instance().LoadPauseMenu();
+
         foreach (var lPin in MapUtility.LowerPins.Where(pin => pin.IsConnected))
             CheckForPossibleDepletion(lPin);
 
@@ -165,7 +168,7 @@ public class GameManager : MonoBehaviour
             int ranInd = UnityEngine.Random.Range(0, MapUtility.UpperPins.Count);
             SpawnFluxIndex(ranInd);
             Debug.Log("Spawned at index: " + ranInd);
-            yield return new WaitForSeconds(fluxSpawnDelay);
+            yield return new WaitForSecondsRealtime(fluxSpawnDelay);
         }
     }
 
