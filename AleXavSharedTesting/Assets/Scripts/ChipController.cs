@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 public class ChipController : MonoBehaviour
 {
@@ -72,15 +73,17 @@ public class ChipController : MonoBehaviour
                     }
                 }
             }
+            //rilascio del mouse/pressione touch
             if (Input.GetMouseButtonUp(0))
             {
                 pickedUpObject = null;
                 if (MapUtility.IsPositionNearPin(gameObject.transform.position).Item1)
                 {
+                    //Chip vicino ad un pin
                     var pin = MapUtility.IsPositionNearPin(gameObject.transform.position).Item2;
-
                     if (MapUtility.IsChipWiring && pin.Type.Equals(PinType.Lower) && !pin.IsConnected && !MapUtility.PreventReattaching)
                     {
+                        //Il pin vicino a Chip era della fila inferiore e Chip stava trasportando un cavo -> collego il cavo al pin
                         gameObject.transform.position = new Vector3(pin.AttachmentPoint.Item1.x, 0, pin.AttachmentPoint.Item1.z);
                         var cable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
                         cable.Instance.transform.position = pin.AttachmentPoint.Item1 + new Vector3(0, 0, 0);
@@ -95,7 +98,7 @@ public class ChipController : MonoBehaviour
                     }
                     else if(MapUtility.IsChipWiring && pin.Type.Equals(PinType.Upper) && pin.IsConnected) //distruggi cavo
                     {
-                        //Chip si porta ad una casella rispettivamente sotto il pin 
+                        //Il pin vicino a Chip era della fila superiore, Chip sta trasportando un cavo, ed il cavo e' collegato proprio a questo pin -> scollego il cavo
                         MapUtility.setCollisionMap(gameObject.transform.position.x, gameObject.transform.position.z, CollisionEntity.getNoCollisionEntity());
                         gameObject.transform.position = new Vector3(pin.AttachmentPoint.Item1.x, 0, pin.AttachmentPoint.Item1.z + 150);
 
@@ -111,6 +114,7 @@ public class ChipController : MonoBehaviour
                     }
                     else if (!MapUtility.IsChipWiring && pin.Type.Equals(PinType.Upper) && !pin.IsConnected)
                     {
+                        //Il pin vicino a Chip era della fila superiore, Chip non sta trasportando un cavo, ed il pin non ha un cavo collegato -> creo un nuovo cavo che Chip trasportera'
                         gameObject.transform.position = new Vector3(pin.AttachmentPoint.Item1.x, 0, pin.AttachmentPoint.Item1.z);
                         cablePrefab.transform.position = pin.AttachmentPoint.Item1;
                         var prefabInstance = Instantiate(cablePrefab);
@@ -133,7 +137,7 @@ public class ChipController : MonoBehaviour
                     }
                     else if (!MapUtility.IsChipWiring && pin.Type.Equals(PinType.Lower) && pin.IsConnected) //stacca cavo
                     {
-                        //impedisco a Chip di attaccare immediatamente il cavo appena scollegato
+                        //Il pin vicino a Chip era della fila inferiore, Chip non sta trasportando un cavo, ed il pin ha un cavo collegato -> stacco il cavo dal pin e lo faccio trasportare da Chip
                         MapUtility.PreventReattaching = true;
                         MapUtility.SetWiring(true);
 
@@ -149,12 +153,16 @@ public class ChipController : MonoBehaviour
                 }
                 else if (MapUtility.IsChipWiring && MapUtility.isCollisionOnPointHole(transform.position))
                 {
-
+                    //rilascio avvenuto su un buco mentre Chip stava trasportando un cavo
+                    //aquisisco le istanze del buco, del cavo trasportato da chip
                     var chipCable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
                     var hole = ((Hole)MapUtility.getCollisionMap(transform.position.x, transform.position.z));
-                    var holeCable = hole.CableConnected;
-                    if (chipCable == holeCable)
+                    var holeConnected = hole.IsConnected;
+                    if(holeConnected)
                     {
+                        //Se il buco ha un cavo collegato significa che sono ritornato sul buco trasportando il cavo uscente da esso -> scollego/distruggo il cavo
+                        hole.IsConnected = false;
+                        hole.CableConnected = null;
                         hole.Exiting(directions.Top);
                         MapUtility.SetWiring(false);
 
@@ -165,6 +173,7 @@ public class ChipController : MonoBehaviour
                     }
                     else
                     {
+                        //Il buco non ha un cavo collegato -> collego il cavo che sto trasportando al buco
                         chipCable.IsConnectedToCip = false;
                         MapUtility.SetWiring(false);
                         hole.IsConnected = true;
@@ -173,37 +182,57 @@ public class ChipController : MonoBehaviour
                 }
                 else if (!MapUtility.IsChipWiring && MapUtility.isCollisionOnPointHole(transform.position))
                 {
+                    //Chip non trasporta un cavo e rilascio la pressione su un buco
+                    //Acquisisco l'istanza del buco su cui Chip si e' fermato 
                     Hole newHole = (Hole)MapUtility.getCollisionMap(transform.position.x, transform.position.z);
-
-                    Hole entranceHole = MapUtility.Holes.First(holeA => holeA.IsConnected == true);
-                    if (newHole != entranceHole)
+                    if (!newHole.IsConnected)
                     {
-                        
-                        cablePrefab.transform.position = transform.position;
-                        var prefabInstance = Instantiate(cablePrefab);
-                        prefabInstance.GetComponent<Renderer>().material.color = entranceHole.CableConnected.Instance.GetComponent<Renderer>().material.color;
-                        var newCable = new Cable()
+                        Hole connectedHole;
+
+                        try
                         {
-                            Instance = prefabInstance,
-                            IsConnectedToCip = true,
-                            index = entranceHole.CableConnected.index
-                        };
+                            connectedHole = MapUtility.Holes.First(holeA => holeA.IsConnected == true);
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            connectedHole = null;
+                        }
 
-                        MapUtility.Cables.Add(newCable);
+                        
+                        if (connectedHole != null)
+                        {
+                            //Controllo se e' presente un buco che ha un cavo collegato -> creo un nuovo cavo e lo collego a Chip
+                            cablePrefab.transform.position = transform.position;
+                            var prefabInstance = Instantiate(cablePrefab);
+                            prefabInstance.GetComponent<Renderer>().material.color = connectedHole.CableConnected.Instance.GetComponent<Renderer>().material.color;
+                            var newCable = new Cable()
+                            {
+                                Instance = prefabInstance,
+                                IsConnectedToCip = true,
+                                index = connectedHole.CableConnected.index
+                            };
 
-                        MapUtility.SetWiring(true);
-                        newHole.IsConnected = true;
-                        newHole.CableConnected = newCable;
-                        newHole.cableCreatedOnHole();
-                        TrailManager.Instance().addPoint(cablePrefab.transform.position);
-                        AudioManager.Instance().PlayAttachDetach();
+                            MapUtility.Cables.Add(newCable);
+
+                            MapUtility.SetWiring(true);
+                            newHole.IsConnected = true;
+                            newHole.CableConnected = newCable;
+                            newHole.cableCreatedOnHole();
+                            TrailManager.Instance().addPoint(cablePrefab.transform.position);
+                            AudioManager.Instance().PlayAttachDetach();
+                        }
                     }
                     else
                     {
-                        MapUtility.SetWiring(true);
-                        entranceHole.IsConnected = false;
-                        entranceHole.CableConnected.IsConnectedToCip = true;
-                        entranceHole.CableConnected = null;
+                        List<Hole> connectedHoles = MapUtility.Holes.Where(holeA => holeA.IsConnected == true).ToList();
+                        //Il buco e' su cui Chip si e' fermato e' l'unico collegato -> scollego il cavo e Chip inizia a trasportarlo
+                        if (connectedHoles.Count == 1)
+                        {
+                            MapUtility.SetWiring(true);
+                            connectedHoles.ElementAt(0).IsConnected = false;
+                            connectedHoles.ElementAt(0).CableConnected.IsConnectedToCip = true;
+                            connectedHoles.ElementAt(0).CableConnected = null;
+                        }
                     }
                 }
             }   

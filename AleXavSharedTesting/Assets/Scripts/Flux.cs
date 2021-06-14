@@ -50,7 +50,7 @@ public class Flux : MonoBehaviour
                     }
                 break;
             case FluxLifeState.Depleted:
-                Debug.Log("Finish depletion");
+                //Debug.Log("Finish depletion");
                 break;
         }
     }
@@ -58,12 +58,12 @@ public class Flux : MonoBehaviour
     public void startDepletion()
     {
         state = FluxLifeState.Depleting;
-        Debug.Log("Start depletion");
+        //Debug.Log("Start depletion");
     }
 
     public void pauseDepletion()
     {
         state = FluxLifeState.Idle;
-        Debug.Log("Stop depletion");
+        //Debug.Log("Stop depletion");
     }
 }

@@ -158,7 +158,7 @@ public class GameManager : MonoBehaviour
     }
     public void LoseLives(int amount)
     {
-        //Debug.Log("loseLife: " + lives);
+        ////Debug.Log("loseLife: " + lives);
         lives -= amount;
         if (lives > 0)
         {

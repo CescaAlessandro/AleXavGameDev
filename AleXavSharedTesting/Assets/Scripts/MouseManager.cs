@@ -21,7 +21,7 @@ public class MouseManager : MonoBehaviour
         if (pickedUpObject != null)
         {
             Vector3 MouseworldPoint = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 65.0f));
-            Debug.Log(MouseworldPoint);
+            //Debug.Log(MouseworldPoint);
             pickedUpObject.transform.position = grid.GetCellCenterWorld(grid.WorldToCell(new Vector3(MouseworldPoint.x, pickedUpObject.transform.position.y, MouseworldPoint.z)));
         }
         else
