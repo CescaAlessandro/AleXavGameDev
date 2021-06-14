@@ -154,7 +154,7 @@ public class GameManager : MonoBehaviour
     }
     public void LoseLives(int amount)
     {
-        //Debug.Log("loseLife: " + lives);
+        ////Debug.Log("loseLife: " + lives);
         lives -= amount;
         if (lives > 0)
         {
@@ -168,7 +168,7 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
-        Debug.Log("GameOver");
+        //Debug.Log("GameOver");
     }
     //spawn fluxes on random pins with a fixed delay between them
     private float fluxSpawnDelay = 20;
@@ -178,7 +178,7 @@ public class GameManager : MonoBehaviour
         {
             int ranInd = UnityEngine.Random.Range(0, MapUtility.UpperPins.Count);
             SpawnFluxIndex(ranInd);
-            Debug.Log("Spawned at index: " + ranInd);
+            //Debug.Log("Spawned at index: " + ranInd);
             yield return new WaitForSeconds(fluxSpawnDelay);
         }
     }

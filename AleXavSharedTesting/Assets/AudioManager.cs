@@ -67,11 +67,11 @@ public class AudioManager : MonoBehaviour
     public void SetMusicVolume(float volume)
     {
         music.volume = volume;
-        Debug.Log(music.volume);
+        //Debug.Log(music.volume);
     }
     public void SetSfxVolume(float volume)
     {
-        Debug.Log(zapMaxVolume);
+        //Debug.Log(zapMaxVolume);
         electricZap.volume = volume * zapMaxVolume;
     }
 }

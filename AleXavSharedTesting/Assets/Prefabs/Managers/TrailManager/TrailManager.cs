@@ -89,8 +89,8 @@ public class TrailManager : MonoBehaviour
                 //var positionas = new Vector3[trail.positionCount];
                 //trail.GetPositions(positionas);
                 //foreach (var vec in positionas)
-                //    Debug.Log(vec);
-                ///Debug.Log("");
+                //    //Debug.Log(vec);
+                /////Debug.Log("");
             }
         }
     }

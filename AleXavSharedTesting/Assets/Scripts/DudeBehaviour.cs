@@ -67,6 +67,10 @@ public class DudeBehaviour : MonoBehaviour
         {
             ThirdTutorialBehavoiur();
         }
+        else if(sceneName.Equals("Level 6"))
+        {
+            FourthTutorialBehavoiur();
+        }
         else
         {
             StandardBehavoiur();
@@ -452,6 +456,155 @@ public class DudeBehaviour : MonoBehaviour
         }
 
         if(GameManager.Instance().GetNumberFluxesDepleteded() == 3)
+        {
+            spriteRenderer.sprite = dudeHappy;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
+        }
+    }
+
+    public void FourthTutorialBehavoiur()
+    {
+        nextDialogTimer += Time.deltaTime;
+
+        var blueUpperPin = MapUtility.UpperPins.ElementAt(0);
+        var pinkUpperPin = MapUtility.UpperPins.ElementAt(1);
+        var lowerPin = MapUtility.LowerPins.First();
+
+        //primo dialogo
+        if (nextDialogTimer >= 8 && !blueUpperPin.IsConnected && !pinkUpperPin.IsConnected &&
+            dialogFlowState == 0)
+        {
+            dialogFlowState = 1;
+            nextDialogTimer = 0;
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.CanDetach];
+        }
+
+        //speciale: salta spiegazione
+        if ((blueUpperPin.IsConnected || pinkUpperPin.IsConnected) &&
+            (dialogFlowState == 0 || dialogFlowState == 1))
+        {
+            dialogFlowState = 11;
+
+            spriteRenderer.sprite = dudeWow;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.NoTimeToLose];
+        }
+
+        //secondo dialogo
+        if (nextDialogTimer > 8 && !blueUpperPin.IsConnected && !pinkUpperPin.IsConnected &&
+            dialogFlowState == 1)
+        {
+            dialogFlowState = 2;
+            nextDialogTimer = 0;
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.CreateBlue];
+        }
+
+        //speciale: hai scelto di collegare il rosa anche se Dude ti ha suggerito blu
+        if (!blueUpperPin.IsConnected && pinkUpperPin.IsConnected &&
+            (dialogFlowState == 2 || dialogFlowState == 8))
+        {
+            dialogFlowState = 7;
+            mistakeDone = true;
+            spriteRenderer.sprite = dudePissed;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.ISaidBlue];
+        }
+
+        //speciale: Dude prende in giro la tua lentezza
+        if (!blueUpperPin.IsConnected && !pinkUpperPin.IsConnected &&
+            (dialogFlowState == 7 || dialogFlowState == 3 || dialogFlowState == 11 || dialogFlowState == 9))
+        {
+            dialogFlowState = 8;
+            //nextDialogTimer = 0;
+            spriteRenderer.sprite = dudeWorried;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.LongDay];
+        }
+
+        //speciale: se fai quello che dice Dude, ti perdona
+        if (blueUpperPin.IsConnected && !pinkUpperPin.IsConnected &&
+            dialogFlowState == 8)
+        {
+            dialogFlowState = 9;
+            nextDialogTimer = 0;
+            mistakeDone = false;
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.OkBlue];
+        }
+
+        //terzo dialogo
+        if (blueUpperPin.IsConnected && !pinkUpperPin.IsConnected &&
+            (dialogFlowState == 2 || (dialogFlowState == 9 && nextDialogTimer >= 5)))
+        {
+            dialogFlowState = 3;
+
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.Attach];
+        }
+
+        //quarto dialogo
+        if (lowerPin.IsConnected &&
+            (dialogFlowState == 3 || dialogFlowState == 7 || dialogFlowState == 11 || dialogFlowState == 9))
+        {
+            dialogFlowState = 4;
+
+            spriteRenderer.sprite = dudeHappy;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.Detach];
+        }
+
+        //quinto dialogo
+        if (!lowerPin.IsConnected &&
+            (dialogFlowState == 4 || dialogFlowState == 10))
+        {
+            dialogFlowState = 5;
+
+            spriteRenderer.sprite = dudeWink;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.Remove];
+        }
+
+        //speciale: hai attaccato il cavo anche se Dude ti ha chiesto di rimuoverlo
+        if (lowerPin.IsConnected &&
+            dialogFlowState == 5)
+        {
+            dialogFlowState = 10;
+            mistakeDone = true;
+
+            spriteRenderer.sprite = dudePissed;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.BadTime];
+        }
+
+        //speciale: Dude ha perso la pazienza
+        if (!lowerPin.IsConnected && !blueUpperPin.IsConnected && !pinkUpperPin.IsConnected &&
+            dialogFlowState == 5 && mistakeDone)
+        {
+            dialogFlowState = 10;
+
+            spriteRenderer.sprite = dudePissed;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.WasteTime];
+        }
+
+        //sesto dialogo
+        if (!blueUpperPin.IsConnected && !pinkUpperPin.IsConnected && !mistakeDone &&
+            dialogFlowState == 5)
+        {
+            dialogFlowState = 6;
+
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.RepeatForPink];
+        }
+
+        //speciale: finchè non fai quello che dice Dude, non si va avanti
+        if (blueUpperPin.IsConnected &&
+            dialogFlowState == 6)
+        {
+            dialogFlowState = 12;
+
+            spriteRenderer.sprite = dudePissed;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.IAmRuler];
+        }
+
+        //sesto dialogo
+        if (!blueUpperPin.IsConnected && pinkUpperPin.IsConnected && lowerPin.IsConnected &&
+            (dialogFlowState == 6 || dialogFlowState == 12))
         {
             spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];

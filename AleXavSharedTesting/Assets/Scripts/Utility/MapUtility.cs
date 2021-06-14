@@ -32,10 +32,14 @@ public static class MapUtility
                 collisionMap[i,j] = CollisionEntity.getNoCollisionEntity();
             }
         }
-        Debug.Log(collisionMap[1, 4].collidesFromAbove);
+        //Debug.Log(collisionMap[1, 4].collidesFromAbove);
     }
+
+    //Dato un punto di partenza e un punto di arrivo sulla board restituisce il punto della board piu' vicino al punto di arrivo raggiungibile dal punto di partenza rispettando i vincoli delle collisioni
+    //Se il movimento richiesto e' in diagonale si muovera' verticalmente nella board fino a raggiungere la y desiderata e poi si muovera' orizzontalmente
     public static Vector3 GetBestFinalLocationForMovement(Vector3 start, Vector3 finish)
     {
+        //converto i punti di partenza e arrivo in indici della mappa delle collisioni
         var startMapConvertionX = (int)Math.Round(((-start.x) + 400) / 100,0);
         var startMapConvertionY = (int)Math.Round(((start.z) + 500) / 100,0);
         var finishMapConvertionX = (int)Math.Round(((-finish.x) + 400) / 100,0);
@@ -48,6 +52,7 @@ public static class MapUtility
         Vector3 bestLocation = start;
         while (currentY != finishMapConvertionY)
         {
+            //muovo verticalmente fino a la y finale e' raggiunta o una collisione blocca il passaggio
             var lastY = currentY;
             if (currentY < finishMapConvertionY)
             {
@@ -60,10 +65,13 @@ public static class MapUtility
             }
             if (collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)].collidesFromAbove)
             {
+                //Se la casella che si sta tentando di entrare non consente l'entrata dalla direzione verticale
                 PrintCollisionMap();
                 if(TrailManager.Instance().isLastMove(new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500)))
                 {
-                    Debug.Log("a");
+                    //Se la casella che si sta tentando di entrare e' l'ultima mossa -> rimuovo l'ultimo punto e mi muovo sulla casella tenendo conto di eventuali modifiche dovute al tipo di casella
+                    //rimuovo la collisione dalla casella corrente
+                    //Debug.Log("a");
                     collisionMap[(int)Math.Round(lastY, 0), (int)Math.Round(currentX, 0)].Exiting(directions.Top);
                     TrailManager.Instance().removeLastPoint();
                     bestLocation = new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500)
@@ -71,30 +79,36 @@ public static class MapUtility
                 }
                 else
                 {
-                    Debug.Log(bestLocation);
+                    //altrimenti il passaggio e' bloccato -> restituisco l'ultima casella come punto piu' vicino al punto di arrivo
+                    //Debug.Log(bestLocation);
                     return bestLocation;
                 }
             }
             else
             {
+                //se non ci sono problemi di collisione
                 if (collisionMap[(int)Math.Round(lastY, 0), (int)Math.Round(currentX, 0)].canBeExitedAbove)
                 {
+                    //controllo che la casella corrente permetta di uscirne verticalmente -> muovo sulla nuova casella e aggiungo questo punto al cavo tenendo conto delle modifiche alla posizione 
+                    //dovute al tipo di casella
                     collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)].PassingThrough(directions.Top);
                     TrailManager.Instance().addPoint(new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500)
                                                                     + collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)].PassingThroughModifications(directions.Top));
                     bestLocation = new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500)
                                                                     + collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)].PassingThroughModifications(directions.Top);
-                    //Debug.Log(new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500));
+                    ////Debug.Log(new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500));
                 }
                 else
                 {
-                    Debug.Log(bestLocation);
+                    //Se non posso uscire da questa casella verticalmente ho raggiunto un blocco -> restituisco l'ultima casella raggiunta
+                    //Debug.Log(bestLocation);
                     return bestLocation;
                 }
             }
         }
         while (currentX != finishMapConvertionX)
         {
+            //muovo orizzontalmente fino a che raggiungo la x corretta o incontro una collisione che blocca il movimento
             var lastX = currentX;
             if (currentX < finishMapConvertionX)
             {
@@ -106,25 +120,33 @@ public static class MapUtility
             }
             if (collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)].collidesFromLeft)
             {
-
+                //Se riscontro una collisione
                 PrintCollisionMap();
-                Debug.Log(TrailManager.Instance().getLastMove());
+                //Debug.Log(TrailManager.Instance().getLastMove());
                 if (TrailManager.Instance().isLastMove(new Vector3(((currentX * 100) - 400) * (-1f), 0, (currentY * 100) - 500)))
                 {
+                    //Se sto cercando di muovermi nella casella dell'ultima mossa -> elimino l'ultimo punto e la collisione su di esso, mi muovo nella nuova casella
+
                     collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(lastX, 0)].Exiting(directions.Left);
                     TrailManager.Instance().removeLastPoint();
                     bestLocation = new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500);
                 }
                 else
                 {
-                    Debug.Log(bestLocation);
+                    //Se non e' la casella dell'ultimo movimento allora non posso andarci -> collisione riscontrata, restituisco l'ultima posizione valida
+                    
+                    //Debug.Log(bestLocation);
                     return bestLocation;
                 }
             }
             else
             {
+                //Non c'è collisione
+
                 if (collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(lastX, 0)].canBeExitedLeft)
                 {
+                    //Se posso uscire dalla casella corrente orizzontalmente -> mi muovo sulla nuova casella, aggiungo un punto al cavo, aggiungo la collisione del nuovo punto
+
                     collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)].PassingThrough(directions.Left);
                     TrailManager.Instance().addPoint(new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500)
                                                                     + collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)].PassingThroughModifications(directions.Left));
@@ -133,14 +155,18 @@ public static class MapUtility
                 }
                 else
                 {
-                    Debug.Log(bestLocation);
+                    //non posso uscire dalla casella corrente orizzontalmente -> collisione, restituisco l'ultima posizione valida
+
+                    //Debug.Log(bestLocation);
                     return bestLocation;
                 }
             }
         }
         PrintCollisionMap();
         //Debug.Assert(bestLocation == new Vector3(finish.Item1, 0, finish.Item2),"Target Position not reached");
-        Debug.Log(bestLocation);
+        //Debug.Log(bestLocation);
+
+        //ho raggiunto sia la x che la y desiderate-> restituisco l'ultima posizione valida che e' anche la posizione finale richiesta
         return bestLocation;
     }
         //controlla se Chip � vicino ad un pin
@@ -214,7 +240,7 @@ public static class MapUtility
     }
     public static bool isCollisionOnPointHole(Vector3 point)
     {
-        Debug.Log("Hole Check");
+        //Debug.Log("Hole Check");
         var MapConvertionX = (int)Math.Round(((-point.x) + 400) / 100, 0);
         var MapConvertionY = (int)Math.Round(((point.z) + 500) / 100, 0);
 
