@@ -6,7 +6,9 @@ public static class DialogsUtility
 {
     public static Dictionary<DialogInstance, string> dialogs = new Dictionary<DialogInstance, string>
     {
-        {DialogInstance.Welcome, "Hi Chip! How are you? I know it is your first day, I'm sure we can be good friends." },
+        {DialogInstance.Presentation, "Hi Chip! How are you? My name is Dude, but you can call me Dude." },
+
+        {DialogInstance.Welcome, "From now on, you will be my assistant. I'm sure we can be good friends." },
         
         {DialogInstance.GoalReached, "Mission accomplished! See you on the next level."},
         
@@ -23,6 +25,8 @@ public static class DialogsUtility
         {DialogInstance.GoToLowerPinSavagePartOne, "Wow! Have you already attended the movement training course?"},
 
         {DialogInstance.GoToLowerPinSavagePartTwo, "However, now drag and drop yourself to the lower pin."},
+
+        {DialogInstance.SkippedTutorial, "Well, maybe you need more difficult challenges. See you on the next level."},
 
         {DialogInstance.CanDetach, "You must know that the cables can be also detached, of course."},
 
@@ -50,6 +54,42 @@ public static class DialogsUtility
 
         {DialogInstance.IAmRuler, "No problem. We can stay here forever, until you wire the pink one."},
 
-        {DialogInstance.WelcomeAgain, "Hi Chip! Let's add something new today."}
+        {DialogInstance.WelcomeAgain, "Hi Chip! Let's add something new today."},
+
+        {DialogInstance.WelcomeThird, "Good morning Chip! I think we are ready to play seriously."},
+
+        {DialogInstance.ExplanationPartOne, "The goal of your job is to let data fluxes reach their destination."},
+
+        {DialogInstance.ExplanationPartTwo, "How? Connecting the corresponding upper pin to a lower one."},
+
+        {DialogInstance.ExplanationPartThree, "Be sure to connect pins which share the same colour."},
+
+        {DialogInstance.ExplanationPartFour, "Otherwise, the flux won't start downloading!"},
+
+        {DialogInstance.ExplanationPartFive, "When there are fluxes ready to being satisfied, you will hear this sound."},
+
+        {DialogInstance.ExplanationPartSix, "Pay attention! If a flux isn't satisfied for a long time, you will lose a life."},
+
+        {DialogInstance.ExplanationPartSeven, "Your remaining lives are represented by the Wi-Fi bars, on the bottom-right."},
+
+        {DialogInstance.ExplanationPartEight, "I hope you will never let us be offline..."},
+
+        {DialogInstance.HereItIs, "Oh! Here it is. New data flux incoming!"},
+
+        {DialogInstance.NotScared, "Don't be scared. For the sake of this tutorial you will not lose lifes today."},
+
+        {DialogInstance.WhatAreYouWaitingFor, "What are you waiting for? Connect those two pins!"},
+
+        {DialogInstance.KindaSus, "<*Today Chip is kinda sus... I hope that flux will be satisified sooner or later...*>"},
+
+        {DialogInstance.DailyGoal, "And that's all! Satisfy all fluxes to complete your daily job."},
+
+        {DialogInstance.ByTheWay, "Oh, maybe I forgot to mention: you can not overlap two cables."},
+
+        {DialogInstance.ALotTime, "Hmm... Maybe I should start looking for a new job..."},
+
+        {DialogInstance.BeautifulDay, "It's a beautiful day outside."}
+
+        //todo: various gameover + dude presentation
     };
 }
