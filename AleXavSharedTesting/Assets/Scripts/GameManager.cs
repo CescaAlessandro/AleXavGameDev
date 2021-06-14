@@ -37,9 +37,11 @@ public class GameManager : MonoBehaviour
 
         MapUtility.LowerPins = new List<Pin>();
         MapUtility.UpperPins = new List<Pin>();
+        MapUtility.Holes = new List<Hole>();
 
         var lowPins = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("LPin")).OrderBy(pin => pin.name).ToList();
         var upperPins = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("UPin")).OrderBy(pin => pin.name).ToList();
+        var holes = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("Hole")).OrderBy(pin => pin.name).ToList();
 
         var pinIndex = 0;
         foreach (var pin in lowPins)
@@ -84,10 +86,22 @@ public class GameManager : MonoBehaviour
             MapUtility.UpperPins.Add(pinInstance);
             pinIndex++;
         }
+
         idleFluxes = new List<Flux>();
         depletioningFluxes = new List<Flux>();
 
         MapUtility.collisionMapBaseSetup();
+        foreach (var hole in holes)
+        {
+            var holeInstance = new Hole()
+            {
+                IsConnected = false,
+                Instance = hole
+            };
+
+            MapUtility.Holes.Add(holeInstance);
+            MapUtility.setCollisionMap(hole.transform.position.x, hole.transform.position.z, holeInstance);
+        }
         MapUtility.setCollisionMap(200, -500, CollisionEntity.getFullCollisionEntity());
         MapUtility.setCollisionMap(0, -500, CollisionEntity.getFullCollisionEntity());
         MapUtility.setCollisionMap(-200, -500, CollisionEntity.getFullCollisionEntity());
@@ -96,7 +110,7 @@ public class GameManager : MonoBehaviour
         MapUtility.setCollisionMap(-200, 500, CollisionEntity.getFullCollisionEntity());
         MapUtility.setCollisionMap(200, 200, new Bridge());
 
-        if(!preventFluxSpawning)
+        if (!preventFluxSpawning)
             StartCoroutine(spawnRandomFluxesForever());
     }
 
@@ -214,8 +228,18 @@ public class GameManager : MonoBehaviour
 
     public void CheckForPossibleDepletion(Pin lPin)
     {
-        var uPin = MapUtility.UpperPins.First(pin => pin.CableConnected == lPin.CableConnected);
-
+        Debug.Assert(lPin != null, "It is null");
+        //var uPin = MapUtility.UpperPins.First(pin => pin.CableConnected.index == lPin.CableConnected.index);
+        Pin uPin = new Pin();
+        foreach (var pin in MapUtility.UpperPins)
+        {
+            if (pin.CableConnected != null) { 
+                if (pin.CableConnected.index == lPin.CableConnected.index)
+                {
+                    uPin = pin;
+                }
+            }
+        }
         var possibleFluxWaiting = idleFluxes.FirstOrDefault(flux => flux.index == uPin.Index);
 
         if(possibleFluxWaiting != null)
