@@ -16,6 +16,11 @@ public static class MapUtility
     public static List<Pin> LowerPins { get; set; }
     public static List<Cable> Cables { get; set; }
     public static List<Hole> Holes { get; set; }
+
+    public static GameObject managersRef { get; set; }
+    public static CanvasesBehaviour canvasesRef { get; set; }
+
+
     public static float range = 100;
     private static CollisionEntity[,] collisionMap = new CollisionEntity[11, 9];
 
@@ -236,7 +241,23 @@ public static class MapUtility
             matrix = matrix + line + '\n';
         }
         Debug.Log(matrix);
-        
+    }
+
+    public static int GetLevelNumber(string sceneName, string result)
+    {
+        char c = sceneName.Last();
+        var sceneNameUpdated = sceneName.Remove(sceneName.Length-1);
+
+        if (Char.IsDigit(c))
+        {
+            result = result + c;
+
+            return GetLevelNumber(sceneNameUpdated, result);
+        }
+        else
+        {
+            return int.Parse(result);
+        }
     }
     public static bool isCollisionOnPointHole(Vector3 point)
     {

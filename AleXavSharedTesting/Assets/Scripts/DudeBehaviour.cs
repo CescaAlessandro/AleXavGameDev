@@ -162,6 +162,9 @@ public class DudeBehaviour : MonoBehaviour
         {
             spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
+            dialogFlowState = -1;
+
+            MenuManager.Instance().LoadLevelCompleteMenu();
         }
 
         //special goal
@@ -170,6 +173,9 @@ public class DudeBehaviour : MonoBehaviour
         {
             spriteRenderer.sprite = dudeWink;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.SkippedTutorial];
+            dialogFlowState = -1;
+
+            MenuManager.Instance().LoadLevelCompleteMenu();
         }
     }
 
@@ -319,6 +325,9 @@ public class DudeBehaviour : MonoBehaviour
         {
             spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
+            dialogFlowState = -1;
+
+            MenuManager.Instance().LoadLevelCompleteMenu();
         }
     }
 
@@ -459,6 +468,10 @@ public class DudeBehaviour : MonoBehaviour
         {
             spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
+
+            MenuManager.Instance().LoadLevelCompleteMenu();
+
+            dialogFlowState = -1;
         }
     }
 

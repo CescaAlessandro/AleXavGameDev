@@ -9,6 +9,11 @@ public class MenuManager : MonoBehaviour
     public GameObject LevelSelectMenu;
     public GameObject SettingsMenu;
     public GameObject FirstStartMainMenu;
+    public GameObject LevelFailedMenu;
+    public GameObject PauseMenu;
+    public GameObject LevelCompleteMenu;
+    private GameObject AreYouSureMenu;
+
     public SaveManager SaveManager;
     public UnityEngine.UI.Slider musicSlider;
     public UnityEngine.UI.Slider sfxSlider;
@@ -17,7 +22,14 @@ public class MenuManager : MonoBehaviour
     public static MenuManager mm;
     public void Setup()
     {
-        mm = this;
+        if(mm == null)
+        {
+            mm = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     public static MenuManager Instance()
@@ -30,10 +42,12 @@ public class MenuManager : MonoBehaviour
         if (SaveManager.isFirstStart())
         {
             FirstStartMainMenu.SetActive(true);
+            LevelCompleteMenu.SetActive(false);
         }
         else
         {
             MainMenu.SetActive(true);
+            LevelCompleteMenu.SetActive(false);
         }
     }
 
@@ -67,7 +81,78 @@ public class MenuManager : MonoBehaviour
     }
     public void FromLevelSelectToLevel(TMPro.TextMeshProUGUI levelName)
     {
+        LevelSelectMenu.SetActive(false);
         LevelManager.LoadLevel(levelName.text);
+    }
+    public void LoadPauseMenu()
+    {
+        Time.timeScale = 0;
+        PauseMenu.SetActive(true);
+    }
+    public void FromPauseToMainMenu()
+    {
+        Time.timeScale = 1;
+        MainMenu.SetActive(true);
+        PauseMenu.SetActive(false);
+        LevelManager.LoadLevel("MenuScene");
+    }
+    public void FromPauseToResume()
+    {
+        Time.timeScale = 1;
+        PauseMenu.SetActive(false);
+    }
+    public void FromPauseToRestartLevel()
+    {
+        Time.timeScale = 1;
+        PauseMenu.SetActive(false);
+        LevelManager.LoadLevel(SceneManager.GetActiveScene().name);
+    }
+    public void LoadLevelCompleteMenu()
+    {
+        Time.timeScale = 0;
+        LevelCompleteMenu.SetActive(true);
+    }
+    public void FromLevelCompleteToNextLevel()
+    {
+        Time.timeScale = 1;
+        var nextLevelIndex = MapUtility.GetLevelNumber(SceneManager.GetActiveScene().name, "") + 1;
+
+        string nextLevel = "Level " + nextLevelIndex;
+        LevelCompleteMenu.SetActive(false);
+        LevelManager.LoadLevel(nextLevel);
+    }
+    public void FromLevelCompleteToMainMenu()
+    {
+        Time.timeScale = 1;
+        LevelCompleteMenu.SetActive(false);
+        loadMainMenu();
+        LevelManager.LoadLevel("MenuScene");
+    }
+    public void FromLevelCompleteToRestartLevel()
+    {
+        Time.timeScale = 1;
+        LevelCompleteMenu.SetActive(false);
+        LevelManager.LoadLevel(SceneManager.GetActiveScene().name);
+    }
+    public void LoadLevelFailedMenu()
+    {
+        Time.timeScale = 0;
+        LevelFailedMenu.SetActive(true);
+    }
+    public void FromLevelFailedToSelectionLevel()
+    {
+        LevelFailedMenu.SetActive(false);
+        LevelSelectMenu.SetActive(true);
+    }
+    public void FromLevelFailedToMainMenu()
+    {
+        Time.timeScale = 1;
+        LevelManager.LoadLevel("MenuScene");
+    }
+    public void FromLevelFailedToRestartLevel()
+    {
+        Time.timeScale = 1;
+        LevelManager.LoadLevel(SceneManager.GetActiveScene().name);
     }
     public void MusicVolumeWidgetChanged(float volume)
     {
