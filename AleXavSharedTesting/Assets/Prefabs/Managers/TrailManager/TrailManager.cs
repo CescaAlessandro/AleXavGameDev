@@ -19,6 +19,7 @@ public class TrailManager : MonoBehaviour
     {
         return tm;
     }
+    /*
     // Update is called once per frame
     public void cableUpdate() {
 
@@ -93,18 +94,19 @@ public class TrailManager : MonoBehaviour
             }
         }
     }
+    */
     public bool isLastMove(Vector3 move)
     {
         foreach (var cable in MapUtility.Cables)
         {
-            //aggiorno e salvo la posizione del cavo solo se questo � maneggiato da Cip
+            //
             if (cable.IsConnectedToCip)
             {
                 var trail = cable.Instance.GetComponent<TrailRenderer>();
                 var positions = new Vector3[trail.positionCount];
                 trail.GetPositions(positions);
                 var positionsList = positions.ToList();
-                if (!(trail.positionCount < 2))
+                if (trail.positionCount > 1)
                 {
                     if (positionsList.ElementAt(trail.positionCount - 2).x == move.x && (positionsList.ElementAt(trail.positionCount - 2).z == move.z))
                     {
@@ -126,7 +128,7 @@ public class TrailManager : MonoBehaviour
 
     public void UpdateCablePointsOnDetach()
     {
-        var cable = MapUtility.Cables.First(cable => cable.IsConnectedToCip);
+        var cable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
         var trail = cable.Instance.GetComponent<TrailRenderer>();
         var positions = new Vector3[trail.positionCount];
         trail.GetPositions(positions);

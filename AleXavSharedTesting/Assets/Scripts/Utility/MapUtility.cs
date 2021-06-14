@@ -15,11 +15,11 @@ public static class MapUtility
     public static List<Pin> UpperPins { get; set; }
     public static List<Pin> LowerPins { get; set; }
     public static List<Cable> Cables { get; set; }
+    public static List<Hole> Holes { get; set; }
 
     public static GameObject managersRef { get; set; }
     public static CanvasesBehaviour canvasesRef { get; set; }
 
-    public static bool FirstStart { get; set; } = true;
 
     public static float range = 100;
     private static CollisionEntity[,] collisionMap = new CollisionEntity[11, 9];
@@ -39,18 +39,18 @@ public static class MapUtility
         }
         Debug.Log(collisionMap[1, 4].collidesFromAbove);
     }
-    public static Vector3 GetBestFinalLocationForMovement(Tuple<float, float> start, Tuple<float, float> finish)
+    public static Vector3 GetBestFinalLocationForMovement(Vector3 start, Vector3 finish)
     {
-        var startMapConvertionX = (int)Math.Round(((-start.Item1) + 400) / 100,0);
-        var startMapConvertionY = (int)Math.Round(((start.Item2) + 500) / 100,0);
-        var finishMapConvertionX = (int)Math.Round(((-finish.Item1) + 400) / 100,0);
-        var finishMapConvertionY = (int)Math.Round(((finish.Item2) + 500) / 100,0);
+        var startMapConvertionX = (int)Math.Round(((-start.x) + 400) / 100,0);
+        var startMapConvertionY = (int)Math.Round(((start.z) + 500) / 100,0);
+        var finishMapConvertionX = (int)Math.Round(((-finish.x) + 400) / 100,0);
+        var finishMapConvertionY = (int)Math.Round(((finish.z) + 500) / 100,0);
 
         float currentX = (float)startMapConvertionX;
         float currentY = (float)startMapConvertionY;
         //bool[,] mapClone = (bool[,])collisionMap.Clone();
         List<Vector3> newPoints = new List<Vector3>();
-        Vector3 bestLocation = new Vector3(start.Item1, 0, start.Item2) + collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)].PassingThroughModifications(directions.Top);
+        Vector3 bestLocation = start;
         while (currentY != finishMapConvertionY)
         {
             var lastY = currentY;
@@ -74,6 +74,7 @@ public static class MapUtility
                     bestLocation = new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500)
                                                  + collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)].PassingThroughModifications(directions.Top);
                 }
+                else
                 {
                     Debug.Log(bestLocation);
                     return bestLocation;
@@ -172,6 +173,12 @@ public static class MapUtility
         var MapConvertionY = (y + 500) / 100;
         collisionMap[(int)Math.Round(MapConvertionY, 0), (int)Math.Round(MapConvertionX, 0)] = ce;
     }
+    public static CollisionEntity getCollisionMap(float x, float y)
+    {
+        var MapConvertionX = ((-x) + 400) / 100;
+        var MapConvertionY = (y + 500) / 100;
+        return collisionMap[(int)Math.Round(MapConvertionY, 0), (int)Math.Round(MapConvertionX, 0)];
+    }
 
     public static List<GameObject> GetAllObjectsOnlyInScene()
     {
@@ -225,5 +232,18 @@ public static class MapUtility
         {
             return int.Parse(result);
         }
+    }
+    public static bool isCollisionOnPointHole(Vector3 point)
+    {
+        Debug.Log("Hole Check");
+        var MapConvertionX = (int)Math.Round(((-point.x) + 400) / 100, 0);
+        var MapConvertionY = (int)Math.Round(((point.z) + 500) / 100, 0);
+
+        foreach(var hole in Holes)
+        {
+            if (collisionMap[MapConvertionY, MapConvertionX] == hole)
+                return true;
+        }
+        return false;
     }
 }

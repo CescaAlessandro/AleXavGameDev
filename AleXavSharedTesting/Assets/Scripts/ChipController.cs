@@ -9,7 +9,7 @@ public class ChipController : MonoBehaviour
     public float gridSize = 1f;
     public GameObject cablePrefab;
     public Grid grid;
-
+    private int cableIndex = 0;
     void Start()
     {
     }
@@ -44,10 +44,7 @@ public class ChipController : MonoBehaviour
                     if (!MapUtility.IsPositionNearPin(gameObject.transform.position).Item1)
                         MapUtility.PreventReattaching = false;
 
-                    var startPosition = new Tuple<float, float>(transform.position.x, transform.position.z);
-                    var finishPosition = new Tuple<float, float>(currentPosition.x, currentPosition.z);
-
-                    var finalPosition = MapUtility.GetBestFinalLocationForMovement(startPosition, finishPosition);
+                    var finalPosition = MapUtility.GetBestFinalLocationForMovement(transform.position, currentPosition);
                     transform.position = finalPosition;
                     var cable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
                     cable.Instance.transform.position = finalPosition;
@@ -114,8 +111,9 @@ public class ChipController : MonoBehaviour
                         {
                             Instance = prefabInstance,
                             IsConnectedToCip = true,
+                            index = cableIndex
                         };
-
+                        cableIndex++;
                         MapUtility.Cables.Add(newCable);
 
                         MapUtility.SetWiring(true);
@@ -140,7 +138,66 @@ public class ChipController : MonoBehaviour
 
                         AudioManager.Instance().PlayAttachDetach();
                     }
-                }                         
+                }
+                else if (MapUtility.IsChipWiring && MapUtility.isCollisionOnPointHole(transform.position))
+                {
+
+                    var chipCable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
+                    var hole = ((Hole)MapUtility.getCollisionMap(transform.position.x, transform.position.z));
+                    var holeCable = hole.CableConnected;
+                    if (chipCable == holeCable)
+                    {
+                        hole.Exiting(directions.Top);
+                        MapUtility.SetWiring(false);
+
+                        UnityEngine.Object.Destroy(chipCable.Instance);
+                        MapUtility.Cables.Remove(chipCable);
+
+                        AudioManager.Instance().PlayAttachDetach();
+                    }
+                    else
+                    {
+                        chipCable.IsConnectedToCip = false;
+                        MapUtility.SetWiring(false);
+                        hole.IsConnected = true;
+                        hole.CableConnected = chipCable;
+                    }
+                }
+                else if (!MapUtility.IsChipWiring && MapUtility.isCollisionOnPointHole(transform.position))
+                {
+                    Hole newHole = (Hole)MapUtility.getCollisionMap(transform.position.x, transform.position.z);
+
+                    Hole entranceHole = MapUtility.Holes.First(holeA => holeA.IsConnected == true);
+                    if (newHole != entranceHole)
+                    {
+                        
+                        cablePrefab.transform.position = transform.position;
+                        var prefabInstance = Instantiate(cablePrefab);
+                        prefabInstance.GetComponent<Renderer>().material.color = entranceHole.CableConnected.Instance.GetComponent<Renderer>().material.color;
+                        var newCable = new Cable()
+                        {
+                            Instance = prefabInstance,
+                            IsConnectedToCip = true,
+                            index = entranceHole.CableConnected.index
+                        };
+
+                        MapUtility.Cables.Add(newCable);
+
+                        MapUtility.SetWiring(true);
+                        newHole.IsConnected = true;
+                        newHole.CableConnected = newCable;
+                        newHole.cableCreatedOnHole();
+                        TrailManager.Instance().addPoint(cablePrefab.transform.position);
+                        AudioManager.Instance().PlayAttachDetach();
+                    }
+                    else
+                    {
+                        MapUtility.SetWiring(true);
+                        entranceHole.IsConnected = false;
+                        entranceHole.CableConnected.IsConnectedToCip = true;
+                        entranceHole.CableConnected = null;
+                    }
+                }
             }   
         }
         else

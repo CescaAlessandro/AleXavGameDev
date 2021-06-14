@@ -18,7 +18,7 @@ public class Cable
 {
     public GameObject Instance { get; set; }
     public bool IsConnectedToCip { get; set; }
-
+    public int index { get; set; }
     public List<Tuple<float, float>> WirePositions = new List<Tuple<float, float>>();
 
     public void AddPosition(Tuple<float, float> position)
@@ -216,5 +216,57 @@ public class Bridge : CollisionEntity
         {
             return new Vector3(0, 0, 0);
         }
+    }
+}
+
+public class Hole : CollisionEntity
+{
+    public GameObject Instance { get; set; }
+    public bool IsConnected { get; set; }
+    public Cable CableConnected { get; set; }
+    public Hole()
+    {
+        collidesFromAbove = false;
+        collidesFromBelow = false;
+        collidesFromLeft = false;
+        collidesFromRight = false;
+        canBeExitedAbove = true;
+        canBeExitedBelow = true;
+        canBeExitedLeft = true;
+        canBeExitedRight = true;
+    }
+
+    public override void PassingThrough(directions dir)
+    {
+        collidesFromAbove = true;
+        collidesFromBelow = true;
+        collidesFromLeft = true;
+        collidesFromRight = true;
+        canBeExitedAbove = false;
+        canBeExitedBelow = false;
+        canBeExitedLeft = false;
+        canBeExitedRight = false;
+    }
+    public override void Exiting(directions dir)
+    {
+        collidesFromAbove = false;
+        collidesFromBelow = false;
+        collidesFromLeft = false;
+        collidesFromRight = false;
+        canBeExitedAbove = true;
+        canBeExitedBelow = true;
+        canBeExitedLeft = true;
+        canBeExitedRight = true;
+    }
+    public void cableCreatedOnHole()
+    {
+        collidesFromAbove = true;
+        collidesFromBelow = true;
+        collidesFromLeft = true;
+        collidesFromRight = true;
+        canBeExitedAbove = true;
+        canBeExitedBelow = true;
+        canBeExitedLeft = true;
+        canBeExitedRight = true;
     }
 }
