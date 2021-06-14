@@ -69,6 +69,9 @@ public enum DialogInstance
     DailyGoal,
     ALotTime,
     #endregion
+    #region GameOver
+    DamnCable,
+    #endregion
 }
 public enum directions
 {

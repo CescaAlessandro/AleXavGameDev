@@ -10,9 +10,10 @@ public class ChipController : MonoBehaviour
     public GameObject cablePrefab;
     public Grid grid;
     private int cableIndex = 0;
-    void Start()
-    {
-    }
+    //void Start()
+    //{
+    //    GameManager.Instance().Setup();
+    //}
 
     // Update is called once per frame
     void Update()
@@ -46,8 +47,15 @@ public class ChipController : MonoBehaviour
 
                     var finalPosition = MapUtility.GetBestFinalLocationForMovement(transform.position, currentPosition);
                     transform.position = finalPosition;
-                    var cable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
-                    cable.Instance.transform.position = finalPosition;
+                    try
+                    {
+                        var cable = MapUtility.Cables.First(cableA => cableA.IsConnectedToCip);
+                        cable.Instance.transform.position = finalPosition;
+                    }
+                    catch (Exception)
+                    {
+                        Debug.Log("Gomenasai");
+                    }
                 }
                 else
                 {

@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public SpriteRenderer livesIndicator;
     public bool preventLoosingLife;
     public bool preventFluxSpawning;
+    public DudeBehaviour Dude;
 
     private int maxLives = 3;
     private int lives;
@@ -166,12 +167,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            GameOver();
+            Dude.GameOverBehaviour();
         }
-    }
-    public void GameOver()
-    {
-        Debug.Log("GameOver");
     }
     //spawn fluxes on random pins with a fixed delay between them
     private float fluxSpawnDelay = 20;

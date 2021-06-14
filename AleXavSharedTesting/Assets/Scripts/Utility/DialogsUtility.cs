@@ -88,6 +88,8 @@ public static class DialogsUtility
 
         {DialogInstance.ALotTime, "Hmm... Maybe I should start looking for a new job..."},
 
+        {DialogInstance.DamnCable, "All we had to do, was wiring those damn pins, Chip!"},
+
         {DialogInstance.BeautifulDay, "It's a beautiful day outside."}
 
         //todo: various gameover + dude presentation

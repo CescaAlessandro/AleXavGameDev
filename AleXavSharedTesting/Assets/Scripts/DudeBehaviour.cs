@@ -475,4 +475,14 @@ public class DudeBehaviour : MonoBehaviour
     {
 
     }
+
+    public void GameOverBehaviour()
+    {
+        spriteRenderer.sprite = dudePissed;
+        textMesh.text = DialogsUtility.dialogs[DialogInstance.DamnCable];
+
+        MenuManager.Instance().LoadLevelFailedMenu();
+
+        dialogFlowState = -1;
+    }
 }

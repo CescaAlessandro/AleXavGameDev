@@ -147,11 +147,13 @@ public class MenuManager : MonoBehaviour
     public void FromLevelFailedToMainMenu()
     {
         Time.timeScale = 1;
+        LevelFailedMenu.SetActive(false);
         LevelManager.LoadLevel("MenuScene");
     }
     public void FromLevelFailedToRestartLevel()
     {
         Time.timeScale = 1;
+        LevelFailedMenu.SetActive(false);
         LevelManager.LoadLevel(SceneManager.GetActiveScene().name);
     }
     public void MusicVolumeWidgetChanged(float volume)
