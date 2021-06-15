@@ -170,11 +170,12 @@ public class GameManager : MonoBehaviour
         lives -= amount;
         if (lives > 0)
         {
-            livesIndicator.sprite = livesSprites[lives - 1];
+            livesIndicator.sprite = livesSprites[lives];
             AudioManager.Instance().PlayLoseLife();
         }
         else
         {
+            livesIndicator.sprite = livesSprites[0];
             Dude.GameOverBehaviour();
         }
     }
