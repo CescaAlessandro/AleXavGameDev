@@ -111,12 +111,17 @@ public class GameManager : MonoBehaviour
 
         if (!preventFluxSpawning)
             StartCoroutine(spawnRandomFluxesForever());
+
+        MapUtility.GamePaused = false;
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape) && !MenuManager.Instance().GetMenusStatus())
+        {
+            MapUtility.GamePaused = true;
             MenuManager.Instance().LoadPauseMenu();
+        }
 
         foreach (var lPin in MapUtility.LowerPins.Where(pin => pin.IsConnected))
             CheckForPossibleDepletion(lPin);

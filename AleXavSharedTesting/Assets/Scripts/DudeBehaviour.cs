@@ -55,26 +55,29 @@ public class DudeBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (sceneName.Equals("Level 1"))
+        if (!MapUtility.GamePaused)
         {
-            FirstTutorialBehavoiur();
-        }
-        else if (sceneName.Equals("Level 2"))
-        {
-            SecondTutorialBehavoiur();
-        }
-        else if (sceneName.Equals("Level 3"))
-        {
-            ThirdTutorialBehavoiur();
-        }
-        else if(sceneName.Equals("Level 6"))
-        {
-            FourthTutorialBehavoiur();
-        }
-        else
-        {
-            StandardBehavoiur();
-        }
+            if (sceneName.Equals("Level 1"))
+            {
+                FirstTutorialBehavoiur();
+            }
+            else if (sceneName.Equals("Level 2"))
+            {
+                SecondTutorialBehavoiur();
+            }
+            else if (sceneName.Equals("Level 3"))
+            {
+                ThirdTutorialBehavoiur();
+            }
+            else if (sceneName.Equals("Level 6"))
+            {
+                FourthTutorialBehavoiur();
+            }
+            else
+            {
+                StandardBehavoiur();
+            }
+        } 
     }
 
     public void FirstTutorialBehavoiur()
@@ -164,6 +167,7 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
             dialogFlowState = -1;
 
+            MapUtility.GamePaused = true;
             MenuManager.Instance().LoadLevelCompleteMenu();
         }
 
@@ -175,6 +179,7 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.SkippedTutorial];
             dialogFlowState = -1;
 
+            MapUtility.GamePaused = true;
             MenuManager.Instance().LoadLevelCompleteMenu();
         }
     }
@@ -327,6 +332,7 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
             dialogFlowState = -1;
 
+            MapUtility.GamePaused = true;
             MenuManager.Instance().LoadLevelCompleteMenu();
         }
     }
@@ -469,6 +475,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
 
+            MapUtility.GamePaused = true;
             MenuManager.Instance().LoadLevelCompleteMenu();
 
             dialogFlowState = -1;
@@ -634,6 +641,7 @@ public class DudeBehaviour : MonoBehaviour
         spriteRenderer.sprite = dudePissed;
         textMesh.text = DialogsUtility.dialogs[DialogInstance.DamnCable];
 
+        MapUtility.GamePaused = true;
         MenuManager.Instance().LoadLevelFailedMenu();
 
         dialogFlowState = -1;

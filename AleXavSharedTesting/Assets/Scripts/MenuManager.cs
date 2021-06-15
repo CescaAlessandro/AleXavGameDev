@@ -12,7 +12,7 @@ public class MenuManager : MonoBehaviour
     public GameObject LevelFailedMenu;
     public GameObject PauseMenu;
     public GameObject LevelCompleteMenu;
-    private GameObject AreYouSureMenu;
+    public GameObject AreYouSureMenu;
 
     public SaveManager SaveManager;
     public UnityEngine.UI.Slider musicSlider;
@@ -39,7 +39,7 @@ public class MenuManager : MonoBehaviour
 
     public bool GetMenusStatus()
     {
-        return LevelFailedMenu.activeSelf || LevelCompleteMenu.activeSelf;
+        return LevelFailedMenu.activeSelf || LevelCompleteMenu.activeSelf || AreYouSureMenu.activeSelf;
     }
 
     //loads the right main menu based on whether it's the first time the game is played or not
@@ -99,6 +99,7 @@ public class MenuManager : MonoBehaviour
     public void FromPauseToMainMenu()
     {
         Time.timeScale = 1;
+        MapUtility.GamePaused = false;
         MainMenu.SetActive(true);
         PauseMenu.SetActive(false);
         LevelManager.LoadLevel("MenuScene");
@@ -106,13 +107,24 @@ public class MenuManager : MonoBehaviour
     public void FromPauseToResume()
     {
         Time.timeScale = 1;
+        MapUtility.GamePaused = false;
         PauseMenu.SetActive(false);
     }
     public void FromPauseToRestartLevel()
     {
-        Time.timeScale = 1;
         PauseMenu.SetActive(false);
+        AreYouSureMenu.SetActive(true);
+    }
+    public void YesAnswer()
+    {
+        Time.timeScale = 1;
+        AreYouSureMenu.SetActive(false);
         LevelManager.LoadLevel(SceneManager.GetActiveScene().name);
+    }
+    public void NoAnswer()
+    {
+        PauseMenu.SetActive(true);
+        AreYouSureMenu.SetActive(false);
     }
     public void LoadLevelCompleteMenu()
     {
@@ -123,7 +135,6 @@ public class MenuManager : MonoBehaviour
     {
         Time.timeScale = 1;
         var nextLevelIndex = MapUtility.GetLevelNumber(SceneManager.GetActiveScene().name, "") + 1;
-
         string nextLevel = "Level " + nextLevelIndex;
         LevelCompleteMenu.SetActive(false);
         LevelManager.LoadLevel(nextLevel);
@@ -154,6 +165,7 @@ public class MenuManager : MonoBehaviour
     public void FromLevelFailedToMainMenu()
     {
         Time.timeScale = 1;
+        MapUtility.GamePaused = false;
         LevelFailedMenu.SetActive(false);
         loadMainMenu();
         LevelManager.LoadLevel("MenuScene");

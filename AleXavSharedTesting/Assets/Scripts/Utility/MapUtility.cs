@@ -11,6 +11,7 @@ public static class MapUtility
     //flag per prevenire che un cavo scollegato venga riattaccato subito 
     //(se Chip � nelle vicinanze del LowerPin con cui ha appena interagito)
     public static bool PreventReattaching { get; set; } = false;
+    public static bool GamePaused { get; set; } = false;
 
     public static List<Pin> UpperPins { get; set; }
     public static List<Pin> LowerPins { get; set; }
