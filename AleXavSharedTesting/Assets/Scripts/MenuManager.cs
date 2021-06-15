@@ -73,7 +73,7 @@ public class MenuManager : MonoBehaviour
     {
         MainMenu.SetActive(false);
         FirstStartMainMenu.SetActive(false);
-        LevelManager.LoadLevel(SaveManager.LastLevelPlayedName);
+        LevelManager.LoadLevel(PlayerPrefs.GetString("LastScene").Equals("") ? "Level 1" : PlayerPrefs.GetString("LastScene"));
     }
     public void FromLevelSelectToMain()
     {
@@ -102,6 +102,7 @@ public class MenuManager : MonoBehaviour
         MapUtility.GamePaused = false;
         MainMenu.SetActive(true);
         PauseMenu.SetActive(false);
+        SaveManager.Instance().SaveLastScene(SceneManager.GetActiveScene().name);
         LevelManager.LoadLevel("MenuScene");
     }
     public void FromPauseToResume()
@@ -143,6 +144,11 @@ public class MenuManager : MonoBehaviour
     {
         Time.timeScale = 1;
         LevelCompleteMenu.SetActive(false);
+
+        var nextLevelIndex = MapUtility.GetLevelNumber(SceneManager.GetActiveScene().name, "") + 1;
+        string nextLevel = "Level " + nextLevelIndex;
+        SaveManager.Instance().SaveLastScene(nextLevel);
+
         loadMainMenu();
         LevelManager.LoadLevel("MenuScene");
     }
@@ -167,6 +173,7 @@ public class MenuManager : MonoBehaviour
         Time.timeScale = 1;
         MapUtility.GamePaused = false;
         LevelFailedMenu.SetActive(false);
+        SaveManager.Instance().SaveLastScene(SceneManager.GetActiveScene().name);
         loadMainMenu();
         LevelManager.LoadLevel("MenuScene");
     }

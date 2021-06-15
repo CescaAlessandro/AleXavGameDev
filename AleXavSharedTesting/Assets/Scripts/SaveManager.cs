@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SaveManager : MonoBehaviour
 {
-    public string LastLevelPlayedName = "Level 1";
     public MenuManager menuManager;
     public bool debugIsFirstStart = false;
 
@@ -39,6 +38,11 @@ public class SaveManager : MonoBehaviour
     public void SaveSfxVolume(float volume)
     {
         PlayerPrefs.SetFloat("SfxVolume", volume);
+        //Debug.Log("sfx: " + volume);
+    }
+    public void SaveLastScene(string SceneName)
+    {
+        PlayerPrefs.SetString("LastScene", SceneName);
         //Debug.Log("sfx: " + volume);
     }
 }
