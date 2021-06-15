@@ -123,20 +123,23 @@ public class GameManager : MonoBehaviour
             MenuManager.Instance().LoadPauseMenu();
         }
 
-        foreach (var lPin in MapUtility.LowerPins.Where(pin => pin.IsConnected))
-            CheckForPossibleDepletion(lPin);
-
-        foreach (var flux in idleFluxes)
+        if (!MapUtility.GamePaused)
         {
-            AudioManager.Instance().PlayZap();
+            foreach (var lPin in MapUtility.LowerPins.Where(pin => pin.IsConnected))
+                CheckForPossibleDepletion(lPin);
 
-            flux.requestTimer += Time.deltaTime;
-
-            if (flux.requestTimer >= 5)
+            foreach (var flux in idleFluxes)
             {
-                if(!preventLoosingLife)
-                    LoseLives(1);
-                flux.requestTimer = 0;
+                AudioManager.Instance().PlayZap();
+
+                flux.requestTimer += Time.deltaTime;
+
+                if (flux.requestTimer >= 5)
+                {
+                    if (!preventLoosingLife)
+                        LoseLives(1);
+                    flux.requestTimer = 0;
+                }
             }
         }
     }
