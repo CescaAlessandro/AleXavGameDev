@@ -39,6 +39,8 @@ public class GameManager : MonoBehaviour
         MapUtility.Holes = new List<Hole>();
         MapUtility.Bridges = new List<Bridge>();
 
+        MapUtility.IsChipWiring = false;
+
         var lowPins = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("LPin")).OrderBy(pin => pin.name).ToList();
         var upperPins = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("UPin")).OrderBy(pin => pin.name).ToList();
         var holes = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("Hole")).ToList();
@@ -112,27 +114,35 @@ public class GameManager : MonoBehaviour
         }
         if (!preventFluxSpawning)
             StartCoroutine(spawnRandomFluxesForever());
+
+        MapUtility.GamePaused = false;
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape) && !MenuManager.Instance().GetMenusStatus())
-            MenuManager.Instance().LoadPauseMenu();
-
-        foreach (var lPin in MapUtility.LowerPins.Where(pin => pin.IsConnected))
-            CheckForPossibleDepletion(lPin);
-
-        foreach (var flux in idleFluxes)
         {
-            AudioManager.Instance().PlayZap();
+            MapUtility.GamePaused = true;
+            MenuManager.Instance().LoadPauseMenu();
+        }
 
-            flux.requestTimer += Time.deltaTime;
+        if (!MapUtility.GamePaused)
+        {
+            foreach (var lPin in MapUtility.LowerPins.Where(pin => pin.IsConnected))
+                CheckForPossibleDepletion(lPin);
 
-            if (flux.requestTimer >= 5)
+            foreach (var flux in idleFluxes)
             {
-                if(!preventLoosingLife)
-                    LoseLives(1);
-                flux.requestTimer = 0;
+                AudioManager.Instance().PlayZap();
+
+                flux.requestTimer += Time.deltaTime;
+
+                if (flux.requestTimer >= 5)
+                {
+                    if (!preventLoosingLife)
+                        LoseLives(1);
+                    flux.requestTimer = 0;
+                }
             }
         }
     }
@@ -163,11 +173,12 @@ public class GameManager : MonoBehaviour
         lives -= amount;
         if (lives > 0)
         {
-            livesIndicator.sprite = livesSprites[lives - 1];
+            livesIndicator.sprite = livesSprites[lives];
             AudioManager.Instance().PlayLoseLife();
         }
         else
         {
+            livesIndicator.sprite = livesSprites[0];
             Dude.GameOverBehaviour();
         }
     }

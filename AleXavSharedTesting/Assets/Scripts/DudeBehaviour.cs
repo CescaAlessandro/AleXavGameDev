@@ -65,26 +65,29 @@ public class DudeBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (sceneName.Equals("Level 1"))
+        if (!MapUtility.GamePaused)
         {
-            FirstTutorialBehavoiur();
-        }
-        else if (sceneName.Equals("Level 2"))
-        {
-            SecondTutorialBehavoiur();
-        }
-        else if (sceneName.Equals("Level 3"))
-        {
-            ThirdTutorialBehavoiur();
-        }
+            if (sceneName.Equals("Level 1"))
+            {
+                FirstTutorialBehavoiur();
+            }
+            else if (sceneName.Equals("Level 2"))
+            {
+                SecondTutorialBehavoiur();
+            }
+            else if (sceneName.Equals("Level 3"))
+            {
+                ThirdTutorialBehavoiur();
+            }
         else if(sceneName.Equals("Level 5"))
-        {
-            FourthTutorialBehavoiur();
-        }
-        else
-        {
-            StandardBehavoiur();
-        }
+            {
+                FourthTutorialBehavoiur();
+            }
+            else
+            {
+                StandardBehavoiur();
+            }
+        } 
     }
 
     public void FirstTutorialBehavoiur()
@@ -106,7 +109,7 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.Pissed];
         }
 
-        //Dude ti da la possibilità di rimediare (l'hai già fatto arrabbiare almeno una volta)
+        //Dude ti da la possibilitï¿½ di rimediare (l'hai giï¿½ fatto arrabbiare almeno una volta)
         if (nextDialogTimer >= 8 && !upperPin.IsConnected && !lowerPin.IsConnected &&
             dialogFlowState == 5)
         {
@@ -146,7 +149,7 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoToLowerPinSavagePartOne];
         }
 
-        //se non hai già fatto arrabbiare Dude una volta
+        //se non hai giï¿½ fatto arrabbiare Dude una volta
         if (!mistakeDone)
             //se primi dialoghi skippati... parte 2
             if (nextDialogTimer >= 8 && upperPin.IsConnected && !lowerPin.IsConnected &&
@@ -174,6 +177,7 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
             dialogFlowState = -1;
 
+            MapUtility.GamePaused = true;
             MenuManager.Instance().LoadLevelCompleteMenu();
         }
 
@@ -185,6 +189,7 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.SkippedTutorial];
             dialogFlowState = -1;
 
+            MapUtility.GamePaused = true;
             MenuManager.Instance().LoadLevelCompleteMenu();
         }
     }
@@ -319,7 +324,7 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.RepeatForPink];
         }
 
-        //speciale: finchè non fai quello che dice Dude, non si va avanti
+        //speciale: finchï¿½ non fai quello che dice Dude, non si va avanti
         if (blueUpperPin.IsConnected &&
             dialogFlowState == 6)
         {
@@ -337,6 +342,7 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
             dialogFlowState = -1;
 
+            MapUtility.GamePaused = true;
             MenuManager.Instance().LoadLevelCompleteMenu();
         }
     }
@@ -479,6 +485,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
 
+            MapUtility.GamePaused = true;
             MenuManager.Instance().LoadLevelCompleteMenu();
 
             dialogFlowState = -1;
@@ -627,6 +634,7 @@ public class DudeBehaviour : MonoBehaviour
         spriteRenderer.sprite = dudePissed;
         textMesh.text = DialogsUtility.dialogs[DialogInstance.DamnCable];
 
+        MapUtility.GamePaused = true;
         MenuManager.Instance().LoadLevelFailedMenu();
 
         dialogFlowState = -1;
