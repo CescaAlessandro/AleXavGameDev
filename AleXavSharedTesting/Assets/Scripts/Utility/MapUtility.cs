@@ -16,6 +16,7 @@ public static class MapUtility
     public static List<Pin> LowerPins { get; set; }
     public static List<Cable> Cables { get; set; }
     public static List<Hole> Holes { get; set; }
+    public static List<Bridge> Bridges { get; set; }
 
     public static GameObject managersRef { get; set; }
     public static CanvasesBehaviour canvasesRef { get; set; }

@@ -69,6 +69,17 @@ public enum DialogInstance
     DailyGoal,
     ALotTime,
     #endregion
+    #region FifthLevel,
+    ExplanationBridgePartOne,
+    ExplanationBridgePartTwo,
+    TwoFluxesArriving,
+    NotUsingBridge,
+    WrongColorsConnectedPartOne,
+    WrongColorsConnectedPartTwo,
+    FluxesMissed,
+    BridgeUsedWellDone,
+    TutorialThreeFluxesArriving,
+    #endregion
     #region GameOver
     DamnCable,
     #endregion

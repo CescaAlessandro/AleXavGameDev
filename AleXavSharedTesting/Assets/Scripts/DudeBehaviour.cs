@@ -13,6 +13,11 @@ public class DudeBehaviour : MonoBehaviour
     private float nextDialogTimer;
     private int dialogFlowState;
     private bool mistakeDone;
+    private bool usingBridge;
+    private Flux f1;
+    private Flux f2;
+    private bool colorTipGiven = false;
+    private bool bridgeTipGiven = false;
 
     public Sprite dudeHappy;
     public Sprite dudeFine;
@@ -45,6 +50,11 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.WelcomeThird];
             spriteRenderer.sprite = dudeHappy;
         }
+        else if (sceneName.Equals("Level 5"))
+        {
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationBridgePartOne];
+            spriteRenderer.sprite = dudeHappy;
+        }
         else
         {
             textMesh.text = DialogsUtility.dialogs[DialogInstance.BeautifulDay];
@@ -67,7 +77,7 @@ public class DudeBehaviour : MonoBehaviour
         {
             ThirdTutorialBehavoiur();
         }
-        else if(sceneName.Equals("Level 6"))
+        else if(sceneName.Equals("Level 5"))
         {
             FourthTutorialBehavoiur();
         }
@@ -477,153 +487,136 @@ public class DudeBehaviour : MonoBehaviour
 
     public void FourthTutorialBehavoiur()
     {
+        //Debug.Log(dialogFlowState);
         nextDialogTimer += Time.deltaTime;
 
-        var blueUpperPin = MapUtility.UpperPins.ElementAt(0);
+        var yellowUpperPin = MapUtility.UpperPins.ElementAt(0);
         var pinkUpperPin = MapUtility.UpperPins.ElementAt(1);
-        var lowerPin = MapUtility.LowerPins.First();
-
+        var redUpperPin = MapUtility.UpperPins.ElementAt(2);
+        var yellowLowerPin = MapUtility.LowerPins.ElementAt(2);
+        var pinkLowerPin = MapUtility.LowerPins.ElementAt(0);
+        var redLowerPin = MapUtility.LowerPins.ElementAt(1);
+        var bridge = MapUtility.Bridges.ElementAt(0);
         //primo dialogo
-        if (nextDialogTimer >= 8 && !blueUpperPin.IsConnected && !pinkUpperPin.IsConnected &&
-            dialogFlowState == 0)
+        if (nextDialogTimer >= 5 && dialogFlowState == 0)
         {
             dialogFlowState = 1;
             nextDialogTimer = 0;
             spriteRenderer.sprite = dudeFine;
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.CanDetach];
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationBridgePartTwo];
         }
-
-        //speciale: salta spiegazione
-        if ((blueUpperPin.IsConnected || pinkUpperPin.IsConnected) &&
-            (dialogFlowState == 0 || dialogFlowState == 1))
+        if (dialogFlowState == 1 && nextDialogTimer >= 5)
         {
-            dialogFlowState = 11;
-
-            spriteRenderer.sprite = dudeWow;
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.NoTimeToLose];
-        }
-
-        //secondo dialogo
-        if (nextDialogTimer > 8 && !blueUpperPin.IsConnected && !pinkUpperPin.IsConnected &&
-            dialogFlowState == 1)
-        {
+            f1 = GameManager.Instance().SpawnFluxIndex(0);
+            f2 = GameManager.Instance().SpawnFluxIndex(1);
             dialogFlowState = 2;
             nextDialogTimer = 0;
             spriteRenderer.sprite = dudeFine;
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.CreateBlue];
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.TwoFluxesArriving];
         }
-
-        //speciale: hai scelto di collegare il rosa anche se Dude ti ha suggerito blu
-        if (!blueUpperPin.IsConnected && pinkUpperPin.IsConnected &&
-            (dialogFlowState == 2 || dialogFlowState == 8))
+        if (dialogFlowState == 2 && nextDialogTimer >= 2 &&
+            ((yellowLowerPin.IsConnected && yellowLowerPin.IsConnected)
+            || (pinkLowerPin.IsConnected && pinkLowerPin.IsConnected)) && !bridge.isTraversed && !bridgeTipGiven)
         {
-            dialogFlowState = 7;
-            mistakeDone = true;
-            spriteRenderer.sprite = dudePissed;
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.ISaidBlue];
-        }
-
-        //speciale: Dude prende in giro la tua lentezza
-        if (!blueUpperPin.IsConnected && !pinkUpperPin.IsConnected &&
-            (dialogFlowState == 7 || dialogFlowState == 3 || dialogFlowState == 11 || dialogFlowState == 9))
-        {
-            dialogFlowState = 8;
-            //nextDialogTimer = 0;
-            spriteRenderer.sprite = dudeWorried;
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.LongDay];
-        }
-
-        //speciale: se fai quello che dice Dude, ti perdona
-        if (blueUpperPin.IsConnected && !pinkUpperPin.IsConnected &&
-            dialogFlowState == 8)
-        {
-            dialogFlowState = 9;
+            bridgeTipGiven = true;
+            dialogFlowState = 2;
             nextDialogTimer = 0;
-            mistakeDone = false;
-            spriteRenderer.sprite = dudeFine;
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.OkBlue];
+            spriteRenderer.sprite = dudeWorried;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.NotUsingBridge];
         }
-
-        //terzo dialogo
-        if (blueUpperPin.IsConnected && !pinkUpperPin.IsConnected &&
-            (dialogFlowState == 2 || (dialogFlowState == 9 && nextDialogTimer >= 5)))
+        if (dialogFlowState == 2 && !colorTipGiven && nextDialogTimer >= 2 &&
+            ((!cableColorsMatchOrNoConnection(yellowUpperPin, MapUtility.LowerPins))
+               || (!cableColorsMatchOrNoConnection(pinkUpperPin, MapUtility.LowerPins))))
         {
+            colorTipGiven = true;
             dialogFlowState = 3;
-
-            spriteRenderer.sprite = dudeFine;
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.Attach];
+            nextDialogTimer = 0;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.WrongColorsConnectedPartOne];
         }
-
-        //quarto dialogo
-        if (lowerPin.IsConnected &&
-            (dialogFlowState == 3 || dialogFlowState == 7 || dialogFlowState == 11 || dialogFlowState == 9))
+        if ((dialogFlowState == 2 || dialogFlowState == 3) && f1.hasArrived && f2.hasArrived && nextDialogTimer >= 2
+            && (!yellowUpperPin.IsConnected || !yellowUpperPin.IsConnected || !pinkUpperPin.IsConnected || !pinkLowerPin.IsConnected
+                || (!cableColorsMatchOrNoConnection(yellowUpperPin, MapUtility.LowerPins)) || (!cableColorsMatchOrNoConnection(yellowUpperPin, MapUtility.LowerPins))))
         {
-            dialogFlowState = 4;
-
-            spriteRenderer.sprite = dudeHappy;
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.Detach];
+            GameManager.Instance().DeleteFlux(f1);
+            GameManager.Instance().DeleteFlux(f2);
+            Destroy(f2.gameObject);
+            f1 = GameManager.Instance().SpawnFluxIndex(0);
+            f2 = GameManager.Instance().SpawnFluxIndex(1);
+            spriteRenderer.sprite = dudePissed;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.FluxesMissed];
+            nextDialogTimer = 0;
         }
-
-        //quinto dialogo
-        if (!lowerPin.IsConnected &&
-            (dialogFlowState == 4 || dialogFlowState == 10))
+        if ((dialogFlowState == 2 || dialogFlowState == 3) && GameManager.Instance().GetNumberFluxesDepleteded() == 2)
         {
             dialogFlowState = 5;
-
-            spriteRenderer.sprite = dudeWink;
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.Remove];
+            //Go on
         }
-
-        //speciale: hai attaccato il cavo anche se Dude ti ha chiesto di rimuoverlo
-        if (lowerPin.IsConnected &&
-            dialogFlowState == 5)
+        if (dialogFlowState == 3 && nextDialogTimer >= 4)
         {
-            dialogFlowState = 10;
-            mistakeDone = true;
-
-            spriteRenderer.sprite = dudePissed;
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.BadTime];
+            dialogFlowState = 2;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.WrongColorsConnectedPartTwo];
+            nextDialogTimer = 0;
         }
-
-        //speciale: Dude ha perso la pazienza
-        if (!lowerPin.IsConnected && !blueUpperPin.IsConnected && !pinkUpperPin.IsConnected &&
-            dialogFlowState == 5 && mistakeDone)
-        {
-            dialogFlowState = 10;
-
-            spriteRenderer.sprite = dudePissed;
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.WasteTime];
-        }
-
-        //sesto dialogo
-        if (!blueUpperPin.IsConnected && !pinkUpperPin.IsConnected && !mistakeDone &&
-            dialogFlowState == 5)
+        if (dialogFlowState == 5)
         {
             dialogFlowState = 6;
-
-            spriteRenderer.sprite = dudeFine;
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.RepeatForPink];
+            spriteRenderer.sprite = dudeHappy;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.BridgeUsedWellDone];
+            nextDialogTimer = 0;
         }
-
-        //speciale: finchè non fai quello che dice Dude, non si va avanti
-        if (blueUpperPin.IsConnected &&
-            dialogFlowState == 6)
+        if (dialogFlowState == 6 && nextDialogTimer >= 5)
         {
-            dialogFlowState = 12;
-
-            spriteRenderer.sprite = dudePissed;
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.IAmRuler];
+            f1 = GameManager.Instance().SpawnFluxIndex(2);
+            f2 = GameManager.Instance().SpawnFluxIndex(1);
+            nextDialogTimer = 0;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.TutorialThreeFluxesArriving];
+            dialogFlowState = 7;
         }
-
-        //sesto dialogo
-        if (!blueUpperPin.IsConnected && pinkUpperPin.IsConnected && lowerPin.IsConnected &&
-            (dialogFlowState == 6 || dialogFlowState == 12))
+        if (dialogFlowState == 7 && nextDialogTimer >= 15)
+        {
+            nextDialogTimer = 0;
+            f1 = GameManager.Instance().SpawnFluxIndex(0);
+            dialogFlowState = 8;
+        }
+        if (dialogFlowState == 8 && nextDialogTimer >= 18)
+        {
+            nextDialogTimer = 0;
+            f1 = GameManager.Instance().SpawnFluxIndex(0);
+            f1 = GameManager.Instance().SpawnFluxIndex(2);
+            dialogFlowState = 9;
+        }
+        if(GameManager.Instance().GetNumberFluxesDepleteded() == 7)
         {
             spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
+
+            MenuManager.Instance().LoadLevelCompleteMenu();
+
+            dialogFlowState = -1;
         }
     }
 
+    private bool cableColorsMatchOrNoConnection(Pin upperPin,List<Pin> lowerPins)
+    {
+        foreach (Pin lower in lowerPins)
+        {
+            if(lower.CableConnected != null)
+            {
+                if (lower.CableConnected == upperPin.CableConnected)
+                {
+                    if (lower.Instance.GetComponent<Renderer>().material.color == upperPin.Instance.GetComponent<Renderer>().material.color)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
     public void StandardBehavoiur()
     {
 
@@ -637,5 +630,10 @@ public class DudeBehaviour : MonoBehaviour
         MenuManager.Instance().LoadLevelFailedMenu();
 
         dialogFlowState = -1;
+    }
+
+    public void SetUsingBridge(bool value)
+    {
+
     }
 }

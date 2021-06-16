@@ -90,7 +90,25 @@ public static class DialogsUtility
 
         {DialogInstance.DamnCable, "All we had to do, was wiring those damn pins, Chip!"},
 
-        {DialogInstance.BeautifulDay, "It's a beautiful day outside."}
+        {DialogInstance.BeautifulDay, "It's a beautiful day outside."},
+
+        {DialogInstance.ExplanationBridgePartOne, "Hey Chip, today we expect a lot of data to come in. But we also have a new tool, right there on the board." },
+
+        {DialogInstance.ExplanationBridgePartTwo, "That's a bridge, cables can be layed both above and below it. This will allow us to cross cables." },
+
+        {DialogInstance.TwoFluxesArriving, "Two fluxing are arriving at the same time, use the bridge to connect both correctly." },
+
+        {DialogInstance.FluxesMissed, "You missed those fluxes... Try to catch the next ones." },
+
+        {DialogInstance.NotUsingBridge, "Chip, you're not using the bridge, we won't be able to deal with so many fluxes without using it." },
+
+        {DialogInstance.WrongColorsConnectedPartOne, "You connected the wrong pins, I thought you learned about pin colors three level ago."},
+
+        {DialogInstance.WrongColorsConnectedPartTwo, "Now please, disconnect those cables and connect them according to the pins' colors"},
+
+        {DialogInstance.BridgeUsedWellDone, "Ok, now that you learned how to use bridges, deal with the incoming fluxes to complete the level"},
+
+        { DialogInstance.TutorialThreeFluxesArriving, "Fluxes incoming!"},
 
         //todo: various gameover + dude presentation
     };

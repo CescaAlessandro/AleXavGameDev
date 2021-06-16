@@ -16,11 +16,14 @@ public class Flux : MonoBehaviour
     public float scaleAcceptanceLevel;
     public int index;
     public float requestTimer;
+
+    public bool hasArrived { get; set; }
     private FluxLifeState state = FluxLifeState.Moving;
     void Start()
     {
         this.transform.LookAt(destination);
         requestTimer = 0;
+        hasArrived = false;
     }
     // Based on which state the flux is either does nothing or moves towards the destination or depletes the trail
     void Update()
@@ -38,6 +41,7 @@ public class Flux : MonoBehaviour
                     tip.SetActive(false);
                     state = FluxLifeState.Idle;
                     GameManager.Instance().FluxArrivedAtDestination(this);
+                    hasArrived = true;
                 }
                 break;
             case FluxLifeState.Depleting:

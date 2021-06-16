@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     private List<Flux> idleFluxes;
-    private List<Flux> depletioningFluxes;
+    private List<Flux> depletingFluxes;
 
     public GameObject fluxPrefab;
     //spawnPoints presi dagli attachment dello scenario, andr� tolto
@@ -37,12 +37,15 @@ public class GameManager : MonoBehaviour
         MapUtility.LowerPins = new List<Pin>();
         MapUtility.UpperPins = new List<Pin>();
         MapUtility.Holes = new List<Hole>();
+        MapUtility.Bridges = new List<Bridge>();
 
         var lowPins = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("LPin")).OrderBy(pin => pin.name).ToList();
         var upperPins = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("UPin")).OrderBy(pin => pin.name).ToList();
-        var holes = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("Hole")).OrderBy(pin => pin.name).ToList();
+        var holes = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("Hole")).ToList();
+        var bridges = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("Bridge")).ToList();
 
         var pinIndex = 0;
+        MapUtility.collisionMapBaseSetup();
         foreach (var pin in lowPins)
         {
             var attachmentPosition = pin.transform.GetChild(0).position;
@@ -57,7 +60,7 @@ public class GameManager : MonoBehaviour
                 AttachmentPoint = attachment,
                 Index = pinIndex
             };
-
+            MapUtility.setCollisionMap(attachmentPosition.x, attachmentPosition.z, CollisionEntity.getFullCollisionEntity());
             MapUtility.LowerPins.Add(pinInstance);
             pinIndex++;
         }
@@ -81,15 +84,15 @@ public class GameManager : MonoBehaviour
                 AttachmentPoint = attachment,
                 Index = pinIndex
             };
-
+            MapUtility.setCollisionMap(attachmentPosition.x, attachmentPosition.z, CollisionEntity.getFullCollisionEntity());
             MapUtility.UpperPins.Add(pinInstance);
             pinIndex++;
         }
 
         idleFluxes = new List<Flux>();
-        depletioningFluxes = new List<Flux>();
+        depletingFluxes = new List<Flux>();
 
-        MapUtility.collisionMapBaseSetup();
+
         foreach (var hole in holes)
         {
             var holeInstance = new Hole()
@@ -101,14 +104,12 @@ public class GameManager : MonoBehaviour
             MapUtility.Holes.Add(holeInstance);
             MapUtility.setCollisionMap(hole.transform.position.x, hole.transform.position.z, holeInstance);
         }
-        MapUtility.setCollisionMap(200, -500, CollisionEntity.getFullCollisionEntity());
-        MapUtility.setCollisionMap(0, -500, CollisionEntity.getFullCollisionEntity());
-        MapUtility.setCollisionMap(-200, -500, CollisionEntity.getFullCollisionEntity());
-        MapUtility.setCollisionMap(200, 500, CollisionEntity.getFullCollisionEntity());
-        MapUtility.setCollisionMap(0, 500, CollisionEntity.getFullCollisionEntity());
-        MapUtility.setCollisionMap(-200, 500, CollisionEntity.getFullCollisionEntity());
-        MapUtility.setCollisionMap(200, 200, new Bridge());
-
+        foreach (var bridge in bridges)
+        {
+            var bridgeInstance = new Bridge();
+            MapUtility.Bridges.Add(bridgeInstance);
+            MapUtility.setCollisionMap(bridge.transform.position.x, bridge.transform.position.z, bridgeInstance);
+        }
         if (!preventFluxSpawning)
             StartCoroutine(spawnRandomFluxesForever());
     }
@@ -184,13 +185,14 @@ public class GameManager : MonoBehaviour
     }
 
     //spawn a flux that will arrive on the pin corresponding to the index passed
-    public void SpawnFluxIndex(int index)
+    public Flux SpawnFluxIndex(int index)
     {
         var pin = MapUtility.UpperPins.FirstOrDefault(pinA => pinA.Index == index);
 
         GameObject inst = GameObject.Instantiate(fluxPrefab, pin.FluxSpawnPoint.Item1, pin.FluxSpawnPoint.Item2, this.transform);
         inst.GetComponent<Flux>().index = index;
         inst.GetComponent<Flux>().destination = pin.AttachmentPoint.Item1;
+        return inst.GetComponent<Flux>();
     }
 
     //Starts depletion of the flux on the pin given as input index
@@ -200,7 +202,7 @@ public class GameManager : MonoBehaviour
         AudioManager.Instance().StopZap();
         AudioManager.Instance().PlayStartDownload();
         idleFluxes.Remove(flux);
-        depletioningFluxes.Add(flux);
+        depletingFluxes.Add(flux);
         //onFluxDepletion();
     }
 
@@ -211,8 +213,8 @@ public class GameManager : MonoBehaviour
         AudioManager.Instance().StopStartDownload();
         if (!idleFluxes.Contains(flux))
             idleFluxes.Add(flux);
-        if(depletioningFluxes.Contains(flux))
-            depletioningFluxes.Remove(flux);
+        if(depletingFluxes.Contains(flux))
+            depletingFluxes.Remove(flux);
     }
 
     //Function used by fluxes to notify the manager that they arrived at the destination
@@ -225,11 +227,17 @@ public class GameManager : MonoBehaviour
     //Function used by fluxes to notify the game manager that they are depleted
     public void FluxDepleted(Flux flux)
     {
-        depletioningFluxes.Remove(flux);
+        depletingFluxes.Remove(flux);
         numberFluxesDepleteded++;
         GameObject.Destroy(flux.gameObject);
     }
-
+    //Function to delete a flux (used in tutorials only)
+    public void DeleteFlux(Flux flux)
+    {
+        depletingFluxes.Remove(flux);
+        idleFluxes.Remove(flux);
+        GameObject.Destroy(flux.gameObject);
+    }
     public void CheckForPossibleDepletion(Pin lPin)
     {
         Debug.Assert(lPin != null, "It is null");
@@ -248,7 +256,7 @@ public class GameManager : MonoBehaviour
 
         if(possibleFluxWaiting != null)
         {
-            var fluxDepletingSameIndex = depletioningFluxes.FirstOrDefault(flux => flux.index == possibleFluxWaiting.index);
+            var fluxDepletingSameIndex = depletingFluxes.FirstOrDefault(flux => flux.index == possibleFluxWaiting.index);
 
             if (lPin.Instance.GetComponent<Renderer>().material.color == uPin.Instance.GetComponent<Renderer>().material.color &&
                 fluxDepletingSameIndex == null)
@@ -266,7 +274,7 @@ public class GameManager : MonoBehaviour
 
             if(possibleLPin != null && possibleLPin.IsConnected)
             {
-                var fluxDepletingSameIndex = depletioningFluxes.FirstOrDefault(flux => flux.index == arrivalFlux.index);
+                var fluxDepletingSameIndex = depletingFluxes.FirstOrDefault(flux => flux.index == arrivalFlux.index);
 
                 if (possibleLPin.Instance.GetComponent<Renderer>().material.color == uPin.Instance.GetComponent<Renderer>().material.color &&
                     fluxDepletingSameIndex == null)
@@ -280,7 +288,7 @@ public class GameManager : MonoBehaviour
         var uPin = MapUtility.UpperPins.FirstOrDefault(pin => pin.CableConnected == lPin.CableConnected);
         if(uPin != null)
         {
-            var possibleDepletingFlux = depletioningFluxes.FirstOrDefault(flux => flux.index == uPin.Index);
+            var possibleDepletingFlux = depletingFluxes.FirstOrDefault(flux => flux.index == uPin.Index);
 
             if (possibleDepletingFlux != null)
                 PauseFluxDepletion(possibleDepletingFlux);

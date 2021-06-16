@@ -135,8 +135,10 @@ public class CollisionEntity
 }
 public class Bridge : CollisionEntity
 {
+    public bool isTraversed { get; set; }
     public Bridge()
     {
+        isTraversed = false;
         collidesFromAbove = false;
         collidesFromBelow = false;
         collidesFromLeft = false;
@@ -144,6 +146,7 @@ public class Bridge : CollisionEntity
     }
     public override void PassingThrough(directions dir)
     {
+        isTraversed = true;
         switch (dir)
         {
             case directions.Top:
@@ -184,6 +187,7 @@ public class Bridge : CollisionEntity
     }
     public override void Exiting(directions dir)
     {
+        isTraversed = false;
         switch (dir)
         {
             case directions.Top:
