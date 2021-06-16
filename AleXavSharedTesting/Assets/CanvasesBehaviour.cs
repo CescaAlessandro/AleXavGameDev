@@ -8,7 +8,6 @@ public class CanvasesBehaviour : MonoBehaviour
     // Start is called before the first frame update
 
     public static CanvasesBehaviour sm;
-
     public static CanvasesBehaviour Instance()
     {
         return sm;

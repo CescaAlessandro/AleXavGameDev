@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class MenuManager : MonoBehaviour
     public GameObject AreYouSureMenu;
 
     public SaveManager SaveManager;
+    public LevelSelectionBehaviour levelSelectionMenuObject;
     public UnityEngine.UI.Slider musicSlider;
     public UnityEngine.UI.Slider sfxSlider;
     public bool DebugStart = false;
@@ -87,9 +89,14 @@ public class MenuManager : MonoBehaviour
     }
     public void FromLevelSelectToLevel(TMPro.TextMeshProUGUI levelName)
     {
-        Time.timeScale = 1;
-        LevelSelectMenu.SetActive(false);
-        LevelManager.LoadLevel(levelName.text);
+        var lockStatus = SaveManager.Instance().GetLevelState(levelName.text);
+
+        if(lockStatus == 1)
+        {
+            Time.timeScale = 1;
+            LevelSelectMenu.SetActive(false);
+            LevelManager.LoadLevel(levelName.text);
+        }
     }
     public void LoadPauseMenu()
     {
@@ -99,7 +106,7 @@ public class MenuManager : MonoBehaviour
     public void FromPauseToMainMenu()
     {
         Time.timeScale = 1;
-        MapUtility.GamePaused = false;
+
         MainMenu.SetActive(true);
         PauseMenu.SetActive(false);
         SaveManager.Instance().SaveLastScene(SceneManager.GetActiveScene().name);
@@ -130,6 +137,10 @@ public class MenuManager : MonoBehaviour
     public void LoadLevelCompleteMenu()
     {
         Time.timeScale = 0;
+        var nextLevelIndex = MapUtility.GetLevelNumber(SceneManager.GetActiveScene().name, "") + 1;
+        string nextLevel = "Level " + nextLevelIndex;
+        SaveManager.Instance().UnlockLevel(nextLevel);
+        levelSelectionMenuObject.UpdateLevels();
         LevelCompleteMenu.SetActive(true);
     }
     public void FromLevelCompleteToNextLevel()
@@ -171,7 +182,7 @@ public class MenuManager : MonoBehaviour
     public void FromLevelFailedToMainMenu()
     {
         Time.timeScale = 1;
-        MapUtility.GamePaused = false;
+
         LevelFailedMenu.SetActive(false);
         SaveManager.Instance().SaveLastScene(SceneManager.GetActiveScene().name);
         loadMainMenu();

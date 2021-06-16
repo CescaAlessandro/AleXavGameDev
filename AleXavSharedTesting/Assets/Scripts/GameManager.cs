@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
         MapUtility.UpperPins = new List<Pin>();
         MapUtility.Holes = new List<Hole>();
 
+        MapUtility.IsChipWiring = false;
+
         var lowPins = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("LPin")).OrderBy(pin => pin.name).ToList();
         var upperPins = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("UPin")).OrderBy(pin => pin.name).ToList();
         var holes = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("Hole")).OrderBy(pin => pin.name).ToList();

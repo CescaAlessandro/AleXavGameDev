@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SaveManager : MonoBehaviour
 {
     public MenuManager menuManager;
     public bool debugIsFirstStart = false;
+    public LevelSelectionBehaviour levelSelectionMenuObject;
 
     public static SaveManager sm;
     public void Setup()
@@ -20,6 +22,14 @@ public class SaveManager : MonoBehaviour
         MenuManager.Instance().changeSfxVolumeWidgetValue(sfxVol);
         AudioManager.Instance().SetMusicVolume(musVol);
         AudioManager.Instance().SetSfxVolume(sfxVol);
+
+        UnlockLevel("Level 1");
+
+        //debug only
+        //LockLevel("Level 2");
+        //LockLevel("Level 3");
+        //LockLevel("Level 4");
+        levelSelectionMenuObject.UpdateLevels();
     }
 
     public static SaveManager Instance()
@@ -43,6 +53,21 @@ public class SaveManager : MonoBehaviour
     public void SaveLastScene(string SceneName)
     {
         PlayerPrefs.SetString("LastScene", SceneName);
+        //Debug.Log("sfx: " + volume);
+    }
+    public void UnlockLevel(string SceneName)
+    {
+        PlayerPrefs.SetInt(SceneName, 1);
+        //Debug.Log("sfx: " + volume);
+    }
+    public void LockLevel(string SceneName)
+    {
+        PlayerPrefs.SetInt(SceneName, 0);
+        //Debug.Log("sfx: " + volume);
+    }
+    public int GetLevelState(string SceneName)
+    {
+        return PlayerPrefs.GetInt(SceneName);
         //Debug.Log("sfx: " + volume);
     }
 }
