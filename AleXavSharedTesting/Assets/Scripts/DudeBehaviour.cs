@@ -35,6 +35,9 @@ public class DudeBehaviour : MonoBehaviour
         dialogFlowState = 0;
         mistakeDone = false;
 
+        //AudioManager.Instance().StopDudeVoice();
+        //AudioManager.Instance().PlayDudeVoice();
+
         if (sceneName.Equals("Level 1"))
         {
             textMesh.text = DialogsUtility.dialogs[DialogInstance.Presentation];
@@ -105,6 +108,9 @@ public class DudeBehaviour : MonoBehaviour
             dialogFlowState = 5;
             mistakeDone = true;
 
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudePissed;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.Pissed];
         }
@@ -113,6 +119,9 @@ public class DudeBehaviour : MonoBehaviour
         if (nextDialogTimer >= 8 && !upperPin.IsConnected && !lowerPin.IsConnected &&
             dialogFlowState == 5)
         {
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudePissed;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.RedeemYourself];
             dialogFlowState = 6;
@@ -124,6 +133,10 @@ public class DudeBehaviour : MonoBehaviour
         {
             nextDialogTimer = 0;
             dialogFlowState = 1;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.Welcome];
         }
@@ -134,6 +147,10 @@ public class DudeBehaviour : MonoBehaviour
         {
             nextDialogTimer = 0;
             dialogFlowState = 2;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoToUpperPin];
         }
@@ -144,6 +161,9 @@ public class DudeBehaviour : MonoBehaviour
         {
             nextDialogTimer = 0;
             dialogFlowState = 4;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
 
             spriteRenderer.sprite = dudeWow;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoToLowerPinSavagePartOne];
@@ -156,6 +176,10 @@ public class DudeBehaviour : MonoBehaviour
                 dialogFlowState == 4)
             {
                 dialogFlowState = 3;
+
+                AudioManager.Instance().StopDudeVoice();
+                AudioManager.Instance().PlayDudeVoice();
+
                 spriteRenderer.sprite = dudeFine;
                 textMesh.text = DialogsUtility.dialogs[DialogInstance.GoToLowerPinSavagePartTwo];
             }
@@ -165,6 +189,10 @@ public class DudeBehaviour : MonoBehaviour
             (dialogFlowState == 2 || dialogFlowState == 6 || dialogFlowState == 5))
         {
             dialogFlowState = 3;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoToLowerPin];
         }
@@ -173,7 +201,12 @@ public class DudeBehaviour : MonoBehaviour
         if (upperPin.IsConnected && lowerPin.IsConnected &&
             dialogFlowState == 3)
         {
+            //AudioManager.Instance().StopDudeVoice();
+            //AudioManager.Instance().PlayDudeVoice();
+            AudioManager.Instance().PlayLevelCompleted();
+
             spriteRenderer.sprite = dudeHappy;
+
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
             dialogFlowState = -1;
 
@@ -185,6 +218,10 @@ public class DudeBehaviour : MonoBehaviour
         if (upperPin.IsConnected && lowerPin.IsConnected &&
             dialogFlowState == 4)
         {
+            //AudioManager.Instance().StopDudeVoice();
+            //AudioManager.Instance().PlayDudeVoice();
+            AudioManager.Instance().PlayLevelCompleted();
+
             spriteRenderer.sprite = dudeWink;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.SkippedTutorial];
             dialogFlowState = -1;
@@ -208,6 +245,10 @@ public class DudeBehaviour : MonoBehaviour
         {
             dialogFlowState = 1;
             nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.CanDetach];
         }
@@ -217,7 +258,10 @@ public class DudeBehaviour : MonoBehaviour
             (dialogFlowState == 0 || dialogFlowState == 1))
         {
             dialogFlowState = 11;
-            
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeWow;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.NoTimeToLose];
         }
@@ -228,6 +272,10 @@ public class DudeBehaviour : MonoBehaviour
         {
             dialogFlowState = 2;
             nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.CreateBlue];
         }
@@ -238,6 +286,10 @@ public class DudeBehaviour : MonoBehaviour
         {
             dialogFlowState = 7;
             mistakeDone = true;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudePissed;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ISaidBlue];
         }
@@ -247,7 +299,10 @@ public class DudeBehaviour : MonoBehaviour
             (dialogFlowState == 7 || dialogFlowState == 3 || dialogFlowState == 11 || dialogFlowState == 9))
         {
             dialogFlowState = 8;
-            //nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeWorried;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.LongDay];
         }
@@ -259,6 +314,10 @@ public class DudeBehaviour : MonoBehaviour
             dialogFlowState = 9;
             nextDialogTimer = 0;
             mistakeDone = false;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.OkBlue];
         }
@@ -268,6 +327,9 @@ public class DudeBehaviour : MonoBehaviour
             (dialogFlowState == 2 || (dialogFlowState == 9 && nextDialogTimer >=5)))
         {
             dialogFlowState = 3;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
 
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.Attach];
@@ -279,6 +341,9 @@ public class DudeBehaviour : MonoBehaviour
         {
             dialogFlowState = 4;
 
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.Detach];
         }
@@ -288,6 +353,9 @@ public class DudeBehaviour : MonoBehaviour
             (dialogFlowState == 4 || dialogFlowState == 10))
         {
             dialogFlowState = 5;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
 
             spriteRenderer.sprite = dudeWink;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.Remove];
@@ -300,6 +368,9 @@ public class DudeBehaviour : MonoBehaviour
             dialogFlowState = 10;
             mistakeDone = true;
 
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudePissed;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.BadTime];
         }
@@ -310,6 +381,10 @@ public class DudeBehaviour : MonoBehaviour
         {
             dialogFlowState = 10;
 
+            //AudioManager.Instance().StopDudeVoice();
+            //AudioManager.Instance().PlayDudeVoice();
+            AudioManager.Instance().PlayLevelCompleted();
+
             spriteRenderer.sprite = dudePissed;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.WasteTime];
         }
@@ -319,7 +394,10 @@ public class DudeBehaviour : MonoBehaviour
             dialogFlowState == 5)
         {
             dialogFlowState = 6;
-            
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.RepeatForPink];
         }
@@ -329,7 +407,10 @@ public class DudeBehaviour : MonoBehaviour
             dialogFlowState == 6)
         {
             dialogFlowState = 12;
-            
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudePissed;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.IAmRuler];
         }
@@ -338,6 +419,10 @@ public class DudeBehaviour : MonoBehaviour
         if (!blueUpperPin.IsConnected && pinkUpperPin.IsConnected && lowerPin.IsConnected &&
             (dialogFlowState == 6 || dialogFlowState == 12))
         {
+            //AudioManager.Instance().StopDudeVoice();
+            //AudioManager.Instance().PlayDudeVoice();
+            AudioManager.Instance().PlayLevelCompleted();
+
             spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
             dialogFlowState = -1;
@@ -360,6 +445,10 @@ public class DudeBehaviour : MonoBehaviour
         {
             dialogFlowState = 1;
             nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationPartOne];
         }
@@ -367,6 +456,10 @@ public class DudeBehaviour : MonoBehaviour
         {
             dialogFlowState = 2;
             nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationPartTwo];
         }
@@ -374,6 +467,10 @@ public class DudeBehaviour : MonoBehaviour
         {
             dialogFlowState = 3;
             nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationPartThree];
         }
@@ -381,6 +478,10 @@ public class DudeBehaviour : MonoBehaviour
         {
             dialogFlowState = 4;
             nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeWorried;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationPartFour];
         }
@@ -388,6 +489,10 @@ public class DudeBehaviour : MonoBehaviour
         {
             dialogFlowState = 5;
             nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationPartFive];
 
@@ -399,6 +504,10 @@ public class DudeBehaviour : MonoBehaviour
 
             dialogFlowState = 6;
             nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeWorried;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationPartSix];
         }
@@ -406,6 +515,10 @@ public class DudeBehaviour : MonoBehaviour
         {
             dialogFlowState = 7;
             nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationPartSeven];
         }
@@ -413,6 +526,10 @@ public class DudeBehaviour : MonoBehaviour
         {
             dialogFlowState = 8;
             nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeWorried;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationPartEight];
         }
@@ -422,7 +539,10 @@ public class DudeBehaviour : MonoBehaviour
 
             dialogFlowState = 9;
             nextDialogTimer = 0;
- 
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeWow;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.HereItIs];
         }
@@ -431,12 +551,18 @@ public class DudeBehaviour : MonoBehaviour
             dialogFlowState = 10;
             nextDialogTimer = 0;
 
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeWink;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.NotScared];
         }
         if((dialogFlowState == 10) && nextDialogTimer >= 6 && (!blueUpperPin.IsConnected || !blueLowerPin.IsConnected))
         {
             dialogFlowState = 11;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
 
             spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.WhatAreYouWaitingFor];
@@ -453,12 +579,18 @@ public class DudeBehaviour : MonoBehaviour
             dialogFlowState = 12;
             nextDialogTimer = 0;
 
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.DailyGoal];
         }
         if((dialogFlowState == 14) && (!blueUpperPin.IsConnected || !blueLowerPin.IsConnected))
         {
             dialogFlowState = 13;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
 
             spriteRenderer.sprite = dudePissed;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.KindaSus];
@@ -468,6 +600,9 @@ public class DudeBehaviour : MonoBehaviour
             dialogFlowState = 15;
             nextDialogTimer = 0;
 
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeWink;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ByTheWay];
         }
@@ -476,12 +611,19 @@ public class DudeBehaviour : MonoBehaviour
             dialogFlowState = 13;
             nextDialogTimer = 0;
 
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudePissed;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ALotTime];
         }
 
         if(GameManager.Instance().GetNumberFluxesDepleteded() == 3 && dialogFlowState != -1)
         {
+            //AudioManager.Instance().StopDudeVoice();
+            //AudioManager.Instance().PlayDudeVoice();
+            AudioManager.Instance().PlayLevelCompleted();
+
             spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
 
@@ -509,6 +651,10 @@ public class DudeBehaviour : MonoBehaviour
         {
             dialogFlowState = 1;
             nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationBridgePartTwo];
         }
@@ -518,6 +664,10 @@ public class DudeBehaviour : MonoBehaviour
             f2 = GameManager.Instance().SpawnFluxIndex(1);
             dialogFlowState = 2;
             nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.TwoFluxesArriving];
         }
@@ -528,6 +678,10 @@ public class DudeBehaviour : MonoBehaviour
             bridgeTipGiven = true;
             dialogFlowState = 2;
             nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudeWorried;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.NotUsingBridge];
         }
@@ -538,6 +692,10 @@ public class DudeBehaviour : MonoBehaviour
             colorTipGiven = true;
             dialogFlowState = 3;
             nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             textMesh.text = DialogsUtility.dialogs[DialogInstance.WrongColorsConnectedPartOne];
         }
         if ((dialogFlowState == 2 || dialogFlowState == 3) && f1.hasArrived && f2.hasArrived && nextDialogTimer >= 2
@@ -549,6 +707,10 @@ public class DudeBehaviour : MonoBehaviour
             Destroy(f2.gameObject);
             f1 = GameManager.Instance().SpawnFluxIndex(0);
             f2 = GameManager.Instance().SpawnFluxIndex(1);
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             spriteRenderer.sprite = dudePissed;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.FluxesMissed];
             nextDialogTimer = 0;
@@ -561,6 +723,10 @@ public class DudeBehaviour : MonoBehaviour
         if (dialogFlowState == 3 && nextDialogTimer >= 4)
         {
             dialogFlowState = 2;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             textMesh.text = DialogsUtility.dialogs[DialogInstance.WrongColorsConnectedPartTwo];
             nextDialogTimer = 0;
         }
@@ -568,6 +734,10 @@ public class DudeBehaviour : MonoBehaviour
         {
             dialogFlowState = 6;
             spriteRenderer.sprite = dudeHappy;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             textMesh.text = DialogsUtility.dialogs[DialogInstance.BridgeUsedWellDone];
             nextDialogTimer = 0;
         }
@@ -576,6 +746,10 @@ public class DudeBehaviour : MonoBehaviour
             f1 = GameManager.Instance().SpawnFluxIndex(2);
             f2 = GameManager.Instance().SpawnFluxIndex(1);
             nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
             textMesh.text = DialogsUtility.dialogs[DialogInstance.TutorialThreeFluxesArriving];
             dialogFlowState = 7;
         }
@@ -594,6 +768,10 @@ public class DudeBehaviour : MonoBehaviour
         }
         if(GameManager.Instance().GetNumberFluxesDepleteded() == 7)
         {
+            //AudioManager.Instance().StopDudeVoice();
+            //AudioManager.Instance().PlayDudeVoice();
+            AudioManager.Instance().PlayLevelCompleted();
+
             spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
 
@@ -632,6 +810,11 @@ public class DudeBehaviour : MonoBehaviour
 
     public void GameOverBehaviour()
     {
+        //AudioManager.Instance().StopDudeVoice();
+        //AudioManager.Instance().PlayDudeVoice();
+        AudioManager.Instance().StopAllInGameSfx();
+        AudioManager.Instance().PlayGameOver();
+
         spriteRenderer.sprite = dudePissed;
         textMesh.text = DialogsUtility.dialogs[DialogInstance.DamnCable];
 
@@ -643,6 +826,10 @@ public class DudeBehaviour : MonoBehaviour
 
     public void LevelCompletedBehaviour()
     {
+        //AudioManager.Instance().StopDudeVoice();
+        //AudioManager.Instance().PlayDudeVoice();
+        AudioManager.Instance().PlayLevelCompleted();
+
         spriteRenderer.sprite = dudeHappy;
         textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
 

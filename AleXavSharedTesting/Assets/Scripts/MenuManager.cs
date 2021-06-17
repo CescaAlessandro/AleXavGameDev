@@ -106,6 +106,7 @@ public class MenuManager : MonoBehaviour
         Time.timeScale = 1;
         MainMenu.SetActive(true);
         PauseMenu.SetActive(false);
+        AudioManager.Instance().StopAllInGameSfx();
         SaveManager.Instance().SaveLastScene(SceneManager.GetActiveScene().name);
         LevelManager.LoadLevel("MenuScene");
     }
@@ -124,6 +125,7 @@ public class MenuManager : MonoBehaviour
     {
         Time.timeScale = 1;
         AreYouSureMenu.SetActive(false);
+        AudioManager.Instance().StopAllInGameSfx();
         LevelManager.LoadLevel(SceneManager.GetActiveScene().name);
     }
     public void NoAnswer()
@@ -143,6 +145,7 @@ public class MenuManager : MonoBehaviour
     public void FromLevelCompleteToNextLevel()
     {
         Time.timeScale = 1;
+        AudioManager.Instance().StopAllInGameSfx();
         var nextLevelIndex = MapUtility.GetLevelNumber(SceneManager.GetActiveScene().name, "") + 1;
         string nextLevel = "Level " + nextLevelIndex;
         LevelCompleteMenu.SetActive(false);
@@ -151,6 +154,7 @@ public class MenuManager : MonoBehaviour
     public void FromLevelCompleteToMainMenu()
     {
         Time.timeScale = 1;
+        AudioManager.Instance().StopAllInGameSfx();
         LevelCompleteMenu.SetActive(false);
         var nextLevelIndex = MapUtility.GetLevelNumber(SceneManager.GetActiveScene().name, "") + 1;
         string nextLevel = "Level " + nextLevelIndex;
@@ -161,6 +165,7 @@ public class MenuManager : MonoBehaviour
     public void FromLevelCompleteToRestartLevel()
     {
         Time.timeScale = 1;
+        AudioManager.Instance().StopAllInGameSfx();
         LevelCompleteMenu.SetActive(false);
         LevelManager.LoadLevel(SceneManager.GetActiveScene().name);
     }
@@ -177,6 +182,7 @@ public class MenuManager : MonoBehaviour
     public void FromLevelFailedToMainMenu()
     {
         Time.timeScale = 1;
+        AudioManager.Instance().StopAllInGameSfx();
         LevelFailedMenu.SetActive(false);
         SaveManager.Instance().SaveLastScene(SceneManager.GetActiveScene().name);
         loadMainMenu();
@@ -185,6 +191,7 @@ public class MenuManager : MonoBehaviour
     public void FromLevelFailedToRestartLevel()
     {
         Time.timeScale = 1;
+        AudioManager.Instance().StopAllInGameSfx();
         LevelFailedMenu.SetActive(false);
         LevelManager.LoadLevel(SceneManager.GetActiveScene().name);
     }

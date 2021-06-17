@@ -44,31 +44,25 @@ public class SaveManager : MonoBehaviour
     public void SaveMusicVolume(float volume)
     {
         PlayerPrefs.SetFloat("MusicVolume", volume);
-        //Debug.Log("mus: " + volume);
     }
     public void SaveSfxVolume(float volume)
     {
         PlayerPrefs.SetFloat("SfxVolume", volume);
-        //Debug.Log("sfx: " + volume);
     }
     public void SaveLastScene(string SceneName)
     {
         PlayerPrefs.SetString("LastScene", SceneName);
-        //Debug.Log("sfx: " + volume);
     }
     public void UnlockLevel(string SceneName)
     {
         PlayerPrefs.SetInt(SceneName, 1);
-        //Debug.Log("sfx: " + volume);
     }
     public void LockLevel(string SceneName)
     {
         PlayerPrefs.SetInt(SceneName, 0);
-        //Debug.Log("sfx: " + volume);
     }
     public int GetLevelState(string SceneName)
     {
         return PlayerPrefs.GetInt(SceneName);
-        //Debug.Log("sfx: " + volume);
     }
 }
