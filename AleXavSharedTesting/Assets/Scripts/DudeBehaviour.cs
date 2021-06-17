@@ -597,6 +597,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
 
+            MapUtility.GamePaused = true;
             MenuManager.Instance().LoadLevelCompleteMenu();
 
             dialogFlowState = -1;
@@ -636,6 +637,17 @@ public class DudeBehaviour : MonoBehaviour
 
         MapUtility.GamePaused = true;
         MenuManager.Instance().LoadLevelFailedMenu();
+
+        dialogFlowState = -1;
+    }
+
+    public void LevelCompletedBehaviour()
+    {
+        spriteRenderer.sprite = dudeHappy;
+        textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
+
+        MapUtility.GamePaused = true;
+        MenuManager.Instance().LoadLevelCompleteMenu();
 
         dialogFlowState = -1;
     }

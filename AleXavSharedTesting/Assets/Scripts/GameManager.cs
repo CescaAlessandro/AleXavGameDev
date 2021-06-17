@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
     //spawnPoints presi dagli attachment dello scenario, andr� tolto
     public List<GameObject> spawnPoints;
     public Sprite[] livesSprites = new Sprite[3];
+    public bool CanWin;
+    public int fluxesDepletedToWin;
+
     public SpriteRenderer livesIndicator;
     public bool preventLoosingLife;
     public bool preventFluxSpawning;
@@ -120,6 +123,9 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (CanWin && fluxesDepletedToWin == numberFluxesDepleteded)
+            Dude.LevelCompletedBehaviour();
+
         if (Input.GetKeyDown(KeyCode.Escape) && !MenuManager.Instance().GetMenusStatus())
         {
             MapUtility.GamePaused = true;
@@ -224,7 +230,7 @@ public class GameManager : MonoBehaviour
         AudioManager.Instance().StopStartDownload();
         if (!idleFluxes.Contains(flux))
             idleFluxes.Add(flux);
-        if(depletingFluxes.Contains(flux))
+        if (depletingFluxes.Contains(flux))
             depletingFluxes.Remove(flux);
     }
 
@@ -256,7 +262,8 @@ public class GameManager : MonoBehaviour
         Pin uPin = new Pin();
         foreach (var pin in MapUtility.UpperPins)
         {
-            if (pin.CableConnected != null) { 
+            if (pin.CableConnected != null)
+            {
                 if (pin.CableConnected.index == lPin.CableConnected.index)
                 {
                     uPin = pin;
@@ -265,7 +272,7 @@ public class GameManager : MonoBehaviour
         }
         var possibleFluxWaiting = idleFluxes.FirstOrDefault(flux => flux.index == uPin.Index);
 
-        if(possibleFluxWaiting != null)
+        if (possibleFluxWaiting != null)
         {
             var fluxDepletingSameIndex = depletingFluxes.FirstOrDefault(flux => flux.index == possibleFluxWaiting.index);
 
@@ -283,7 +290,7 @@ public class GameManager : MonoBehaviour
             var possibleLPin = MapUtility.LowerPins.FirstOrDefault(pin => pin.CableConnected == uPin.CableConnected);
 
 
-            if(possibleLPin != null && possibleLPin.IsConnected)
+            if (possibleLPin != null && possibleLPin.IsConnected)
             {
                 var fluxDepletingSameIndex = depletingFluxes.FirstOrDefault(flux => flux.index == arrivalFlux.index);
 
@@ -297,7 +304,7 @@ public class GameManager : MonoBehaviour
     public void CheckForPossibleDepletionPauses(Pin lPin)
     {
         var uPin = MapUtility.UpperPins.FirstOrDefault(pin => pin.CableConnected == lPin.CableConnected);
-        if(uPin != null)
+        if (uPin != null)
         {
             var possibleDepletingFlux = depletingFluxes.FirstOrDefault(flux => flux.index == uPin.Index);
 

@@ -29,6 +29,7 @@ public class SaveManager : MonoBehaviour
         //LockLevel("Level 2");
         //LockLevel("Level 3");
         //LockLevel("Level 4");
+
         levelSelectionMenuObject.UpdateLevels();
     }
 
