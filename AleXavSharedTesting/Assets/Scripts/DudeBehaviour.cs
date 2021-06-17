@@ -35,9 +35,6 @@ public class DudeBehaviour : MonoBehaviour
         dialogFlowState = 0;
         mistakeDone = false;
 
-        //AudioManager.Instance().StopDudeVoice();
-        //AudioManager.Instance().PlayDudeVoice();
-
         if (sceneName.Equals("Level 1"))
         {
             textMesh.text = DialogsUtility.dialogs[DialogInstance.Presentation];
@@ -201,8 +198,6 @@ public class DudeBehaviour : MonoBehaviour
         if (upperPin.IsConnected && lowerPin.IsConnected &&
             dialogFlowState == 3)
         {
-            //AudioManager.Instance().StopDudeVoice();
-            //AudioManager.Instance().PlayDudeVoice();
             AudioManager.Instance().PlayLevelCompleted();
 
             spriteRenderer.sprite = dudeHappy;
@@ -218,8 +213,6 @@ public class DudeBehaviour : MonoBehaviour
         if (upperPin.IsConnected && lowerPin.IsConnected &&
             dialogFlowState == 4)
         {
-            //AudioManager.Instance().StopDudeVoice();
-            //AudioManager.Instance().PlayDudeVoice();
             AudioManager.Instance().PlayLevelCompleted();
 
             spriteRenderer.sprite = dudeWink;
@@ -380,9 +373,6 @@ public class DudeBehaviour : MonoBehaviour
             dialogFlowState == 5 && mistakeDone)
         {
             dialogFlowState = 10;
-
-            //AudioManager.Instance().StopDudeVoice();
-            //AudioManager.Instance().PlayDudeVoice();
             AudioManager.Instance().PlayLevelCompleted();
 
             spriteRenderer.sprite = dudePissed;
@@ -419,8 +409,6 @@ public class DudeBehaviour : MonoBehaviour
         if (!blueUpperPin.IsConnected && pinkUpperPin.IsConnected && lowerPin.IsConnected &&
             (dialogFlowState == 6 || dialogFlowState == 12))
         {
-            //AudioManager.Instance().StopDudeVoice();
-            //AudioManager.Instance().PlayDudeVoice();
             AudioManager.Instance().PlayLevelCompleted();
 
             spriteRenderer.sprite = dudeHappy;
@@ -620,8 +608,6 @@ public class DudeBehaviour : MonoBehaviour
 
         if(GameManager.Instance().GetNumberFluxesDepleteded() == 3 && dialogFlowState != -1)
         {
-            //AudioManager.Instance().StopDudeVoice();
-            //AudioManager.Instance().PlayDudeVoice();
             AudioManager.Instance().PlayLevelCompleted();
 
             spriteRenderer.sprite = dudeHappy;
@@ -810,6 +796,7 @@ public class DudeBehaviour : MonoBehaviour
 
     public void GameOverBehaviour()
     {
+        dialogFlowState = -1;
         //AudioManager.Instance().StopDudeVoice();
         //AudioManager.Instance().PlayDudeVoice();
         AudioManager.Instance().StopAllInGameSfx();
@@ -826,8 +813,10 @@ public class DudeBehaviour : MonoBehaviour
 
     public void LevelCompletedBehaviour()
     {
+        dialogFlowState = -1;
         //AudioManager.Instance().StopDudeVoice();
         //AudioManager.Instance().PlayDudeVoice();
+        AudioManager.Instance().StopAllInGameSfx();
         AudioManager.Instance().PlayLevelCompleted();
 
         spriteRenderer.sprite = dudeHappy;
@@ -835,8 +824,6 @@ public class DudeBehaviour : MonoBehaviour
 
         MapUtility.GamePaused = true;
         MenuManager.Instance().LoadLevelCompleteMenu();
-
-        dialogFlowState = -1;
     }
 
     public void SetUsingBridge(bool value)

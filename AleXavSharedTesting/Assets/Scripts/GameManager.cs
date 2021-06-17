@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     private int maxLives = 3;
     private int lives;
     private int numberFluxesDepleteded;
-
+    private bool levelCompleted;
 
     public static GameManager gm;
 
@@ -36,6 +36,9 @@ public class GameManager : MonoBehaviour
         gm = this;
         lives = maxLives;
         numberFluxesDepleteded = 0;
+        levelCompleted = false;
+
+        SaveManager.Instance().SaveLastScene(SceneManager.GetActiveScene().name);
 
         MapUtility.LowerPins = new List<Pin>();
         MapUtility.UpperPins = new List<Pin>();
@@ -123,8 +126,11 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (CanWin && fluxesDepletedToWin == numberFluxesDepleteded)
+        if (CanWin && fluxesDepletedToWin == numberFluxesDepleteded && !levelCompleted)
+        {
+            levelCompleted = true;
             Dude.LevelCompletedBehaviour();
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape) && !MenuManager.Instance().GetMenusStatus())
         {
@@ -208,7 +214,8 @@ public class GameManager : MonoBehaviour
 
         GameObject inst = GameObject.Instantiate(fluxPrefab, pin.FluxSpawnPoint.Item1, pin.FluxSpawnPoint.Item2, this.transform);
         inst.GetComponent<Flux>().index = index;
-        inst.GetComponent<Flux>().destination = pin.AttachmentPoint.Item1;
+        Vector3 destination = new Vector3(pin.AttachmentPoint.Item1.x, pin.AttachmentPoint.Item1.y, pin.AttachmentPoint.Item1.z - 100f); 
+        inst.GetComponent<Flux>().destination = destination;
         return inst.GetComponent<Flux>();
     }
 
