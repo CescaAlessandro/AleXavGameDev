@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
 
         var lowPins = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("LPin")).OrderBy(pin => pin.name).ToList();
         var upperPins = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("UPin")).OrderBy(pin => pin.name).ToList();
-        var holes = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("Hole")).ToList();
+        var holes = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("Hole")).OrderBy(hole => hole.name).ToList();
         var bridges = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("Bridge")).ToList();
 
         var pinIndex = 0;
@@ -184,12 +184,15 @@ public class GameManager : MonoBehaviour
     }
     //spawn fluxes on random pins with a fixed delay between them
     private float fluxSpawnDelay = 20;
+    private List<Pin> spawnablePins;
     IEnumerator spawnRandomFluxesForever()
     {
+        spawnablePins = MapUtility.UpperPins.ToList();
         while (true)
         {
-            int ranInd = UnityEngine.Random.Range(0, MapUtility.UpperPins.Count);
-            SpawnFluxIndex(ranInd);
+            int ranInd = UnityEngine.Random.Range(0, spawnablePins.Count);
+            SpawnFluxIndex(spawnablePins.ElementAt(ranInd).Index);
+            spawnablePins.RemoveAll(pinA => pinA.Index == ranInd);
             Debug.Log("Spawned at index: " + ranInd);
             yield return new WaitForSecondsRealtime(fluxSpawnDelay);
         }
@@ -241,6 +244,10 @@ public class GameManager : MonoBehaviour
         depletingFluxes.Remove(flux);
         numberFluxesDepleteded++;
         GameObject.Destroy(flux.gameObject);
+        if (!preventFluxSpawning)
+        {
+            spawnablePins.Add(MapUtility.UpperPins.ElementAt(flux.index));
+        }
     }
     //Function to delete a flux (used in tutorials only)
     public void DeleteFlux(Flux flux)

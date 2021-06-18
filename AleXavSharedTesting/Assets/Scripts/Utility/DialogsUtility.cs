@@ -92,13 +92,13 @@ public static class DialogsUtility
 
         {DialogInstance.BeautifulDay, "It's a beautiful day outside."},
 
-        {DialogInstance.ExplanationBridgePartOne, "Hey Chip, today we expect a lot of data to come in. But we also have a new tool, right there on the board." },
+        {DialogInstance.ExplanationBridgePartOne, "Hey Chip, today we expect a lot of data to come in. But we also have something new on the board to help us" },
 
-        {DialogInstance.ExplanationBridgePartTwo, "That's a bridge, cables can be layed both above and below it. This will allow us to cross cables." },
+        {DialogInstance.ExplanationBridgePartTwo, "That's a bridge, cables can be laid both above and below it. This will allow us to cross cables." },
 
         {DialogInstance.TwoFluxesArriving, "Two fluxing are arriving at the same time, use the bridge to connect both correctly." },
 
-        {DialogInstance.FluxesMissed, "You missed those fluxes... Try to catch the next ones." },
+        {DialogInstance.FluxesMissed, "You missed those fluxes... No problem but try to catch the next ones." },
 
         {DialogInstance.NotUsingBridge, "Chip, you're not using the bridge, we won't be able to deal with so many fluxes without using it." },
 
@@ -108,7 +108,43 @@ public static class DialogsUtility
 
         {DialogInstance.BridgeUsedWellDone, "Ok, now that you learned how to use bridges, deal with the incoming fluxes to complete the level"},
 
-        { DialogInstance.TutorialThreeFluxesArriving, "Fluxes incoming!"},
+        {DialogInstance.TutorialThreeFluxesArriving, "Fluxes incoming!"},
+
+        {DialogInstance.ExplanationHolePartOne, "Hey Chip, are you excited? You'll learn how to use a new tool today" },
+
+        {DialogInstance.ExplanationHolePartTwo, "As you can see there are two holes on the board, cables can enter one and exit from the other" },
+
+        {DialogInstance.ExplanationHolePartThree, "Connect a cable to the red pin, bring it to the neareast hole and drop it." },
+
+        {DialogInstance.ExplanationHolePartFour, "Now move yourself to the other hole to grab the cable" },
+
+        {DialogInstance.ExplanationHolePartFive, "Nice, now complete the cable attaching it to the lower pin with the same color" },
+
+        {DialogInstance.ExplanationHoleDifferentColor, "You chose a different color? That's fine i like that one too" },
+
+        {DialogInstance.ExplanationHoleWrongHole, "That's not the nearest hole but ok, keep going" },
+
+        {DialogInstance.ExplanationHoleNotUsed, "Ok you connected the pins but now try doing it using the holes, so you learn how to use them" },
+
+        {DialogInstance.ExplanationHolePartSix, "It seems there aren't any fluxes coming in today..." },
+
+        {DialogInstance.ExplanationHolePartSeven, "Well, I'll teach you how to disconnect cables from holes and then we can call it a day, ok?" },
+
+        {DialogInstance.ExplanationHolePartEight, "So, disconnect the cable from the lower pin, same as usual" },
+
+        {DialogInstance.ExplanationHolePartNine, "Now drag and drop yourself to the hole to disconnect the cable you are holding" },
+
+        {DialogInstance.ExplanationHolePartTen, "To disconnect the second half of the cable go to the other hole" },
+
+        {DialogInstance.ExplanationHolePartEleven, "Ok, I think you know how to detach the cable from the upper pin" },
+
+        {DialogInstance.ExplanationHolePartTwelve, "Nice, you learned everything about holes" },
+
+        {DialogInstance.ExplanationHolePartThirteen, "I heard from management that they are gonna bring in more pins for the next level..." },
+
+        {DialogInstance.ExplanationHolePartFourteen, "Also there are going to be both bridges and holes. I guess they expect a lot of fluxes..." },
+
+        {DialogInstance.ExplanationHolePartFifteen, "I hope you're ready to deal with all that." },
 
         //todo: various gameover + dude presentation
     };

@@ -115,9 +115,9 @@ public class ChipController : MonoBehaviour
                             {
                                 Instance = prefabInstance,
                                 IsConnectedToCip = true,
-                                index = cableIndex
+                                index = pin.Index
                             };
-                            cableIndex++;
+                            //cableIndex++;
                             MapUtility.Cables.Add(newCable);
 
                             MapUtility.SetWiring(true);
@@ -189,8 +189,6 @@ public class ChipController : MonoBehaviour
                             {
                                 connectedHole = null;
                             }
-
-
                             if (connectedHole != null)
                             {
                                 //Controllo se e' presente un buco che ha un cavo collegato -> creo un nuovo cavo e lo collego a Chip
@@ -217,13 +215,21 @@ public class ChipController : MonoBehaviour
                         else
                         {
                             List<Hole> connectedHoles = MapUtility.Holes.Where(holeA => holeA.IsConnected == true).ToList();
-                            //Il buco e' su cui Chip si e' fermato e' l'unico collegato -> scollego il cavo e Chip inizia a trasportarlo
                             if (connectedHoles.Count == 1)
                             {
+                                //Il buco su cui Chip si e' fermato e' l'unico collegato -> scollego il cavo e Chip inizia a trasportarlo
                                 MapUtility.SetWiring(true);
                                 connectedHoles.ElementAt(0).IsConnected = false;
                                 connectedHoles.ElementAt(0).CableConnected.IsConnectedToCip = true;
                                 connectedHoles.ElementAt(0).CableConnected = null;
+                            }
+                            else if(connectedHoles.ElementAt(0).CableConnected.index != connectedHoles.ElementAt(1).CableConnected.index)
+                            {
+                                //il buco su cui Chip si e' fermato non e' l'unico ma ci sono cavi diversi collegati ai due buchi -> scollego il cavo
+                                MapUtility.SetWiring(true);
+                                newHole.IsConnected = false;
+                                newHole.CableConnected.IsConnectedToCip = true;
+                                newHole.CableConnected = null;
                             }
                         }
                     }

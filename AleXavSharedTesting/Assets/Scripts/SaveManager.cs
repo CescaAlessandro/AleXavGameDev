@@ -7,6 +7,7 @@ public class SaveManager : MonoBehaviour
 {
     public MenuManager menuManager;
     public bool debugIsFirstStart = false;
+    private bool firstStart = true;
     public LevelSelectionBehaviour levelSelectionMenuObject;
 
     public static SaveManager sm;
@@ -22,9 +23,20 @@ public class SaveManager : MonoBehaviour
         MenuManager.Instance().changeSfxVolumeWidgetValue(sfxVol);
         AudioManager.Instance().SetMusicVolume(musVol);
         AudioManager.Instance().SetSfxVolume(sfxVol);
-
+        var firstTimePlaying = PlayerPrefs.GetInt("First start", 1);
+        if (firstTimePlaying == 1)
+        {
+            firstStart = true;
+        }
+        else
+        {
+            firstStart = false;
+        }
+        MenuManager.Instance().loadMainMenu();
+        firstStart = false;
+        PlayerPrefs.SetInt("First start", 0);
         UnlockLevel("Level 1");
-
+        //UnlockLevel("Level 7");
         //debug only
         //LockLevel("Level 2");
         //LockLevel("Level 3");
@@ -38,7 +50,7 @@ public class SaveManager : MonoBehaviour
     }
     public bool isFirstStart()
     {
-        return debugIsFirstStart;
+        return debugIsFirstStart || firstStart;
     }
     public void SaveMusicVolume(float volume)
     {

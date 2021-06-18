@@ -13,12 +13,22 @@ public class DudeBehaviour : MonoBehaviour
     private float nextDialogTimer;
     private int dialogFlowState;
     private bool mistakeDone;
+    
+    //for 4th tutorial
     private bool usingBridge;
     private Flux f1;
     private Flux f2;
     private bool colorTipGiven = false;
     private bool bridgeTipGiven = false;
-
+    
+    //for 5th tutorial
+    private bool usingHole;
+    private bool colorCommented = false;
+    private bool NearHoleCommented = false;
+    private bool holeUsed = false;
+    private Pin pinToConnect;
+    
+    //Dude sprites
     public Sprite dudeHappy;
     public Sprite dudeFine;
     public Sprite dudeWorried;
@@ -55,6 +65,11 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationBridgePartOne];
             spriteRenderer.sprite = dudeHappy;
         }
+        else if (sceneName.Equals("Level 7"))
+        {
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartOne];
+            spriteRenderer.sprite = dudeHappy;
+        }
         else
         {
             textMesh.text = DialogsUtility.dialogs[DialogInstance.BeautifulDay];
@@ -79,9 +94,13 @@ public class DudeBehaviour : MonoBehaviour
             {
                 ThirdTutorialBehavoiur();
             }
-        else if(sceneName.Equals("Level 5"))
+            else if(sceneName.Equals("Level 5"))
             {
                 FourthTutorialBehavoiur();
+            }
+            else if (sceneName.Equals("Level 7"))
+            {
+                FifthTutorialBehavoiur();
             }
             else
             {
@@ -505,14 +524,14 @@ public class DudeBehaviour : MonoBehaviour
         var redLowerPin = MapUtility.LowerPins.ElementAt(1);
         var bridge = MapUtility.Bridges.ElementAt(0);
         //primo dialogo
-        if (nextDialogTimer >= 5 && dialogFlowState == 0)
+        if (nextDialogTimer >= 12 && dialogFlowState == 0)
         {
             dialogFlowState = 1;
             nextDialogTimer = 0;
             spriteRenderer.sprite = dudeFine;
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationBridgePartTwo];
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartTwo];
         }
-        if (dialogFlowState == 1 && nextDialogTimer >= 5)
+        if (dialogFlowState == 1 && nextDialogTimer >= 10)
         {
             f1 = GameManager.Instance().SpawnFluxIndex(0);
             f2 = GameManager.Instance().SpawnFluxIndex(1);
@@ -521,7 +540,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.TwoFluxesArriving];
         }
-        if (dialogFlowState == 2 && nextDialogTimer >= 2 &&
+        if (dialogFlowState == 2 && nextDialogTimer >= 5 &&
             ((yellowLowerPin.IsConnected && yellowLowerPin.IsConnected)
             || (pinkLowerPin.IsConnected && pinkLowerPin.IsConnected)) && !bridge.isTraversed && !bridgeTipGiven)
         {
@@ -531,7 +550,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeWorried;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.NotUsingBridge];
         }
-        if (dialogFlowState == 2 && !colorTipGiven && nextDialogTimer >= 2 &&
+        if (dialogFlowState == 2 && !colorTipGiven && nextDialogTimer >= 5 &&
             ((!cableColorsMatchOrNoConnection(yellowUpperPin, MapUtility.LowerPins))
                || (!cableColorsMatchOrNoConnection(pinkUpperPin, MapUtility.LowerPins))))
         {
@@ -558,7 +577,7 @@ public class DudeBehaviour : MonoBehaviour
             dialogFlowState = 5;
             //Go on
         }
-        if (dialogFlowState == 3 && nextDialogTimer >= 4)
+        if (dialogFlowState == 3 && nextDialogTimer >= 8)
         {
             dialogFlowState = 2;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.WrongColorsConnectedPartTwo];
@@ -571,7 +590,7 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.BridgeUsedWellDone];
             nextDialogTimer = 0;
         }
-        if (dialogFlowState == 6 && nextDialogTimer >= 5)
+        if (dialogFlowState == 6 && nextDialogTimer >= 10)
         {
             f1 = GameManager.Instance().SpawnFluxIndex(2);
             f2 = GameManager.Instance().SpawnFluxIndex(1);
@@ -603,6 +622,216 @@ public class DudeBehaviour : MonoBehaviour
         }
     }
 
+    public void FifthTutorialBehavoiur()
+    {
+        nextDialogTimer += Time.deltaTime;
+
+        var yellowUpperPin = MapUtility.UpperPins.ElementAt(0);
+        var pinkUpperPin = MapUtility.UpperPins.ElementAt(1);
+        var redUpperPin = MapUtility.UpperPins.ElementAt(2);
+        var yellowLowerPin = MapUtility.LowerPins.ElementAt(2);
+        var pinkLowerPin = MapUtility.LowerPins.ElementAt(0);
+        var redLowerPin = MapUtility.LowerPins.ElementAt(1);
+        var hole1 = MapUtility.Holes.ElementAt(0);
+        var hole2 = MapUtility.Holes.ElementAt(1);
+
+        if (nextDialogTimer >= 7 && dialogFlowState == 0)
+        {
+            pinToConnect = redUpperPin;
+            dialogFlowState = 1;
+            nextDialogTimer = 0;
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartTwo];
+        }
+
+        if (nextDialogTimer >= 8 && dialogFlowState == 1)
+        {
+            dialogFlowState = 2;
+            nextDialogTimer = 0;
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartThree];
+        }
+
+        //wait for the first hole to be connected
+        
+        //case wrong hole
+        if (nextDialogTimer >= 8 && dialogFlowState == 2 &&  hole2.IsConnected && !hole1.IsConnected)
+        {
+            pinToConnect = MapUtility.UpperPins.ElementAt(hole2.CableConnected.index);
+            dialogFlowState = 3;
+            nextDialogTimer = 0;
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHoleWrongHole];
+        }
+        
+        //case right hole
+        if (nextDialogTimer >= 8 && dialogFlowState == 2 && hole1.IsConnected)
+        {
+            pinToConnect = MapUtility.UpperPins.ElementAt(hole1.CableConnected.index);
+            dialogFlowState = 3;
+        }
+        
+        //case hole not used
+        if (nextDialogTimer >= 8 && dialogFlowState == 2 && pinToConnect.IsConnected  
+            && hole1.CableConnected == null && hole2.CableConnected == null 
+            && MapUtility.LowerPins.First(pin => pin.Instance.GetComponent<Renderer>().material.color == pinToConnect.Instance.GetComponent<Renderer>().material.color).IsConnected)
+        {
+            nextDialogTimer = 0;
+            spriteRenderer.sprite = dudeWorried;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHoleNotUsed];
+        }
+        
+        //different pin used possibility
+        if(nextDialogTimer >= 4 && dialogFlowState == 3)
+        {
+            if (!(pinToConnect == redUpperPin))
+            {
+                spriteRenderer.sprite = dudeHappy;
+                textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHoleDifferentColor];
+                nextDialogTimer = 0;
+            }
+            dialogFlowState = 4;
+        }
+
+        //both holes connected
+        if (nextDialogTimer >= 8 && dialogFlowState == 4 && 
+            (hole1.IsConnected || hole2.IsConnected))
+        {
+            dialogFlowState = 5;
+            nextDialogTimer = 0;
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartFour];
+        }
+        
+        try
+        {
+            //Vedo se il pin dello stesso colore di quello scelto dall'utente è a sua volta collegato con il cavo
+            Pin lowerPinToConnect = MapUtility.LowerPins.First(pin => pin.Instance.GetComponent<Renderer>().material.color == pinToConnect.Instance.GetComponent<Renderer>().material.color);
+
+            if (hole1.IsConnected && hole2.IsConnected)
+            {
+                if (nextDialogTimer >= 3 && dialogFlowState == 5
+                    && hole1.CableConnected.index == pinToConnect.CableConnected.index
+                    && hole2.CableConnected.index == pinToConnect.CableConnected.index)
+                {
+                    dialogFlowState = 6;
+                    nextDialogTimer = 0;
+                    spriteRenderer.sprite = dudeFine;
+                    textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartFive];
+                }
+            }
+
+            if (hole1.IsConnected && hole2.IsConnected )
+            {
+                //se i due pin e i due buchi sono collegati tutti con cavi aventi lo stesso indice
+                if (nextDialogTimer >= 3 && dialogFlowState == 6
+                    && lowerPinToConnect.CableConnected.index == pinToConnect.CableConnected.index
+                    && hole1.CableConnected.index == pinToConnect.CableConnected.index
+                    && hole2.CableConnected.index == pinToConnect.CableConnected.index)
+                {
+                    dialogFlowState = 7;
+                    nextDialogTimer = 0;
+                    spriteRenderer.sprite = dudeFine;
+                    textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartSix];
+                }
+            }
+            
+            //i cavi vengono cambiati casualmente dall'utente nel mezzo del tutorial -> accetto i nuovi cavi/colori usati
+            if(dialogFlowState >= 7)
+            {
+                if (hole1.IsConnected && hole2.IsConnected)
+                {
+                    if (hole1.CableConnected.index == hole2.CableConnected.index && hole1.CableConnected.index != pinToConnect.Index)
+                    {
+                        pinToConnect = MapUtility.UpperPins.ElementAt(hole1.CableConnected.index);
+                        lowerPinToConnect = MapUtility.LowerPins.First(pin => pin.Instance.GetComponent<Renderer>().material.color == pinToConnect.Instance.GetComponent<Renderer>().material.color);
+                    }
+                }
+            }
+
+            if (nextDialogTimer >= 8 && dialogFlowState == 7)
+            {
+                dialogFlowState = 8;
+                nextDialogTimer = 0;
+                spriteRenderer.sprite = dudeFine;
+                textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartSeven];
+            }
+
+            if (nextDialogTimer >= 8 && dialogFlowState == 8)
+            {
+                dialogFlowState = 9;
+                nextDialogTimer = 0;
+                spriteRenderer.sprite = dudeFine;
+                textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartEight];
+            }
+
+            //attendo che il pin inferiore venga sconnesso
+            if (nextDialogTimer >= 3 && dialogFlowState == 9 && !lowerPinToConnect.IsConnected)
+            {
+                dialogFlowState = 10;
+                nextDialogTimer = 0;
+                spriteRenderer.sprite = dudeFine;
+                textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartNine];
+            }
+
+            //attendo che il primo buco venga sconnesso
+            if (nextDialogTimer >= 3 && dialogFlowState == 10 && !lowerPinToConnect.IsConnected && (!hole1.IsConnected || !hole2.IsConnected))
+            {
+                dialogFlowState = 11;
+                nextDialogTimer = 0;
+                spriteRenderer.sprite = dudeFine;
+                textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartTen];
+            }
+
+            //attendo che il secondo buco venga sconnesso
+            if (nextDialogTimer >= 3 && dialogFlowState == 11 && !lowerPinToConnect.IsConnected && !hole1.IsConnected && !hole2.IsConnected)
+            {
+                dialogFlowState = 12;
+                nextDialogTimer = 0;
+                spriteRenderer.sprite = dudeFine;
+                textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartEleven];
+            }
+
+            //attendo che il pin superiore venga sconnesso
+            if (nextDialogTimer >= 3 && dialogFlowState == 12 && !lowerPinToConnect.IsConnected && !hole1.IsConnected && !hole2.IsConnected && !pinToConnect.IsConnected)
+            {
+                dialogFlowState = 13;
+                nextDialogTimer = 0;
+                spriteRenderer.sprite = dudeFine;
+                textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartTwelve];
+            }
+        }
+        catch (System.Exception)
+        {
+        }
+
+        if (nextDialogTimer >= 6 && dialogFlowState == 13)
+        {
+            dialogFlowState = 14;
+            nextDialogTimer = 0;
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartThirteen];
+        }
+
+        if (nextDialogTimer >= 8 && dialogFlowState == 14)
+        {
+            dialogFlowState = 15;
+            nextDialogTimer = 0;
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartFourteen];
+        }
+
+        if (nextDialogTimer >= 8 && dialogFlowState == 15)
+        {
+            MenuManager.Instance().LoadLevelCompleteMenu();
+            dialogFlowState = -1;
+            nextDialogTimer = 0;
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartFifteen];
+        }
+    }
+
+
     private bool cableColorsMatchOrNoConnection(Pin upperPin,List<Pin> lowerPins)
     {
         foreach (Pin lower in lowerPins)
@@ -624,6 +853,7 @@ public class DudeBehaviour : MonoBehaviour
         }
         return true;
     }
+
     public void StandardBehavoiur()
     {
 

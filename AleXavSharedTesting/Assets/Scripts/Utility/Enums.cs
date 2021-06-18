@@ -80,6 +80,26 @@ public enum DialogInstance
     BridgeUsedWellDone,
     TutorialThreeFluxesArriving,
     #endregion
+    #region SixthLevel,
+    ExplanationHolePartOne,
+    ExplanationHolePartTwo,
+    ExplanationHolePartThree,
+    ExplanationHolePartFour,
+    ExplanationHolePartFive,
+    ExplanationHolePartSix,
+    ExplanationHolePartSeven,
+    ExplanationHolePartEight,
+    ExplanationHolePartNine,
+    ExplanationHolePartTen,
+    ExplanationHolePartEleven,
+    ExplanationHolePartTwelve,
+    ExplanationHolePartThirteen,
+    ExplanationHolePartFourteen,
+    ExplanationHolePartFifteen,
+    ExplanationHoleDifferentColor,
+    ExplanationHoleWrongHole,
+    ExplanationHoleNotUsed,
+    #endregion
     #region GameOver
     DamnCable,
     #endregion
