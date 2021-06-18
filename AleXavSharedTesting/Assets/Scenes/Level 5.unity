@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657755, g: 0.4964127, b: 0.57481825, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657683, g: 0.49641192, b: 0.5748182, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -879,6 +879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b842834eaba429459a7c6f570a5b058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fluxStartedDepletion: 0
   dudeHappy: {fileID: 21300000, guid: 81e1de844a265894893389f703598ffb, type: 3}
   dudeFine: {fileID: 21300000, guid: 12d5e229549e443439eb43f7a4d730b7, type: 3}
   dudeWorried: {fileID: 21300000, guid: ead7e3349433b404e96aac1a9494d54a, type: 3}
@@ -997,9 +998,12 @@ MonoBehaviour:
   fluxPrefab: {fileID: 7810289677318505576, guid: ba8af05337f0a8d40b0d5349b178f2a3, type: 3}
   spawnPoints: []
   livesSprites:
+  - {fileID: 21300000, guid: 90e2984eaa8a4c645b42263d9be14055, type: 3}
   - {fileID: 21300000, guid: 01ac510e9178dd247bbe5a6b72462798, type: 3}
   - {fileID: 21300000, guid: 82ce087798fda6649b9f107090941ebf, type: 3}
   - {fileID: 21300000, guid: 08c644e19cecf3b43bdebe7c54f47c09, type: 3}
+  CanWin: 0
+  fluxesDepletedToWin: 0
   livesIndicator: {fileID: 1684308567}
   preventLoosingLife: 0
   preventFluxSpawning: 1
@@ -1729,6 +1733,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7391925506930933991, guid: 9700098172b84954cab675529ec38386, type: 3}
+      propertyPath: grid
+      value: 
+      objectReference: {fileID: 1270008402}
     - target: {fileID: 8489225921877185387, guid: 9700098172b84954cab675529ec38386, type: 3}
       propertyPath: grid
       value: 
@@ -1801,7 +1809,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 9700098172b84954cab675529ec38386, type: 3}
 --- !u!1 &1890859918 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 8489225921877185393, guid: 9700098172b84954cab675529ec38386, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7391925506930934013, guid: 9700098172b84954cab675529ec38386, type: 3}
   m_PrefabInstance: {fileID: 1890859917}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1899408258
@@ -2116,5 +2124,5 @@ Transform:
   m_LocalScale: {x: 1, y: 1.8251, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 90, y: -90, z: 90}
