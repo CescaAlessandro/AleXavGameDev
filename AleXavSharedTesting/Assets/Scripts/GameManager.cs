@@ -179,6 +179,10 @@ public class GameManager : MonoBehaviour
     {
 
     }
+    public int GetCurrentLives()
+    {
+        return lives;
+    }
     public void LoseLives(int amount)
     {
         ////Debug.Log("loseLife: " + lives);
@@ -225,6 +229,7 @@ public class GameManager : MonoBehaviour
         flux.startDepletion();
         AudioManager.Instance().StopZap();
         AudioManager.Instance().PlayStartDownload();
+        Dude.fluxStartedDepletion = true;
         idleFluxes.Remove(flux);
         depletingFluxes.Add(flux);
         //onFluxDepletion();

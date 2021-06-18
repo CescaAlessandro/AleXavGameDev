@@ -21,7 +21,8 @@ public enum DialogInstance
     #region General
     GoalReached,
     Joke,
-    Mistake,
+    Buffering,
+    FluxDownloading,
     BeautifulDay,
     #endregion
     #region FirstLevel
@@ -82,6 +83,18 @@ public enum DialogInstance
     #endregion
     #region GameOver
     DamnCable,
+    YouDied,
+    Snake,
+    #endregion
+    #region LoosingLives
+    WhyLagging,
+    RestartRouter,
+    #endregion
+    #region FluxDownloading
+    FireInTheHole,
+    FusRohDah,
+    KingBrowser
+
     #endregion
 }
 public enum directions

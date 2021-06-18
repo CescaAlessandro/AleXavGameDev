@@ -18,7 +18,8 @@ public class DudeBehaviour : MonoBehaviour
     private Flux f2;
     private bool colorTipGiven = false;
     private bool bridgeTipGiven = false;
-
+    
+    public bool fluxStartedDepletion;
     public Sprite dudeHappy;
     public Sprite dudeFine;
     public Sprite dudeWorried;
@@ -28,6 +29,7 @@ public class DudeBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        fluxStartedDepletion = false;
         sceneName = SceneManager.GetActiveScene().name;
         spriteRenderer = this.GetComponent<SpriteRenderer>();
         textMesh = this.transform.GetChild(0).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
@@ -57,7 +59,7 @@ public class DudeBehaviour : MonoBehaviour
         }
         else
         {
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.BeautifulDay];
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.Buffering];
             spriteRenderer.sprite = dudeFine;
         }
     }
@@ -754,8 +756,6 @@ public class DudeBehaviour : MonoBehaviour
         }
         if(GameManager.Instance().GetNumberFluxesDepleteded() == 7)
         {
-            //AudioManager.Instance().StopDudeVoice();
-            //AudioManager.Instance().PlayDudeVoice();
             AudioManager.Instance().PlayLevelCompleted();
 
             spriteRenderer.sprite = dudeHappy;
@@ -791,19 +791,114 @@ public class DudeBehaviour : MonoBehaviour
     }
     public void StandardBehavoiur()
     {
+        if (!MapUtility.GamePaused)
+        {
+            var lives = GameManager.Instance().GetCurrentLives();
 
+            if (fluxStartedDepletion)
+            {
+                nextDialogTimer += Time.deltaTime;
+
+                if(nextDialogTimer > 1)
+                    FluxDepletionBehaviour();
+            }
+
+            if(lives == 3 && dialogFlowState == 0)
+            {
+                nextDialogTimer += Time.deltaTime; 
+            }
+
+            if(lives == 2 && dialogFlowState == 1)
+            {
+                nextDialogTimer += Time.deltaTime; 
+            }
+
+            if (lives == 1 && dialogFlowState == 2)
+            {
+                nextDialogTimer += Time.deltaTime;
+            }
+
+            if (lives == 3 && dialogFlowState == 0 && nextDialogTimer > 1)
+            {
+                AudioManager.Instance().PlayDudeVoice();
+                dialogFlowState = 1;
+                nextDialogTimer = 0;
+
+                spriteRenderer.sprite = dudeFine;
+                textMesh.text = DialogsUtility.dialogs[DialogInstance.BeautifulDay];
+            }
+
+            if (lives == 2 && dialogFlowState == 1 && nextDialogTimer > 1)
+            {
+                AudioManager.Instance().PlayDudeVoice();
+                dialogFlowState = 2;
+                nextDialogTimer = 0;
+
+                spriteRenderer.sprite = dudePissed;
+                textMesh.text = DialogsUtility.dialogs[DialogInstance.WhyLagging];
+            }
+            if (lives == 1 && dialogFlowState == 2 && nextDialogTimer > 1)
+            {
+                AudioManager.Instance().PlayDudeVoice();
+                dialogFlowState = 3;
+
+                spriteRenderer.sprite = dudeWorried;
+                textMesh.text = DialogsUtility.dialogs[DialogInstance.RestartRouter];
+            }
+        }
+    }
+
+    public void FluxDepletionBehaviour()
+    {
+        AudioManager.Instance().PlayDudeVoice();
+        int ranInd = Random.Range(0, 3);
+        switch (ranInd)
+        {
+            case 0:
+                spriteRenderer.sprite = dudeHappy;
+                textMesh.text = DialogsUtility.dialogs[DialogInstance.FusRohDah];
+                break;
+            case 1:
+                spriteRenderer.sprite = dudeHappy;
+                textMesh.text = DialogsUtility.dialogs[DialogInstance.KingBrowser];
+                break;
+            case 2:
+                spriteRenderer.sprite = dudeHappy;
+                textMesh.text = DialogsUtility.dialogs[DialogInstance.FireInTheHole];
+                break;
+        }
+
+        if(dialogFlowState > 0)
+            dialogFlowState--;
+
+        fluxStartedDepletion = false;
+        nextDialogTimer = -2;
     }
 
     public void GameOverBehaviour()
     {
         dialogFlowState = -1;
-        //AudioManager.Instance().StopDudeVoice();
-        //AudioManager.Instance().PlayDudeVoice();
+        
         AudioManager.Instance().StopAllInGameSfx();
         AudioManager.Instance().PlayGameOver();
 
-        spriteRenderer.sprite = dudePissed;
-        textMesh.text = DialogsUtility.dialogs[DialogInstance.DamnCable];
+        int ranInd = Random.Range(0, 3);
+
+        switch (ranInd)
+        {
+            case 0:
+                spriteRenderer.sprite = dudePissed;
+                textMesh.text = DialogsUtility.dialogs[DialogInstance.DamnCable];
+                break;
+            case 1:
+                spriteRenderer.sprite = dudeWorried;
+                textMesh.text = DialogsUtility.dialogs[DialogInstance.Snake];
+                break;
+            case 2:
+                spriteRenderer.sprite = dudeFine;
+                textMesh.text = DialogsUtility.dialogs[DialogInstance.YouDied];
+                break;
+        }
 
         MapUtility.GamePaused = true;
         MenuManager.Instance().LoadLevelFailedMenu();
