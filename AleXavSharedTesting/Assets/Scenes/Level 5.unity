@@ -879,6 +879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b842834eaba429459a7c6f570a5b058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fluxStartedDepletion: 0
   dudeHappy: {fileID: 21300000, guid: 81e1de844a265894893389f703598ffb, type: 3}
   dudeFine: {fileID: 21300000, guid: 12d5e229549e443439eb43f7a4d730b7, type: 3}
   dudeWorried: {fileID: 21300000, guid: ead7e3349433b404e96aac1a9494d54a, type: 3}
@@ -1732,6 +1733,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7391925506930933991, guid: 9700098172b84954cab675529ec38386, type: 3}
+      propertyPath: grid
+      value: 
+      objectReference: {fileID: 1270008402}
     - target: {fileID: 8489225921877185387, guid: 9700098172b84954cab675529ec38386, type: 3}
       propertyPath: grid
       value: 
@@ -1804,7 +1809,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 9700098172b84954cab675529ec38386, type: 3}
 --- !u!1 &1890859918 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 8489225921877185393, guid: 9700098172b84954cab675529ec38386, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7391925506930934013, guid: 9700098172b84954cab675529ec38386, type: 3}
   m_PrefabInstance: {fileID: 1890859917}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1899408258
@@ -2119,5 +2124,5 @@ Transform:
   m_LocalScale: {x: 1, y: 1.8251, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 90, y: -90, z: 90}
