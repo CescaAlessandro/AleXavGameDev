@@ -55,7 +55,17 @@ public static class DialogsUtility
 
         {DialogInstance.ExplanationBridgePartTwo, "That's a bridge, cables can be laid both above and below it. This will allow us to cross cables." },
 
-        {DialogInstance.TwoFluxesArriving, "Two fluxing are arriving at the same time, use the bridge to connect both correctly." },
+        {DialogInstance.BridgeOrangePin, "Go to the orange pin to create a cable" },
+
+        {DialogInstance.BridgeCrossVertically, "Now move through the bridge vertically to cross it from above" },
+
+        {DialogInstance.CompleteFirstCable, "Complete the cable connecting it to the orange pin" },
+
+        {DialogInstance.BridgeCrossHorizontally, "Good, now create a new cable on the pink pin and drag it across the bridge horizontally to pass underneath it" },
+
+        {DialogInstance.CompleteSecondCable, "Connect the cable to the lower pink pin" },
+
+        {DialogInstance.TwoFluxesArriving, "Two fluxing are arriving at the same time, without the bridge we couldn't catch both" },
 
         {DialogInstance.FluxesMissed, "You missed those fluxes... No problem but try to catch the next ones." },
 
@@ -63,16 +73,15 @@ public static class DialogsUtility
         {DialogInstance.WrongColorsConnectedPartOne, "You connected the wrong pins, I thought you learned about pin colors three level ago."},
         {DialogInstance.WrongColorsConnectedPartTwo, "Now please, disconnect those cables and connect them according to the pins' colors"},
         {DialogInstance.BridgeUsedWellDone, "Ok, now that you learned how to use bridges, deal with the incoming fluxes to complete the level"},
-        {DialogInstance.Snake, "Chip, what happened? Chip!? CHIIIIIIIIIIIP!"},
+
+        { DialogInstance.Snake, "Chip, what happened? Chip!? CHIIIIIIIIIIIP!"},
         {DialogInstance.YouDied, "YOU DIED"},
         {DialogInstance.WhyLagging, "Why is it lagging?"},
         {DialogInstance.RestartRouter, "Should I restart the router?"},
         {DialogInstance.TutorialThreeFluxesArriving, "Fluxes incoming!"},
         {DialogInstance.KingBrowser, "So long, King-a Browser!"},
         {DialogInstance.FireInTheHole, "Fire in the hole!"},
-        {DialogInstance.FusRohDah, "FUS ROH DAH!"}
-
-        {DialogInstance.TutorialThreeFluxesArriving, "Fluxes incoming!"},
+        {DialogInstance.FusRohDah, "FUS ROH DAH!"},
 
         {DialogInstance.ExplanationHolePartOne, "Hey Chip, are you excited? You'll learn how to use a new tool today" },
 

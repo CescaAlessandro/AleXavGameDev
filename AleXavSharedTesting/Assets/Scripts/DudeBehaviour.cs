@@ -38,7 +38,7 @@ public class DudeBehaviour : MonoBehaviour
     public Sprite dudeWow;
     public Sprite dudeWink;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         fluxStartedDepletion = false;
         sceneName = SceneManager.GetActiveScene().name;
@@ -664,13 +664,79 @@ public class DudeBehaviour : MonoBehaviour
             AudioManager.Instance().PlayDudeVoice();
 
             spriteRenderer.sprite = dudeFine;
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartTwo];
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationBridgePartTwo];
         }
-        if (dialogFlowState == 1 && nextDialogTimer >= 10)
+        if (dialogFlowState == 1 && nextDialogTimer >= 8)
+        {
+            dialogFlowState = 2;
+            nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.BridgeOrangePin];
+        }
+        if (dialogFlowState == 2 && nextDialogTimer >= 4 && yellowUpperPin.IsConnected)
+        {
+            dialogFlowState = 3;
+            nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.BridgeCrossVertically];
+        }
+        if (dialogFlowState == 3 && nextDialogTimer >= 4 && bridge.isTraversedVertical)
+        {
+            dialogFlowState = 4;
+            nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.CompleteFirstCable];
+        }
+        if (dialogFlowState == 3 && nextDialogTimer >= 4 && bridge.isTraversedVertical)
+        {
+            dialogFlowState = 4;
+            nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.CompleteFirstCable];
+        }
+        if (dialogFlowState == 4 && nextDialogTimer >= 4 && bridge.isTraversedVertical && yellowUpperPin.IsConnected && yellowLowerPin.IsConnected)
+        {
+            dialogFlowState = 5;
+            nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.BridgeCrossHorizontally];
+        }
+        if (dialogFlowState == 5 && nextDialogTimer >= 4 && bridge.isTraversedHoriz && pinkUpperPin.IsConnected)
+        {
+            dialogFlowState = 6;
+            nextDialogTimer = 0;
+
+            AudioManager.Instance().StopDudeVoice();
+            AudioManager.Instance().PlayDudeVoice();
+
+            spriteRenderer.sprite = dudeFine;
+            textMesh.text = DialogsUtility.dialogs[DialogInstance.CompleteSecondCable];
+        }
+        if (dialogFlowState == 6 && nextDialogTimer >= 4 && bridge.isTraversedHoriz && pinkUpperPin.IsConnected && pinkLowerPin.IsConnected && bridge.isTraversedVertical)
         {
             f1 = GameManager.Instance().SpawnFluxIndex(0);
             f2 = GameManager.Instance().SpawnFluxIndex(1);
-            dialogFlowState = 2;
+            dialogFlowState = 7;
             nextDialogTimer = 0;
 
             AudioManager.Instance().StopDudeVoice();
@@ -679,12 +745,12 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.TwoFluxesArriving];
         }
-        if (dialogFlowState == 2 && nextDialogTimer >= 5 &&
-            ((yellowLowerPin.IsConnected && yellowLowerPin.IsConnected)
-            || (pinkLowerPin.IsConnected && pinkLowerPin.IsConnected)) && !bridge.isTraversed && !bridgeTipGiven)
+
+        if (dialogFlowState > 1 && dialogFlowState < 8 && nextDialogTimer >= 5 &&
+            ((yellowUpperPin.IsConnected && yellowLowerPin.IsConnected)
+            || (pinkUpperPin.IsConnected && pinkLowerPin.IsConnected)) && !bridge.isTraversedVertical && !bridge.isTraversedHoriz && !bridgeTipGiven)
         {
             bridgeTipGiven = true;
-            dialogFlowState = 2;
             nextDialogTimer = 0;
 
             AudioManager.Instance().StopDudeVoice();
@@ -693,12 +759,12 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeWorried;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.NotUsingBridge];
         }
-        if (dialogFlowState == 2 && !colorTipGiven && nextDialogTimer >= 5 &&
+
+        if (dialogFlowState > 1 && dialogFlowState < 8 && !colorTipGiven && nextDialogTimer >= 5 &&
             ((!cableColorsMatchOrNoConnection(yellowUpperPin, MapUtility.LowerPins))
                || (!cableColorsMatchOrNoConnection(pinkUpperPin, MapUtility.LowerPins))))
         {
             colorTipGiven = true;
-            dialogFlowState = 3;
             nextDialogTimer = 0;
 
             AudioManager.Instance().StopDudeVoice();
@@ -706,41 +772,34 @@ public class DudeBehaviour : MonoBehaviour
 
             textMesh.text = DialogsUtility.dialogs[DialogInstance.WrongColorsConnectedPartOne];
         }
-        if ((dialogFlowState == 2 || dialogFlowState == 3) && f1.hasArrived && f2.hasArrived && nextDialogTimer >= 2
-            && (!yellowUpperPin.IsConnected || !yellowUpperPin.IsConnected || !pinkUpperPin.IsConnected || !pinkLowerPin.IsConnected
-                || (!cableColorsMatchOrNoConnection(yellowUpperPin, MapUtility.LowerPins)) || (!cableColorsMatchOrNoConnection(yellowUpperPin, MapUtility.LowerPins))))
+        if (f1 != null && f2 != null)
         {
-            GameManager.Instance().DeleteFlux(f1);
-            GameManager.Instance().DeleteFlux(f2);
-            Destroy(f2.gameObject);
-            f1 = GameManager.Instance().SpawnFluxIndex(0);
-            f2 = GameManager.Instance().SpawnFluxIndex(1);
+            if (dialogFlowState > 1 && dialogFlowState < 8 && f1.hasArrived && f2.hasArrived && nextDialogTimer >= 2
+                && (!yellowUpperPin.IsConnected || !yellowLowerPin.IsConnected || !pinkUpperPin.IsConnected || !pinkLowerPin.IsConnected
+                    || (!cableColorsMatchOrNoConnection(yellowUpperPin, MapUtility.LowerPins)) || (!cableColorsMatchOrNoConnection(yellowUpperPin, MapUtility.LowerPins))))
+            {
+                GameManager.Instance().DeleteFlux(f1);
+                GameManager.Instance().DeleteFlux(f2);
+                Destroy(f2.gameObject);
+                f1 = GameManager.Instance().SpawnFluxIndex(0);
+                f2 = GameManager.Instance().SpawnFluxIndex(1);
 
-            AudioManager.Instance().StopDudeVoice();
-            AudioManager.Instance().PlayDudeVoice();
+                AudioManager.Instance().StopDudeVoice();
+                AudioManager.Instance().PlayDudeVoice();
 
-            spriteRenderer.sprite = dudePissed;
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.FluxesMissed];
-            nextDialogTimer = 0;
+                spriteRenderer.sprite = dudePissed;
+                textMesh.text = DialogsUtility.dialogs[DialogInstance.FluxesMissed];
+                nextDialogTimer = 0;
+            }
         }
-        if ((dialogFlowState == 2 || dialogFlowState == 3) && GameManager.Instance().GetNumberFluxesDepleteded() == 2)
+        if (dialogFlowState > 1 && dialogFlowState < 8 && GameManager.Instance().GetNumberFluxesDepleteded() == 2)
         {
-            dialogFlowState = 5;
+            dialogFlowState = 8;
             //Go on
         }
-        if (dialogFlowState == 3 && nextDialogTimer >= 8)
+        if (dialogFlowState == 8 && nextDialogTimer >= 5)
         {
-            dialogFlowState = 2;
-
-            AudioManager.Instance().StopDudeVoice();
-            AudioManager.Instance().PlayDudeVoice();
-
-            textMesh.text = DialogsUtility.dialogs[DialogInstance.WrongColorsConnectedPartTwo];
-            nextDialogTimer = 0;
-        }
-        if (dialogFlowState == 5)
-        {
-            dialogFlowState = 6;
+            dialogFlowState = 9;
             spriteRenderer.sprite = dudeHappy;
 
             AudioManager.Instance().StopDudeVoice();
@@ -749,7 +808,7 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.BridgeUsedWellDone];
             nextDialogTimer = 0;
         }
-        if (dialogFlowState == 6 && nextDialogTimer >= 10)
+        if (dialogFlowState == 9 && nextDialogTimer >= 10)
         {
             f1 = GameManager.Instance().SpawnFluxIndex(2);
             f2 = GameManager.Instance().SpawnFluxIndex(1);
@@ -759,20 +818,20 @@ public class DudeBehaviour : MonoBehaviour
             AudioManager.Instance().PlayDudeVoice();
 
             textMesh.text = DialogsUtility.dialogs[DialogInstance.TutorialThreeFluxesArriving];
-            dialogFlowState = 7;
+            dialogFlowState = 10;
         }
-        if (dialogFlowState == 7 && nextDialogTimer >= 15)
+        if (dialogFlowState == 10 && nextDialogTimer >= 15)
         {
             nextDialogTimer = 0;
             f1 = GameManager.Instance().SpawnFluxIndex(0);
-            dialogFlowState = 8;
+            dialogFlowState = 11;
         }
-        if (dialogFlowState == 8 && nextDialogTimer >= 18)
+        if (dialogFlowState == 11 && nextDialogTimer >= 18)
         {
             nextDialogTimer = 0;
             f1 = GameManager.Instance().SpawnFluxIndex(0);
             f1 = GameManager.Instance().SpawnFluxIndex(2);
-            dialogFlowState = 9;
+            dialogFlowState = 12;
         }
         if(GameManager.Instance().GetNumberFluxesDepleteded() == 7)
         {

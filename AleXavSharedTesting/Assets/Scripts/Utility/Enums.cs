@@ -73,6 +73,11 @@ public enum DialogInstance
     #region FifthLevel,
     ExplanationBridgePartOne,
     ExplanationBridgePartTwo,
+    BridgeOrangePin,
+    BridgeCrossVertically,
+    CompleteFirstCable,
+    BridgeCrossHorizontally,
+    CompleteSecondCable,
     TwoFluxesArriving,
     NotUsingBridge,
     WrongColorsConnectedPartOne,
@@ -113,7 +118,7 @@ public enum DialogInstance
     #region FluxDownloading
     FireInTheHole,
     FusRohDah,
-    KingBrowser
+    KingBrowser,
 
     #endregion
 }

@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using UnityEngine.UI;
+
 public class MenuManager : MonoBehaviour
 {
     public GameObject MainMenu;
@@ -126,7 +127,8 @@ public class MenuManager : MonoBehaviour
         Time.timeScale = 1;
         AreYouSureMenu.SetActive(false);
         AudioManager.Instance().StopAllInGameSfx();
-        LevelManager.LoadLevel(SceneManager.GetActiveScene().name);
+        LevelManager.LoadLevel(SceneManager.GetActiveScene().name);
+
     }
     public void NoAnswer()
     {

@@ -135,10 +135,12 @@ public class CollisionEntity
 }
 public class Bridge : CollisionEntity
 {
-    public bool isTraversed { get; set; }
+    public bool isTraversedVertical { get; set; }
+    public bool isTraversedHoriz { get; set; }
     public Bridge()
     {
-        isTraversed = false;
+        isTraversedVertical = false;
+        isTraversedHoriz = false;
         collidesFromAbove = false;
         collidesFromBelow = false;
         collidesFromLeft = false;
@@ -146,10 +148,10 @@ public class Bridge : CollisionEntity
     }
     public override void PassingThrough(directions dir)
     {
-        isTraversed = true;
         switch (dir)
         {
             case directions.Top:
+                isTraversedVertical = true;
                 collidesFromAbove = true;
                 collidesFromBelow = true;
                 canBeExitedAbove = true;
@@ -158,6 +160,7 @@ public class Bridge : CollisionEntity
                 canBeExitedRight = false;
                 break;
             case directions.Bottom:
+                isTraversedVertical = true;
                 collidesFromAbove = true;
                 collidesFromBelow = true;
                 canBeExitedAbove = true;
@@ -166,6 +169,7 @@ public class Bridge : CollisionEntity
                 canBeExitedRight = false;
                 break;
             case directions.Left:
+                isTraversedHoriz = true;
                 collidesFromLeft = true;
                 collidesFromRight = true;
                 canBeExitedAbove = false;
@@ -174,6 +178,7 @@ public class Bridge : CollisionEntity
                 canBeExitedRight = true;
                 break;
             case directions.Right:
+                isTraversedHoriz = true;
                 collidesFromLeft = true;
                 collidesFromRight = true;
                 canBeExitedAbove = false;
@@ -187,22 +192,25 @@ public class Bridge : CollisionEntity
     }
     public override void Exiting(directions dir)
     {
-        isTraversed = false;
         switch (dir)
         {
             case directions.Top:
+                isTraversedVertical = false;
                 collidesFromAbove = false;
                 collidesFromBelow = false;
                 break;
             case directions.Bottom:
+                isTraversedVertical = false;
                 collidesFromAbove = false;
                 collidesFromBelow = false;
                 break;
             case directions.Left:
+                isTraversedHoriz = false;
                 collidesFromLeft = false;
                 collidesFromRight = false;
                 break;
             case directions.Right:
+                isTraversedHoriz = false;
                 collidesFromLeft = false;
                 collidesFromRight = false;
                 break;
