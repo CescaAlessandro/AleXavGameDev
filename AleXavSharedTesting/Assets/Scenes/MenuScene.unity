@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -847,7 +847,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3d19715ad7d515748950040f033db8e5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 108205f22be09e74c9bb3cddc9c9b36e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1715,7 +1715,14 @@ MonoBehaviour:
   levelCompleted: {fileID: 1233779386}
   dudeVoice: {fileID: 281160911}
   music: {fileID: 1521337193}
-  fsxMaxVolume: 0.001
+  musicMaxVolume: 0.2
+  electricZapMaxVolume: 0.08
+  lifeLossMaxVolume: 0.08
+  startDownloadMaxVolume: 0.08
+  attachDetachMaxVolume: 0.08
+  gameOverMaxVolume: 0.08
+  levelCompletedMaxVolume: 0.08
+  dudeVoiceMaxVolume: 0.3
 --- !u!1 &210525205
 GameObject:
   m_ObjectHideFlags: 0
@@ -2009,7 +2016,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 0a65de72948f37241b71e9b5d8b41cf2, type: 3}
+  m_audioClip: {fileID: 8300000, guid: d516a97fd1ddf4b4495c3341731fc3ae, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.25
   m_Pitch: 1
@@ -2166,7 +2173,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3d19715ad7d515748950040f033db8e5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 108205f22be09e74c9bb3cddc9c9b36e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3886,7 +3893,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3d19715ad7d515748950040f033db8e5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 108205f22be09e74c9bb3cddc9c9b36e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5360,7 +5367,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3d19715ad7d515748950040f033db8e5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 108205f22be09e74c9bb3cddc9c9b36e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5449,7 +5456,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3d19715ad7d515748950040f033db8e5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 108205f22be09e74c9bb3cddc9c9b36e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5733,7 +5740,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3d19715ad7d515748950040f033db8e5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 108205f22be09e74c9bb3cddc9c9b36e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8647,7 +8654,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3d19715ad7d515748950040f033db8e5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 108205f22be09e74c9bb3cddc9c9b36e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10542,7 +10549,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 24300002, guid: df8285ae4685db741850d727845fc63b, type: 2}
   m_audioClip: {fileID: 8300000, guid: 7e64c5def40b00749af7950771c64a4c, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -11557,7 +11564,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 03133cc6c288b9848ad57da93a83b21c, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.25
+  m_Volume: 0.05
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -11698,7 +11705,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3d19715ad7d515748950040f033db8e5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 108205f22be09e74c9bb3cddc9c9b36e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12116,7 +12123,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3d19715ad7d515748950040f033db8e5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 108205f22be09e74c9bb3cddc9c9b36e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12334,7 +12341,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3d19715ad7d515748950040f033db8e5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 108205f22be09e74c9bb3cddc9c9b36e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

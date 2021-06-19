@@ -47,7 +47,7 @@ public class SaveManager : MonoBehaviour
         //UnlockLevel("Level 4"); 
         //UnlockLevel("Level 5");
         //UnlockLevel("Level 6");
-        UnlockLevel("Level 7");
+        //UnlockLevel("Level 7");
         #endregion
 
         levelSelectionMenuObject.UpdateLevels();
