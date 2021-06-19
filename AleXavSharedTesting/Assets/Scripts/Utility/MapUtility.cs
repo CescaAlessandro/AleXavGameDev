@@ -73,7 +73,7 @@ public static class MapUtility
             if (collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)].collidesFromAbove)
             {
                 //Se la casella che si sta tentando di entrare non consente l'entrata dalla direzione verticale
-                PrintCollisionMap();
+                //PrintCollisionMap();
                 if(TrailManager.Instance().isLastMove(new Vector3(((currentX * 100) - 400) * (-1f), 0, currentY * 100 - 500)))
                 {
                     //Se la casella che si sta tentando di entrare e' l'ultima mossa -> rimuovo l'ultimo punto e mi muovo sulla casella tenendo conto di eventuali modifiche dovute al tipo di casella
@@ -128,7 +128,7 @@ public static class MapUtility
             if (collisionMap[(int)Math.Round(currentY, 0), (int)Math.Round(currentX, 0)].collidesFromLeft)
             {
                 //Se riscontro una collisione
-                PrintCollisionMap();
+                //PrintCollisionMap();
                 //Debug.Log(TrailManager.Instance().getLastMove());
                 if (TrailManager.Instance().isLastMove(new Vector3(((currentX * 100) - 400) * (-1f), 0, (currentY * 100) - 500)))
                 {
@@ -169,7 +169,7 @@ public static class MapUtility
                 }
             }
         }
-        PrintCollisionMap();
+        //PrintCollisionMap();
         //Debug.Assert(bestLocation == new Vector3(finish.Item1, 0, finish.Item2),"Target Position not reached");
         //Debug.Log(bestLocation);
 

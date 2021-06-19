@@ -20,12 +20,12 @@ public class DudeBehaviour : MonoBehaviour
     private Flux f2;
     private bool colorTipGiven = false;
     private bool bridgeTipGiven = false;
-    
+
     //for 5th tutorial
-    private bool usingHole;
-    private bool colorCommented = false;
-    private bool NearHoleCommented = false;
-    private bool holeUsed = false;
+    //private bool usingHole;
+    //private bool colorCommented = false;
+    //private bool NearHoleCommented = false;
+    //private bool holeUsed = false;
     private Pin pinToConnect;
     
     //Dude sprites
@@ -68,7 +68,7 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationBridgePartOne];
             spriteRenderer.sprite = dudeHappy;
         }
-        else if (sceneName.Equals("Level 7"))
+        else if (sceneName.Equals("Level 6"))
         {
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartOne];
             spriteRenderer.sprite = dudeHappy;
@@ -101,7 +101,7 @@ public class DudeBehaviour : MonoBehaviour
             {
                 FourthTutorialBehavoiur();
             }
-            else if (sceneName.Equals("Level 7"))
+            else if (sceneName.Equals("Level 6"))
             {
                 FifthTutorialBehavoiur();
             }

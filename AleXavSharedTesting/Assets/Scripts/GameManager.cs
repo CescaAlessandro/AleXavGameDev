@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     private int maxLives = 3;
     private int lives;
     private int numberFluxesDepleteded;
+    private int numberFluxesSpawned;
     private bool levelCompleted;
 
     public static GameManager gm;
@@ -119,14 +120,23 @@ public class GameManager : MonoBehaviour
             MapUtility.setCollisionMap(bridge.transform.position.x, bridge.transform.position.z, bridgeInstance);
         }
         if (!preventFluxSpawning)
-            StartCoroutine(spawnRandomFluxesForever());
+        {
+            if (SceneManager.GetActiveScene().name == "Level 7")
+            {
+                StartCoroutine(spawnRandomFluxesForeverWithDoubleFlux());
+            }
+            else
+            {
+                StartCoroutine(spawnRandomFluxesForever());
+            }
+        }
 
         MapUtility.GamePaused = false;
     }
 
     void Update()
     {
-        if (CanWin && fluxesDepletedToWin == numberFluxesDepleteded && !levelCompleted)
+        if (CanWin && fluxesDepletedToWin < numberFluxesDepleteded && !levelCompleted)
         {
             levelCompleted = true;
             Dude.LevelCompletedBehaviour();
@@ -199,18 +209,63 @@ public class GameManager : MonoBehaviour
         }
     }
     //spawn fluxes on random pins with a fixed delay between them
-    private float fluxSpawnDelay = 20;
+    private float fluxSpawnDelay = 15;
     private List<Pin> spawnablePins;
     IEnumerator spawnRandomFluxesForever()
     {
         spawnablePins = MapUtility.UpperPins.ToList();
+        numberFluxesSpawned = 0;
         while (true)
         {
-            int ranInd = UnityEngine.Random.Range(0, spawnablePins.Count);
-            SpawnFluxIndex(spawnablePins.ElementAt(ranInd).Index);
-            spawnablePins.RemoveAll(pinA => pinA.Index == ranInd);
-            Debug.Log("Spawned at index: " + ranInd);
-            yield return new WaitForSecondsRealtime(fluxSpawnDelay);
+            if (numberFluxesSpawned<fluxesDepletedToWin)
+            {
+                int ranInd = UnityEngine.Random.Range(0, spawnablePins.Count);
+                SpawnFluxIndex(spawnablePins.ElementAt(ranInd).Index);
+                spawnablePins.RemoveAt(ranInd);
+                Debug.Log("Spawned at index: " + ranInd);
+                numberFluxesSpawned++;
+                yield return new WaitForSecondsRealtime(fluxSpawnDelay);
+            }
+        }
+    }
+    
+    //random fluxes with the chance of 2 fluxes at the same time
+    private int spawnDoubleFluxOnceEvery = 4;
+    IEnumerator spawnRandomFluxesForeverWithDoubleFlux()
+    {
+        spawnablePins = MapUtility.UpperPins.ToList();
+        numberFluxesSpawned = 0;
+        while (true)
+        {
+            if (numberFluxesSpawned < fluxesDepletedToWin)
+            {
+                int doubleFluxChance = UnityEngine.Random.Range(0, spawnDoubleFluxOnceEvery);
+                if (doubleFluxChance == 3)
+                {
+                    int ranInd1 = UnityEngine.Random.Range(0, spawnablePins.Count);
+                    int ranInd2 = ranInd1;
+                    while (ranInd1 == ranInd2)
+                    {
+                        ranInd2 = UnityEngine.Random.Range(0, spawnablePins.Count);
+                    }
+                    var pin1 = spawnablePins.ElementAt(ranInd1);
+                    var pin2 = spawnablePins.ElementAt(ranInd2);
+                    SpawnFluxIndex(pin1.Index);
+                    SpawnFluxIndex(pin2.Index);
+                    spawnablePins.Remove(pin1);
+                    spawnablePins.Remove(pin2);
+                    numberFluxesSpawned+=2;
+                }
+                else
+                {
+                    int ranInd = UnityEngine.Random.Range(0, spawnablePins.Count);
+                    SpawnFluxIndex(spawnablePins.ElementAt(ranInd).Index);
+                    spawnablePins.RemoveAt(ranInd);
+                    numberFluxesSpawned++;
+                    //Debug.Log("Spawned at index: " + ranInd);
+                }
+                yield return new WaitForSecondsRealtime(fluxSpawnDelay);
+            }
         }
     }
 
@@ -265,6 +320,11 @@ public class GameManager : MonoBehaviour
         if (!preventFluxSpawning)
         {
             spawnablePins.Add(MapUtility.UpperPins.ElementAt(flux.index));
+            foreach(Pin pin in spawnablePins)
+            {
+                Debug.Log(pin.Instance.name);
+            }
+            Debug.Log("");
         }
     }
     //Function to delete a flux (used in tutorials only)

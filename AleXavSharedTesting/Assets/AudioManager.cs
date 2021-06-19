@@ -50,7 +50,7 @@ public class AudioManager : MonoBehaviour
     }
     public void PlayAttachDetach()
     {
-        Debug.Log(attachDetach.volume);
+        //Debug.Log(attachDetach.volume);
         attachDetach.loop = false;
 
         attachDetach.Play();
