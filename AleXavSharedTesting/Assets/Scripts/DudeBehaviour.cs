@@ -68,7 +68,7 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationBridgePartOne];
             spriteRenderer.sprite = dudeHappy;
         }
-        else if (sceneName.Equals("Level 7"))
+        else if (sceneName.Equals("Level 6"))
         {
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartOne];
             spriteRenderer.sprite = dudeHappy;
@@ -101,7 +101,7 @@ public class DudeBehaviour : MonoBehaviour
             {
                 FourthTutorialBehavoiur();
             }
-            else if (sceneName.Equals("Level 7"))
+            else if (sceneName.Equals("Level 6"))
             {
                 FifthTutorialBehavoiur();
             }
