@@ -25,22 +25,30 @@ public class SaveManager : MonoBehaviour
         AudioManager.Instance().SetSfxVolume(sfxVol);
         var firstTimePlaying = PlayerPrefs.GetInt("First start", 1);
         if (firstTimePlaying == 1)
-        {
             firstStart = true;
-        }
         else
-        {
             firstStart = false;
-        }
         MenuManager.Instance().loadMainMenu();
         firstStart = false;
         PlayerPrefs.SetInt("First start", 0);
         UnlockLevel("Level 1");
-        //UnlockLevel("Level 7");
-        //debug only
+
+        #region Debug LockUnlock Levels
+
         //LockLevel("Level 2");
         //LockLevel("Level 3");
         //LockLevel("Level 4");
+        //LockLevel("Level 5");
+        //LockLevel("Level 6");
+        //LockLevel("Level 7");
+
+        //UnlockLevel("Level 2");
+        //UnlockLevel("Level 3");
+        //UnlockLevel("Level 4"); 
+        //UnlockLevel("Level 5");
+        //UnlockLevel("Level 6");
+        UnlockLevel("Level 7");
+        #endregion
 
         levelSelectionMenuObject.UpdateLevels();
     }

@@ -138,10 +138,32 @@ public class MenuManager : MonoBehaviour
     public void LoadLevelCompleteMenu()
     {
         Time.timeScale = 0;
+        MapUtility.GamePaused = true;
         var nextLevelIndex = MapUtility.GetLevelNumber(SceneManager.GetActiveScene().name, "") + 1;
         string nextLevel = "Level " + nextLevelIndex;
         SaveManager.Instance().UnlockLevel(nextLevel);
         levelSelectionMenuObject.UpdateLevels();
+
+        //se livello successivo è l'8, next level non interagibile
+        if(nextLevelIndex == 8)
+        {
+            var panel = LevelCompleteMenu.transform.GetChild(0);
+            var buttonNextLevel = panel.GetChild(1);
+            var coomingSoon = panel.GetChild(2);
+
+            buttonNextLevel.gameObject.SetActive(false);
+            coomingSoon.gameObject.SetActive(true);
+        }
+        else
+        {
+            var panel = LevelCompleteMenu.transform.GetChild(0);
+            var buttonNextLevel = panel.GetChild(1);
+            var coomingSoon = panel.GetChild(2);
+
+            buttonNextLevel.gameObject.SetActive(true);
+            coomingSoon.gameObject.SetActive(false);
+        }
+
         LevelCompleteMenu.SetActive(true);
     }
     public void FromLevelCompleteToNextLevel()
@@ -160,7 +182,10 @@ public class MenuManager : MonoBehaviour
         LevelCompleteMenu.SetActive(false);
         var nextLevelIndex = MapUtility.GetLevelNumber(SceneManager.GetActiveScene().name, "") + 1;
         string nextLevel = "Level " + nextLevelIndex;
-        SaveManager.Instance().SaveLastScene(nextLevel);
+        //se livello successivo non è l'ultimo disponbile, 
+        //viene salvato per il pulsante 'continue'
+        if (nextLevelIndex != 8)
+            SaveManager.Instance().SaveLastScene(nextLevel);
         loadMainMenu();
         LevelManager.LoadLevel("MenuScene");
     }
@@ -174,6 +199,7 @@ public class MenuManager : MonoBehaviour
     public void LoadLevelFailedMenu()
     {
         Time.timeScale = 0;
+        MapUtility.GamePaused = true;
         LevelFailedMenu.SetActive(true);
     }
     public void FromLevelFailedToSelectionLevel()
