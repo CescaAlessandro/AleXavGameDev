@@ -27,9 +27,14 @@ public class DudeBehaviour : MonoBehaviour
     //private bool NearHoleCommented = false;
     //private bool holeUsed = false;
     private Pin pinToConnect;
-    
+
+    //for standard behaviour
+    private bool dudeHasSpokenDialogOne = false;
+    private bool dudeHasSpokenDialogTwo = false;
+    private bool dudeHasSpokenDialogThree = false;
+
     //Dude sprites
-    
+
     public bool fluxStartedDepletion;
     public Sprite dudeHappy;
     public Sprite dudeFine;
@@ -1094,45 +1099,49 @@ public class DudeBehaviour : MonoBehaviour
                     FluxDepletionBehaviour();
             }
 
-            if(lives == 3 && dialogFlowState == 0)
-            {
-                nextDialogTimer += Time.deltaTime; 
-            }
+            nextDialogTimer += Time.deltaTime; 
 
-            if(lives == 2 && dialogFlowState == 1)
+            if (lives == 3 && nextDialogTimer > 1)
             {
-                nextDialogTimer += Time.deltaTime; 
-            }
+                if(dudeHasSpokenDialogOne == false)
+                {
+                    dudeHasSpokenDialogOne = true;
+                    dudeHasSpokenDialogTwo = false;
+                    dudeHasSpokenDialogThree = false;
+                    AudioManager.Instance().PlayDudeVoice();
+                }
 
-            if (lives == 1 && dialogFlowState == 2)
-            {
-                nextDialogTimer += Time.deltaTime;
-            }
-
-            if (lives == 3 && dialogFlowState == 0 && nextDialogTimer > 1)
-            {
-                AudioManager.Instance().PlayDudeVoice();
-                dialogFlowState = 1;
                 nextDialogTimer = 0;
 
                 spriteRenderer.sprite = dudeFine;
                 textMesh.text = DialogsUtility.dialogs[DialogInstance.BeautifulDay];
             }
 
-            if (lives == 2 && dialogFlowState == 1 && nextDialogTimer > 1)
+            if (lives == 2 && nextDialogTimer > 1)
             {
-                AudioManager.Instance().PlayDudeVoice();
-                dialogFlowState = 2;
+                if(dudeHasSpokenDialogTwo == false)
+                {
+                    dudeHasSpokenDialogTwo = true;
+                    dudeHasSpokenDialogOne = false;
+                    dudeHasSpokenDialogThree = false;
+                    AudioManager.Instance().PlayDudeVoice();
+                }
                 nextDialogTimer = 0;
 
                 spriteRenderer.sprite = dudePissed;
                 textMesh.text = DialogsUtility.dialogs[DialogInstance.WhyLagging];
             }
-            if (lives == 1 && dialogFlowState == 2 && nextDialogTimer > 1)
+            if (lives == 1 && nextDialogTimer > 1)
             {
-                AudioManager.Instance().PlayDudeVoice();
-                dialogFlowState = 3;
+                if(dudeHasSpokenDialogThree == false)
+                {
+                    dudeHasSpokenDialogThree = true;
+                    dudeHasSpokenDialogOne = false;
+                    dudeHasSpokenDialogTwo = false;
+                    AudioManager.Instance().PlayDudeVoice();
+                }
 
+                nextDialogTimer = 0;
                 spriteRenderer.sprite = dudeWorried;
                 textMesh.text = DialogsUtility.dialogs[DialogInstance.RestartRouter];
             }
@@ -1159,8 +1168,9 @@ public class DudeBehaviour : MonoBehaviour
                 break;
         }
 
-        if(dialogFlowState > 0)
-            dialogFlowState--;
+        dudeHasSpokenDialogOne = false;
+        dudeHasSpokenDialogTwo = false;
+        dudeHasSpokenDialogThree = false;
 
         fluxStartedDepletion = false;
         nextDialogTimer = -2;
