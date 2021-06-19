@@ -13,7 +13,7 @@ public class DudeBehaviour : MonoBehaviour
     private float nextDialogTimer;
     private int dialogFlowState;
     private bool mistakeDone;
-    
+
     //for 4th tutorial
     private bool usingBridge;
     private Flux f1;
@@ -32,6 +32,8 @@ public class DudeBehaviour : MonoBehaviour
     private bool dudeHasSpokenDialogOne = false;
     private bool dudeHasSpokenDialogTwo = false;
     private bool dudeHasSpokenDialogThree = false;
+    private int currentLives;
+    private bool firstUpdate = true;
 
     //Dude sprites
 
@@ -88,6 +90,12 @@ public class DudeBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (firstUpdate)
+        {
+            currentLives = GameManager.Instance().GetCurrentLives();
+            firstUpdate = false;
+        }
+
         if (!MapUtility.GamePaused)
         {
             if (sceneName.Equals("Level 1"))
@@ -102,7 +110,7 @@ public class DudeBehaviour : MonoBehaviour
             {
                 ThirdTutorialBehavoiur();
             }
-            else if(sceneName.Equals("Level 5"))
+            else if (sceneName.Equals("Level 5"))
             {
                 FourthTutorialBehavoiur();
             }
@@ -114,7 +122,7 @@ public class DudeBehaviour : MonoBehaviour
             {
                 StandardBehavoiur();
             }
-        } 
+        }
     }
 
     public void FirstTutorialBehavoiur()
@@ -344,7 +352,7 @@ public class DudeBehaviour : MonoBehaviour
 
         //terzo dialogo
         if (blueUpperPin.IsConnected && !pinkUpperPin.IsConnected &&
-            (dialogFlowState == 2 || (dialogFlowState == 9 && nextDialogTimer >=5)))
+            (dialogFlowState == 2 || (dialogFlowState == 9 && nextDialogTimer >= 5)))
         {
             dialogFlowState = 3;
 
@@ -467,7 +475,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationPartOne];
         }
-        if(dialogFlowState == 1 && nextDialogTimer >= 8)
+        if (dialogFlowState == 1 && nextDialogTimer >= 8)
         {
             dialogFlowState = 2;
             nextDialogTimer = 0;
@@ -478,7 +486,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationPartTwo];
         }
-        if(dialogFlowState == 2 && nextDialogTimer >= 8)
+        if (dialogFlowState == 2 && nextDialogTimer >= 8)
         {
             dialogFlowState = 3;
             nextDialogTimer = 0;
@@ -489,7 +497,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationPartThree];
         }
-        if(dialogFlowState == 3 && nextDialogTimer >= 8)
+        if (dialogFlowState == 3 && nextDialogTimer >= 8)
         {
             dialogFlowState = 4;
             nextDialogTimer = 0;
@@ -500,7 +508,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeWorried;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationPartFour];
         }
-        if(dialogFlowState == 4 && nextDialogTimer >= 8)
+        if (dialogFlowState == 4 && nextDialogTimer >= 8)
         {
             dialogFlowState = 5;
             nextDialogTimer = 0;
@@ -513,7 +521,7 @@ public class DudeBehaviour : MonoBehaviour
 
             AudioManager.Instance().PlayLoopZap();
         }
-        if(dialogFlowState == 5 && nextDialogTimer >= 8)
+        if (dialogFlowState == 5 && nextDialogTimer >= 8)
         {
             AudioManager.Instance().StopZap();
 
@@ -526,7 +534,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeWorried;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationPartSix];
         }
-        if(dialogFlowState == 6 && nextDialogTimer >= 8)
+        if (dialogFlowState == 6 && nextDialogTimer >= 8)
         {
             dialogFlowState = 7;
             nextDialogTimer = 0;
@@ -537,7 +545,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationPartSeven];
         }
-        if(dialogFlowState == 7 && nextDialogTimer >= 8)
+        if (dialogFlowState == 7 && nextDialogTimer >= 8)
         {
             dialogFlowState = 8;
             nextDialogTimer = 0;
@@ -548,7 +556,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeWorried;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationPartEight];
         }
-        if(dialogFlowState == 8 && nextDialogTimer >= 8)
+        if (dialogFlowState == 8 && nextDialogTimer >= 8)
         {
             GameManager.Instance().SpawnFluxIndex(0);
 
@@ -561,7 +569,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeWow;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.HereItIs];
         }
-        if(dialogFlowState == 9 && nextDialogTimer >= 6)
+        if (dialogFlowState == 9 && nextDialogTimer >= 6)
         {
             dialogFlowState = 10;
             nextDialogTimer = 0;
@@ -572,7 +580,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeWink;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.NotScared];
         }
-        if((dialogFlowState == 10) && nextDialogTimer >= 6 && (!blueUpperPin.IsConnected || !blueLowerPin.IsConnected))
+        if ((dialogFlowState == 10) && nextDialogTimer >= 6 && (!blueUpperPin.IsConnected || !blueLowerPin.IsConnected))
         {
             dialogFlowState = 11;
 
@@ -582,11 +590,11 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.WhatAreYouWaitingFor];
         }
-        if((dialogFlowState == 11 || dialogFlowState == 10) && blueUpperPin.IsConnected && blueLowerPin.IsConnected)
+        if ((dialogFlowState == 11 || dialogFlowState == 10) && blueUpperPin.IsConnected && blueLowerPin.IsConnected)
         {
             dialogFlowState = 14;
         }
-        if((dialogFlowState == 14 || dialogFlowState == 13) && GameManager.Instance().GetNumberFluxesDepleteded() == 1)
+        if ((dialogFlowState == 14 || dialogFlowState == 13) && GameManager.Instance().GetNumberFluxesDepleteded() == 1)
         {
             GameManager.Instance().SpawnFluxIndex(0);
             GameManager.Instance().SpawnFluxIndex(1);
@@ -600,7 +608,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.DailyGoal];
         }
-        if((dialogFlowState == 14) && (!blueUpperPin.IsConnected || !blueLowerPin.IsConnected))
+        if ((dialogFlowState == 14) && (!blueUpperPin.IsConnected || !blueLowerPin.IsConnected))
         {
             dialogFlowState = 13;
 
@@ -610,7 +618,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudePissed;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.KindaSus];
         }
-        if(dialogFlowState == 12 && nextDialogTimer >= 8)
+        if (dialogFlowState == 12 && nextDialogTimer >= 8)
         {
             dialogFlowState = 15;
             nextDialogTimer = 0;
@@ -621,7 +629,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeWink;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ByTheWay];
         }
-        if(dialogFlowState == 15 && nextDialogTimer >= 50)
+        if (dialogFlowState == 15 && nextDialogTimer >= 50)
         {
             dialogFlowState = 13;
             nextDialogTimer = 0;
@@ -633,7 +641,7 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ALotTime];
         }
 
-        if(GameManager.Instance().GetNumberFluxesDepleteded() == 3 && dialogFlowState != -1)
+        if (GameManager.Instance().GetNumberFluxesDepleteded() == 3 && dialogFlowState != -1)
         {
             AudioManager.Instance().PlayLevelCompleted();
 
@@ -839,7 +847,7 @@ public class DudeBehaviour : MonoBehaviour
             f1 = GameManager.Instance().SpawnFluxIndex(2);
             dialogFlowState = 12;
         }
-        if(GameManager.Instance().GetNumberFluxesDepleteded() == 7)
+        if (GameManager.Instance().GetNumberFluxesDepleteded() == 7)
         {
             AudioManager.Instance().PlayLevelCompleted();
 
@@ -884,9 +892,9 @@ public class DudeBehaviour : MonoBehaviour
         }
 
         //wait for the first hole to be connected
-        
+
         //case wrong hole
-        if (nextDialogTimer >= 8 && dialogFlowState == 2 &&  hole2.IsConnected && !hole1.IsConnected)
+        if (nextDialogTimer >= 8 && dialogFlowState == 2 && hole2.IsConnected && !hole1.IsConnected)
         {
             pinToConnect = MapUtility.UpperPins.ElementAt(hole2.CableConnected.index);
             dialogFlowState = 3;
@@ -894,26 +902,26 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHoleWrongHole];
         }
-        
+
         //case right hole
         if (nextDialogTimer >= 8 && dialogFlowState == 2 && hole1.IsConnected)
         {
             pinToConnect = MapUtility.UpperPins.ElementAt(hole1.CableConnected.index);
             dialogFlowState = 3;
         }
-        
+
         //case hole not used
-        if (nextDialogTimer >= 8 && dialogFlowState == 2 && pinToConnect.IsConnected  
-            && hole1.CableConnected == null && hole2.CableConnected == null 
+        if (nextDialogTimer >= 8 && dialogFlowState == 2 && pinToConnect.IsConnected
+            && hole1.CableConnected == null && hole2.CableConnected == null
             && MapUtility.LowerPins.First(pin => pin.Instance.GetComponent<Renderer>().material.color == pinToConnect.Instance.GetComponent<Renderer>().material.color).IsConnected)
         {
             nextDialogTimer = 0;
             spriteRenderer.sprite = dudeWorried;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHoleNotUsed];
         }
-        
+
         //different pin used possibility
-        if(nextDialogTimer >= 4 && dialogFlowState == 3)
+        if (nextDialogTimer >= 4 && dialogFlowState == 3)
         {
             if (!(pinToConnect == redUpperPin))
             {
@@ -925,7 +933,7 @@ public class DudeBehaviour : MonoBehaviour
         }
 
         //both holes connected
-        if (nextDialogTimer >= 8 && dialogFlowState == 4 && 
+        if (nextDialogTimer >= 8 && dialogFlowState == 4 &&
             (hole1.IsConnected || hole2.IsConnected))
         {
             dialogFlowState = 5;
@@ -933,7 +941,7 @@ public class DudeBehaviour : MonoBehaviour
             spriteRenderer.sprite = dudeFine;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartFour];
         }
-        
+
         try
         {
             //Vedo se il pin dello stesso colore di quello scelto dall'utente è a sua volta collegato con il cavo
@@ -952,7 +960,7 @@ public class DudeBehaviour : MonoBehaviour
                 }
             }
 
-            if (hole1.IsConnected && hole2.IsConnected )
+            if (hole1.IsConnected && hole2.IsConnected)
             {
                 //se i due pin e i due buchi sono collegati tutti con cavi aventi lo stesso indice
                 if (nextDialogTimer >= 3 && dialogFlowState == 6
@@ -966,9 +974,9 @@ public class DudeBehaviour : MonoBehaviour
                     textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartSix];
                 }
             }
-            
+
             //i cavi vengono cambiati casualmente dall'utente nel mezzo del tutorial -> accetto i nuovi cavi/colori usati
-            if(dialogFlowState >= 7)
+            if (dialogFlowState >= 7)
             {
                 if (hole1.IsConnected && hole2.IsConnected)
                 {
@@ -1063,11 +1071,11 @@ public class DudeBehaviour : MonoBehaviour
     }
 
 
-    private bool cableColorsMatchOrNoConnection(Pin upperPin,List<Pin> lowerPins)
+    private bool cableColorsMatchOrNoConnection(Pin upperPin, List<Pin> lowerPins)
     {
         foreach (Pin lower in lowerPins)
         {
-            if(lower.CableConnected != null)
+            if (lower.CableConnected != null)
             {
                 if (lower.CableConnected == upperPin.CableConnected)
                 {
@@ -1090,20 +1098,25 @@ public class DudeBehaviour : MonoBehaviour
         if (!MapUtility.GamePaused)
         {
             var lives = GameManager.Instance().GetCurrentLives();
+            if(currentLives != lives)
+            {
+                currentLives = lives;
+                nextDialogTimer = 0;
+            }
 
             if (fluxStartedDepletion)
             {
                 nextDialogTimer += Time.deltaTime;
 
-                if(nextDialogTimer > 1)
+                if (nextDialogTimer > 1)
                     FluxDepletionBehaviour();
             }
 
-            nextDialogTimer += Time.deltaTime; 
+            nextDialogTimer += Time.deltaTime;
 
-            if (lives == 3 && nextDialogTimer > 1)
+            if (lives == 3 && nextDialogTimer > 2)
             {
-                if(dudeHasSpokenDialogOne == false)
+                if (dudeHasSpokenDialogOne == false)
                 {
                     dudeHasSpokenDialogOne = true;
                     dudeHasSpokenDialogTwo = false;
@@ -1117,9 +1130,9 @@ public class DudeBehaviour : MonoBehaviour
                 textMesh.text = DialogsUtility.dialogs[DialogInstance.BeautifulDay];
             }
 
-            if (lives == 2 && nextDialogTimer > 1)
+            if (lives == 2 && nextDialogTimer > 2)
             {
-                if(dudeHasSpokenDialogTwo == false)
+                if (dudeHasSpokenDialogTwo == false)
                 {
                     dudeHasSpokenDialogTwo = true;
                     dudeHasSpokenDialogOne = false;
@@ -1131,9 +1144,9 @@ public class DudeBehaviour : MonoBehaviour
                 spriteRenderer.sprite = dudePissed;
                 textMesh.text = DialogsUtility.dialogs[DialogInstance.WhyLagging];
             }
-            if (lives == 1 && nextDialogTimer > 1)
+            if (lives == 1 && nextDialogTimer > 2)
             {
-                if(dudeHasSpokenDialogThree == false)
+                if (dudeHasSpokenDialogThree == false)
                 {
                     dudeHasSpokenDialogThree = true;
                     dudeHasSpokenDialogOne = false;
@@ -1173,13 +1186,13 @@ public class DudeBehaviour : MonoBehaviour
         dudeHasSpokenDialogThree = false;
 
         fluxStartedDepletion = false;
-        nextDialogTimer = -2;
+        nextDialogTimer = -1;
     }
 
     public void GameOverBehaviour()
     {
         dialogFlowState = -1;
-        
+
         AudioManager.Instance().StopAllInGameSfx();
         AudioManager.Instance().PlayGameOver();
 
@@ -1210,8 +1223,7 @@ public class DudeBehaviour : MonoBehaviour
     public void LevelCompletedBehaviour()
     {
         dialogFlowState = -1;
-        //AudioManager.Instance().StopDudeVoice();
-        //AudioManager.Instance().PlayDudeVoice();
+
         AudioManager.Instance().StopAllInGameSfx();
         AudioManager.Instance().PlayLevelCompleted();
 
