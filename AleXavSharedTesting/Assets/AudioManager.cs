@@ -13,7 +13,14 @@ public class AudioManager : MonoBehaviour
     public AudioSource dudeVoice;
     public AudioSource music;
 
-    public float fsxMaxVolume = 0.5f;
+    public float musicMaxVolume = 0.2f;
+    public float electricZapMaxVolume = 0.08f;
+    public float lifeLossMaxVolume = 0.08f;
+    public float startDownloadMaxVolume = 0.08f;
+    public float attachDetachMaxVolume = 0.08f;
+    public float gameOverMaxVolume = 0.08f;
+    public float levelCompletedMaxVolume = 0.08f;
+    public float dudeVoiceMaxVolume = 0.4f;
 
     public static AudioManager am;
 
@@ -107,17 +114,17 @@ public class AudioManager : MonoBehaviour
     }
     public void SetMusicVolume(float volume)
     {
-        music.volume = volume;
+        music.volume = volume * musicMaxVolume;
     }
     public void SetSfxVolume(float volume)
     {
-        electricZap.volume = volume * 0.5f;
-        lifeLoss.volume = volume;
-        startDownload.volume = volume;
-        attachDetach.volume = volume;
-        dudeVoice.volume = volume;
-        gameOver.volume = volume;
-        levelCompleted.volume = volume;
+        electricZap.volume = volume * electricZapMaxVolume;
+        lifeLoss.volume = volume * lifeLossMaxVolume;
+        startDownload.volume = volume * startDownloadMaxVolume;
+        attachDetach.volume = volume * attachDetachMaxVolume;
+        dudeVoice.volume = volume * dudeVoiceMaxVolume;
+        gameOver.volume = volume * gameOverMaxVolume;
+        levelCompleted.volume = volume * levelCompletedMaxVolume;
     }
     public void StopAllInGameSfx()
     {
