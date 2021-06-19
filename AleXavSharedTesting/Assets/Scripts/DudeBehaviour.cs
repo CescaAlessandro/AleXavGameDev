@@ -718,7 +718,7 @@ public class DudeBehaviour : MonoBehaviour
             AudioManager.Instance().StopDudeVoice();
             AudioManager.Instance().PlayDudeVoice();
 
-            spriteRenderer.sprite = dudeFine;
+            spriteRenderer.sprite = dudeHappy;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.BridgeCrossHorizontally];
         }
         if (dialogFlowState == 5 && nextDialogTimer >= 4 && bridge.isTraversedHoriz && pinkUpperPin.IsConnected)
@@ -813,6 +813,7 @@ public class DudeBehaviour : MonoBehaviour
             f1 = GameManager.Instance().SpawnFluxIndex(2);
             f2 = GameManager.Instance().SpawnFluxIndex(1);
             nextDialogTimer = 0;
+            spriteRenderer.sprite = dudeWow;
 
             AudioManager.Instance().StopDudeVoice();
             AudioManager.Instance().PlayDudeVoice();
@@ -837,7 +838,7 @@ public class DudeBehaviour : MonoBehaviour
         {
             AudioManager.Instance().PlayLevelCompleted();
 
-            spriteRenderer.sprite = dudeHappy;
+            spriteRenderer.sprite = dudeWow;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.GoalReached];
 
             MapUtility.GamePaused = true;
@@ -956,7 +957,7 @@ public class DudeBehaviour : MonoBehaviour
                 {
                     dialogFlowState = 7;
                     nextDialogTimer = 0;
-                    spriteRenderer.sprite = dudeFine;
+                    spriteRenderer.sprite = dudeWorried;
                     textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartSix];
                 }
             }
@@ -1022,7 +1023,7 @@ public class DudeBehaviour : MonoBehaviour
             {
                 dialogFlowState = 13;
                 nextDialogTimer = 0;
-                spriteRenderer.sprite = dudeFine;
+                spriteRenderer.sprite = dudeWow;
                 textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartTwelve];
             }
         }
@@ -1051,7 +1052,7 @@ public class DudeBehaviour : MonoBehaviour
             MenuManager.Instance().LoadLevelCompleteMenu();
             dialogFlowState = -1;
             nextDialogTimer = 0;
-            spriteRenderer.sprite = dudeFine;
+            spriteRenderer.sprite = dudeWorried;
             textMesh.text = DialogsUtility.dialogs[DialogInstance.ExplanationHolePartFifteen];
         }
     }

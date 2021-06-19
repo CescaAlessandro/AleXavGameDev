@@ -170,6 +170,7 @@ public class ChipController : MonoBehaviour
                             MapUtility.SetWiring(false);
                             hole.IsConnected = true;
                             hole.CableConnected = chipCable;
+                            AudioManager.Instance().PlayAttachDetach();
                         }
                     }
                     else if (!MapUtility.IsChipWiring && MapUtility.isCollisionOnPointHole(transform.position))
@@ -222,6 +223,7 @@ public class ChipController : MonoBehaviour
                                 connectedHoles.ElementAt(0).IsConnected = false;
                                 connectedHoles.ElementAt(0).CableConnected.IsConnectedToCip = true;
                                 connectedHoles.ElementAt(0).CableConnected = null;
+                                AudioManager.Instance().PlayAttachDetach();
                             }
                             else if(connectedHoles.ElementAt(0).CableConnected.index != connectedHoles.ElementAt(1).CableConnected.index)
                             {
@@ -230,6 +232,7 @@ public class ChipController : MonoBehaviour
                                 newHole.IsConnected = false;
                                 newHole.CableConnected.IsConnectedToCip = true;
                                 newHole.CableConnected = null;
+                                AudioManager.Instance().PlayAttachDetach();
                             }
                         }
                     }

@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (CanWin && fluxesDepletedToWin < numberFluxesDepleteded && !levelCompleted)
+        if (CanWin && fluxesDepletedToWin <= numberFluxesDepleteded && !levelCompleted)
         {
             levelCompleted = true;
             Dude.LevelCompletedBehaviour();
@@ -217,15 +217,16 @@ public class GameManager : MonoBehaviour
         numberFluxesSpawned = 0;
         while (true)
         {
-            if (numberFluxesSpawned<fluxesDepletedToWin)
+            if (numberFluxesSpawned < fluxesDepletedToWin)
             {
                 int ranInd = UnityEngine.Random.Range(0, spawnablePins.Count);
                 SpawnFluxIndex(spawnablePins.ElementAt(ranInd).Index);
                 spawnablePins.RemoveAt(ranInd);
                 Debug.Log("Spawned at index: " + ranInd);
                 numberFluxesSpawned++;
-                yield return new WaitForSecondsRealtime(fluxSpawnDelay);
+                
             }
+            yield return new WaitForSecondsRealtime(fluxSpawnDelay);
         }
     }
     
@@ -264,8 +265,8 @@ public class GameManager : MonoBehaviour
                     numberFluxesSpawned++;
                     //Debug.Log("Spawned at index: " + ranInd);
                 }
-                yield return new WaitForSecondsRealtime(fluxSpawnDelay);
             }
+            yield return new WaitForSecondsRealtime(fluxSpawnDelay);
         }
     }
 
