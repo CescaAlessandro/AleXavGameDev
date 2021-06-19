@@ -20,12 +20,12 @@ public class DudeBehaviour : MonoBehaviour
     private Flux f2;
     private bool colorTipGiven = false;
     private bool bridgeTipGiven = false;
-    
+
     //for 5th tutorial
-    private bool usingHole;
-    private bool colorCommented = false;
-    private bool NearHoleCommented = false;
-    private bool holeUsed = false;
+    //private bool usingHole;
+    //private bool colorCommented = false;
+    //private bool NearHoleCommented = false;
+    //private bool holeUsed = false;
     private Pin pinToConnect;
     
     //Dude sprites

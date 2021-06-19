@@ -10,7 +10,7 @@ public class ChipController : MonoBehaviour
     public float gridSize = 1f;
     public GameObject cablePrefab;
     public Grid grid;
-    private int cableIndex = 0;
+    //private int cableIndex = 0;
 
     // Update is called once per frame
     void Update()
