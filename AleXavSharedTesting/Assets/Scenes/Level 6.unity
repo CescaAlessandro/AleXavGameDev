@@ -998,6 +998,7 @@ MonoBehaviour:
   fluxPrefab: {fileID: 7810289677318505576, guid: ba8af05337f0a8d40b0d5349b178f2a3, type: 3}
   spawnPoints: []
   livesSprites:
+  - {fileID: 21300000, guid: 90e2984eaa8a4c645b42263d9be14055, type: 3}
   - {fileID: 21300000, guid: 01ac510e9178dd247bbe5a6b72462798, type: 3}
   - {fileID: 21300000, guid: 82ce087798fda6649b9f107090941ebf, type: 3}
   - {fileID: 21300000, guid: 08c644e19cecf3b43bdebe7c54f47c09, type: 3}
