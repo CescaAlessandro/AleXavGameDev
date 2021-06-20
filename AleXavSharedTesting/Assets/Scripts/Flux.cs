@@ -28,8 +28,10 @@ public class Flux : MonoBehaviour
     // Based on which state the flux is either does nothing or moves towards the destination or depletes the trail
     void Update()
     {
-        if (!MapUtility.GamePaused)
-        {
+        if (!MapUtility.GamePaused)
+
+        {
+
         switch (state)
         {
             case FluxLifeState.Idle:
@@ -58,7 +60,8 @@ public class Flux : MonoBehaviour
             case FluxLifeState.Depleted:
                 //Debug.Log("Finish depletion");
                 break;
-            }
+            }
+
         }
     }
 

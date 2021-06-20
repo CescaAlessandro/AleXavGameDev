@@ -87,7 +87,7 @@ public static class DialogsUtility
 
         {DialogInstance.ExplanationHolePartTwo, "As you can see there are two holes on the board, cables can enter one and exit from the other" },
 
-        {DialogInstance.ExplanationHolePartThree, "Connect a cable to the red pin, bring it to the neareast hole and drop it." },
+        {DialogInstance.ExplanationHolePartThree, "Connect a cable to the red pin, bring it to the nearest hole and drop it." },
 
         {DialogInstance.ExplanationHolePartFour, "Now move yourself to the other hole to grab the cable" },
 

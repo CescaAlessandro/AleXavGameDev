@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
@@ -222,7 +221,7 @@ public class GameManager : MonoBehaviour
                 int ranInd = UnityEngine.Random.Range(0, spawnablePins.Count);
                 SpawnFluxIndex(spawnablePins.ElementAt(ranInd).Index);
                 spawnablePins.RemoveAt(ranInd);
-                Debug.Log("Spawned at index: " + ranInd);
+                //Debug.Log("Spawned at index: " + ranInd);
                 numberFluxesSpawned++;
                 
             }
@@ -321,11 +320,6 @@ public class GameManager : MonoBehaviour
         if (!preventFluxSpawning)
         {
             spawnablePins.Add(MapUtility.UpperPins.ElementAt(flux.index));
-            foreach(Pin pin in spawnablePins)
-            {
-                Debug.Log(pin.Instance.name);
-            }
-            Debug.Log("");
         }
     }
     //Function to delete a flux (used in tutorials only)
@@ -337,7 +331,7 @@ public class GameManager : MonoBehaviour
     }
     public void CheckForPossibleDepletion(Pin lPin)
     {
-        Debug.Assert(lPin != null, "It is null");
+        //Debug.Assert(lPin != null, "It is null");
         //var uPin = MapUtility.UpperPins.First(pin => pin.CableConnected.index == lPin.CableConnected.index);
         Pin uPin = new Pin();
         foreach (var pin in MapUtility.UpperPins)

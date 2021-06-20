@@ -9,6 +9,7 @@ public class MenuManager : MonoBehaviour
     public GameObject MainMenu;
     public GameObject LevelSelectMenu;
     public GameObject SettingsMenu;
+    public GameObject CreditsMenu;
     public GameObject FirstStartMainMenu;
     public GameObject LevelFailedMenu;
     public GameObject PauseMenu;
@@ -22,6 +23,7 @@ public class MenuManager : MonoBehaviour
     public bool DebugStart = false;
 
     public static MenuManager mm;
+    private bool goBackToFirstStart = false;
     public void Setup()
     {
         if(mm == null)
@@ -68,8 +70,23 @@ public class MenuManager : MonoBehaviour
     public void FromMainToSettings()
     {
         MainMenu.SetActive(false);
+        SettingsMenu.SetActive(true);
+    }
+    public void FromMainFirstStartToSettings()
+    {
+        goBackToFirstStart = true;
         FirstStartMainMenu.SetActive(false);
         SettingsMenu.SetActive(true);
+    }
+    public void FromSettingsToCredits()
+    {
+        SettingsMenu.SetActive(false);
+        CreditsMenu.SetActive(true);
+    }
+    public void FromCreditsToSettings()
+    {
+        SettingsMenu.SetActive(true);
+        CreditsMenu.SetActive(false);
     }
     public void FromMainToContinue()
     {
@@ -84,8 +101,16 @@ public class MenuManager : MonoBehaviour
     }
     public void FromSettingsToMain()
     {
-        SettingsMenu.SetActive(false);
-        loadMainMenu();
+        if (goBackToFirstStart)
+        {
+            SettingsMenu.SetActive(false);
+            FirstStartMainMenu.SetActive(true);
+        }
+        else
+        {
+            SettingsMenu.SetActive(false);
+            loadMainMenu();
+        }
     }
     public void FromLevelSelectToLevel(TMPro.TextMeshProUGUI levelName)
     {
