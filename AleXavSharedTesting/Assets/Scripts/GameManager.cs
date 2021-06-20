@@ -214,58 +214,70 @@ public class GameManager : MonoBehaviour
     {
         spawnablePins = MapUtility.UpperPins.ToList();
         numberFluxesSpawned = 0;
+
         while (true)
         {
-            if (numberFluxesSpawned < fluxesDepletedToWin)
+            if (!MapUtility.GamePaused)
             {
-                int ranInd = UnityEngine.Random.Range(0, spawnablePins.Count);
-                SpawnFluxIndex(spawnablePins.ElementAt(ranInd).Index);
-                spawnablePins.RemoveAt(ranInd);
-                //Debug.Log("Spawned at index: " + ranInd);
-                numberFluxesSpawned++;
-                
+                if (numberFluxesSpawned < fluxesDepletedToWin)
+                {
+                    int ranInd = UnityEngine.Random.Range(0, spawnablePins.Count);
+                    SpawnFluxIndex(spawnablePins.ElementAt(ranInd).Index);
+                    spawnablePins.RemoveAt(ranInd);
+                    //Debug.Log("Spawned at index: " + ranInd);
+                    numberFluxesSpawned++;
+
+                }
+                yield return new WaitForSeconds(fluxSpawnDelay);
             }
-            yield return new WaitForSecondsRealtime(fluxSpawnDelay);
+            else
+                yield return null;
         }
     }
-    
+
     //random fluxes with the chance of 2 fluxes at the same time
     private int spawnDoubleFluxOnceEvery = 4;
     IEnumerator spawnRandomFluxesForeverWithDoubleFlux()
     {
         spawnablePins = MapUtility.UpperPins.ToList();
         numberFluxesSpawned = 0;
+
         while (true)
         {
-            if (numberFluxesSpawned < fluxesDepletedToWin)
+            if (!MapUtility.GamePaused)
             {
-                int doubleFluxChance = UnityEngine.Random.Range(0, spawnDoubleFluxOnceEvery);
-                if (doubleFluxChance == 3)
+                if (numberFluxesSpawned < fluxesDepletedToWin)
                 {
-                    int ranInd1 = UnityEngine.Random.Range(0, spawnablePins.Count);
-                    int ranInd2 = ranInd1;
-                    while (ranInd1 == ranInd2)
+                    int doubleFluxChance = UnityEngine.Random.Range(0, spawnDoubleFluxOnceEvery);
+                    if (doubleFluxChance == 3)
                     {
-                        ranInd2 = UnityEngine.Random.Range(0, spawnablePins.Count);
+                        int ranInd1 = UnityEngine.Random.Range(0, spawnablePins.Count);
+                        int ranInd2 = ranInd1;
+                        while (ranInd1 == ranInd2)
+                        {
+                            ranInd2 = UnityEngine.Random.Range(0, spawnablePins.Count);
+                        }
+                        var pin1 = spawnablePins.ElementAt(ranInd1);
+                        var pin2 = spawnablePins.ElementAt(ranInd2);
+                        SpawnFluxIndex(pin1.Index);
+                        SpawnFluxIndex(pin2.Index);
+                        spawnablePins.Remove(pin1);
+                        spawnablePins.Remove(pin2);
+                        numberFluxesSpawned += 2;
                     }
-                    var pin1 = spawnablePins.ElementAt(ranInd1);
-                    var pin2 = spawnablePins.ElementAt(ranInd2);
-                    SpawnFluxIndex(pin1.Index);
-                    SpawnFluxIndex(pin2.Index);
-                    spawnablePins.Remove(pin1);
-                    spawnablePins.Remove(pin2);
-                    numberFluxesSpawned+=2;
+                    else
+                    {
+                        int ranInd = UnityEngine.Random.Range(0, spawnablePins.Count);
+                        SpawnFluxIndex(spawnablePins.ElementAt(ranInd).Index);
+                        spawnablePins.RemoveAt(ranInd);
+                        numberFluxesSpawned++;
+                        //Debug.Log("Spawned at index: " + ranInd);
+                    }
                 }
-                else
-                {
-                    int ranInd = UnityEngine.Random.Range(0, spawnablePins.Count);
-                    SpawnFluxIndex(spawnablePins.ElementAt(ranInd).Index);
-                    spawnablePins.RemoveAt(ranInd);
-                    numberFluxesSpawned++;
-                    //Debug.Log("Spawned at index: " + ranInd);
-                }
+                yield return new WaitForSeconds(fluxSpawnDelay);
             }
-            yield return new WaitForSecondsRealtime(fluxSpawnDelay);
+            else
+                yield return null;
         }
     }
 
@@ -276,7 +288,7 @@ public class GameManager : MonoBehaviour
 
         GameObject inst = GameObject.Instantiate(fluxPrefab, pin.FluxSpawnPoint.Item1, pin.FluxSpawnPoint.Item2, this.transform);
         inst.GetComponent<Flux>().index = index;
-        Vector3 destination = new Vector3(pin.AttachmentPoint.Item1.x, pin.AttachmentPoint.Item1.y, pin.AttachmentPoint.Item1.z - 100f); 
+        Vector3 destination = new Vector3(pin.AttachmentPoint.Item1.x, pin.AttachmentPoint.Item1.y, pin.AttachmentPoint.Item1.z - 100f);
         inst.GetComponent<Flux>().destination = destination;
         return inst.GetComponent<Flux>();
     }

@@ -225,7 +225,7 @@ public class ChipController : MonoBehaviour
                                 connectedHoles.ElementAt(0).CableConnected = null;
                                 AudioManager.Instance().PlayAttachDetach();
                             }
-                            else if(connectedHoles.ElementAt(0).CableConnected.index != connectedHoles.ElementAt(1).CableConnected.index)
+                            else if (connectedHoles.ElementAt(0).CableConnected.index != connectedHoles.ElementAt(1).CableConnected.index)
                             {
                                 //il buco su cui Chip si e' fermato non e' l'unico ma ci sono cavi diversi collegati ai due buchi -> scollego il cavo
                                 MapUtility.SetWiring(true);
@@ -245,7 +245,8 @@ public class ChipController : MonoBehaviour
                     Ray m_ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                     RaycastHit m_hit;
                     bool result = Physics.Raycast(m_ray, out m_hit);
-                    if (result)
+                    if (result &&
+                        Math.Abs(transform.position.x - m_hit.point.x) < 50 && Math.Abs(transform.position.z - m_hit.point.z) < 50)
                         pickedUpObject = m_hit.transform.gameObject;
                 }
             }
