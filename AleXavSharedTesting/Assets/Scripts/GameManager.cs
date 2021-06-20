@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
     public bool preventFluxSpawning;
     public DudeBehaviour Dude;
 
+    public Camera camera;
+
     private int maxLives = 3;
     private int lives;
     private int numberFluxesDepleteded;
@@ -33,6 +35,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        camera.orthographicSize = Screen.height * 800 / 1920;
+        //Dude.transform.GetChild(0).GetComponent<RectTransform>().position.
         gm = this;
         lives = maxLives;
         numberFluxesDepleteded = 0;
