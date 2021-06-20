@@ -51,28 +51,28 @@ public static class DialogsUtility
         {DialogInstance.DamnCable, "All we had to do, was wiring those damn pins, Chip!"},
         {DialogInstance.BeautifulDay, "It's a beautiful day outside."},
 
-        {DialogInstance.ExplanationBridgePartOne, "Hey Chip, today we expect a lot of data to come in. But we also have something new on the board to help us" },
+        {DialogInstance.ExplanationBridgePartOne, "Hey Chip, today we expect a lot of data to come in. But we also have something new on the board to help us." },
 
         {DialogInstance.ExplanationBridgePartTwo, "That's a bridge, cables can be laid both above and below it. This will allow us to cross cables." },
 
-        {DialogInstance.BridgeOrangePin, "Go to the orange pin to create a cable" },
+        {DialogInstance.BridgeOrangePin, "Go to the orange pin to create a cable." },
 
-        {DialogInstance.BridgeCrossVertically, "Now move through the bridge vertically to cross it from above" },
+        {DialogInstance.BridgeCrossVertically, "Now move through the bridge vertically to cross it from above." },
 
-        {DialogInstance.CompleteFirstCable, "Complete the cable connecting it to the orange pin" },
+        {DialogInstance.CompleteFirstCable, "Complete the cable connecting it to the orange pin." },
 
-        {DialogInstance.BridgeCrossHorizontally, "Good, now create a new cable on the pink pin and drag it across the bridge horizontally to pass underneath it" },
+        {DialogInstance.BridgeCrossHorizontally, "Good, now create a new cable on the pink pin and drag it across the bridge horizontally to pass underneath it." },
 
-        {DialogInstance.CompleteSecondCable, "Connect the cable to the lower pink pin" },
+        {DialogInstance.CompleteSecondCable, "Connect the cable to the lower pink pin." },
 
-        {DialogInstance.TwoFluxesArriving, "Two fluxing are arriving at the same time, without the bridge we couldn't catch both" },
+        {DialogInstance.TwoFluxesArriving, "Two fluxing are arriving at the same time, without the bridge we couldn't catch both." },
 
         {DialogInstance.FluxesMissed, "You missed those fluxes... No problem but try to catch the next ones." },
 
         {DialogInstance.NotUsingBridge, "Chip, you're not using the bridge, we won't be able to deal with so many fluxes without using it." },
         {DialogInstance.WrongColorsConnectedPartOne, "You connected the wrong pins, I thought you learned about pin colors three level ago."},
-        {DialogInstance.WrongColorsConnectedPartTwo, "Now please, disconnect those cables and connect them according to the pins' colors"},
-        {DialogInstance.BridgeUsedWellDone, "Ok, now that you learned how to use bridges, deal with the incoming fluxes to complete the level"},
+        {DialogInstance.WrongColorsConnectedPartTwo, "Now please, disconnect those cables and connect them according to the pins' colors."},
+        {DialogInstance.BridgeUsedWellDone, "Ok, now that you learned how to use bridges, deal with the incoming fluxes to complete the level."},
 
         { DialogInstance.Snake, "Chip, what happened? Chip!? CHIIIIIIIIIIIP!"},
         {DialogInstance.YouDied, "YOU DIED"},
@@ -83,35 +83,35 @@ public static class DialogsUtility
         {DialogInstance.FireInTheHole, "Fire in the hole!"},
         {DialogInstance.FusRohDah, "FUS ROH DAH!"},
 
-        {DialogInstance.ExplanationHolePartOne, "Hey Chip, are you excited? You'll learn how to use a new tool today" },
+        {DialogInstance.ExplanationHolePartOne, "Hey Chip, are you excited? You'll learn how to use a new tool today." },
 
-        {DialogInstance.ExplanationHolePartTwo, "As you can see there are two holes on the board, cables can enter one and exit from the other" },
+        {DialogInstance.ExplanationHolePartTwo, "As you can see there are two holes on the board, cables can enter one and exit from the other." },
 
         {DialogInstance.ExplanationHolePartThree, "Connect a cable to the red pin, bring it to the nearest hole and drop it." },
 
-        {DialogInstance.ExplanationHolePartFour, "Now move yourself to the other hole to grab the cable" },
+        {DialogInstance.ExplanationHolePartFour, "Now move yourself to the other hole to grab the cable." },
 
-        {DialogInstance.ExplanationHolePartFive, "Nice, now complete the cable attaching it to the lower pin with the same color" },
+        {DialogInstance.ExplanationHolePartFive, "Nice, now complete the cable attaching it to the lower pin with the same color." },
 
-        {DialogInstance.ExplanationHoleDifferentColor, "You chose a different color? That's fine i like that one too" },
+        {DialogInstance.ExplanationHoleDifferentColor, "You chose a different color? That's fine i like that one too." },
 
-        {DialogInstance.ExplanationHoleWrongHole, "That's not the nearest hole but ok, keep going" },
+        {DialogInstance.ExplanationHoleWrongHole, "That's not the nearest hole but ok, keep going." },
 
-        {DialogInstance.ExplanationHoleNotUsed, "Ok you connected the pins but now try doing it using the holes, so you learn how to use them" },
+        {DialogInstance.ExplanationHoleNotUsed, "Ok you connected the pins but now try doing it using the holes, so you learn how to use them." },
 
         {DialogInstance.ExplanationHolePartSix, "It seems there aren't any fluxes coming in today..." },
 
         {DialogInstance.ExplanationHolePartSeven, "Well, I'll teach you how to disconnect cables from holes and then we can call it a day, ok?" },
 
-        {DialogInstance.ExplanationHolePartEight, "So, disconnect the cable from the lower pin, same as usual" },
+        {DialogInstance.ExplanationHolePartEight, "So, disconnect the cable from the lower pin, same as usual." },
 
-        {DialogInstance.ExplanationHolePartNine, "Now drag and drop yourself to the hole to disconnect the cable you are holding" },
+        {DialogInstance.ExplanationHolePartNine, "Now drag and drop yourself to the hole to disconnect the cable you are holding." },
 
-        {DialogInstance.ExplanationHolePartTen, "To disconnect the second half of the cable go to the other hole" },
+        {DialogInstance.ExplanationHolePartTen, "To disconnect the second half of the cable go to the other hole." },
 
-        {DialogInstance.ExplanationHolePartEleven, "Ok, I think you know how to detach the cable from the upper pin" },
+        {DialogInstance.ExplanationHolePartEleven, "Ok, I think you know how to detach the cable from the upper pin." },
 
-        {DialogInstance.ExplanationHolePartTwelve, "Nice, you learned everything about holes" },
+        {DialogInstance.ExplanationHolePartTwelve, "Nice, you learned everything about holes." },
 
         {DialogInstance.ExplanationHolePartThirteen, "I heard from management that they are gonna bring in more pins for the next level..." },
 
