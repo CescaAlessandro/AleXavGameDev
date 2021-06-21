@@ -27,6 +27,7 @@ public static class MapUtility
 
     public static void SetWiring(bool flag)
     {
+        //IsChipWiring == true => Chip sta maneggiando un cavo
         IsChipWiring = flag;
     }
     public static void collisionMapBaseSetup()
@@ -246,19 +247,17 @@ public static class MapUtility
 
     public static int GetLevelNumber(string sceneName, string result)
     {
+        //i nomi delle scene livelli finiscono tutti con un numero
         char c = sceneName.Last();
         var sceneNameUpdated = sceneName.Remove(sceneName.Length-1);
 
         if (Char.IsDigit(c))
         {
             result = result + c;
-
             return GetLevelNumber(sceneNameUpdated, result);
         }
         else
-        {
             return int.Parse(result);
-        }
     }
     public static bool isCollisionOnPointHole(Vector3 point)
     {

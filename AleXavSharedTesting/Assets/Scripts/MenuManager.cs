@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
+    //riferimenti ai Canvas del menu
     public GameObject MainMenu;
     public GameObject LevelSelectMenu;
     public GameObject SettingsMenu;
@@ -41,11 +42,12 @@ public class MenuManager : MonoBehaviour
         return mm;
     }
 
+    //funzione per controllare se un menu è attivo (tranne quello di pausa)
     public bool GetMenusStatus()
     {
         return LevelFailedMenu.activeSelf || LevelCompleteMenu.activeSelf || AreYouSureMenu.activeSelf;
     }
-
+    #region Main Menu
     //loads the right main menu based on whether it's the first time the game is played or not
     public void loadMainMenu()
     {
@@ -60,7 +62,6 @@ public class MenuManager : MonoBehaviour
             LevelCompleteMenu.SetActive(false);
         }
     }
-
     public void FromMainToLevelSelect()
     {
         MainMenu.SetActive(false);
@@ -77,16 +78,6 @@ public class MenuManager : MonoBehaviour
         goBackToFirstStart = true;
         FirstStartMainMenu.SetActive(false);
         SettingsMenu.SetActive(true);
-    }
-    public void FromSettingsToCredits()
-    {
-        SettingsMenu.SetActive(false);
-        CreditsMenu.SetActive(true);
-    }
-    public void FromCreditsToSettings()
-    {
-        SettingsMenu.SetActive(true);
-        CreditsMenu.SetActive(false);
     }
     public void FromMainToContinue()
     {
@@ -122,6 +113,8 @@ public class MenuManager : MonoBehaviour
             LevelManager.LoadLevel(levelName.text);
         }
     }
+    #endregion
+    #region Pause Menu
     public void LoadPauseMenu()
     {
         Time.timeScale = 0;
@@ -153,13 +146,14 @@ public class MenuManager : MonoBehaviour
         AreYouSureMenu.SetActive(false);
         AudioManager.Instance().StopAllInGameSfx();
         LevelManager.LoadLevel(SceneManager.GetActiveScene().name);
-
     }
     public void NoAnswer()
     {
         PauseMenu.SetActive(true);
         AreYouSureMenu.SetActive(false);
     }
+    #endregion
+    #region Level Complete Menu
     public void LoadLevelCompleteMenu()
     {
         Time.timeScale = 0;
@@ -221,6 +215,8 @@ public class MenuManager : MonoBehaviour
         LevelCompleteMenu.SetActive(false);
         LevelManager.LoadLevel(SceneManager.GetActiveScene().name);
     }
+    #endregion
+    #region Level Failed Menu
     public void LoadLevelFailedMenu()
     {
         Time.timeScale = 0;
@@ -248,6 +244,8 @@ public class MenuManager : MonoBehaviour
         LevelFailedMenu.SetActive(false);
         LevelManager.LoadLevel(SceneManager.GetActiveScene().name);
     }
+    #endregion
+    #region Settings Methods
     public void MusicVolumeWidgetChanged(float volume)
     {
         SaveManager.SaveMusicVolume(volume);
@@ -266,4 +264,15 @@ public class MenuManager : MonoBehaviour
     {
         sfxSlider.SetValueWithoutNotify(value);
     }
+    public void FromSettingsToCredits()
+    {
+        SettingsMenu.SetActive(false);
+        CreditsMenu.SetActive(true);
+    }
+    public void FromCreditsToSettings()
+    {
+        SettingsMenu.SetActive(true);
+        CreditsMenu.SetActive(false);
+    }
+    #endregion
 }

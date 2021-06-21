@@ -36,7 +36,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         camera.orthographicSize = Screen.height * 800 / 1920;
-        //Dude.transform.GetChild(0).GetComponent<RectTransform>().position.
         gm = this;
         lives = maxLives;
         numberFluxesDepleteded = 0;
@@ -54,10 +53,11 @@ public class GameManager : MonoBehaviour
         var lowPins = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("LPin")).OrderBy(pin => pin.name).ToList();
         var upperPins = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("UPin")).OrderBy(pin => pin.name).ToList();
         var holes = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("Hole")).OrderBy(hole => hole.name).ToList();
-        var bridges = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("Bridge")).ToList();
-
-        var pinIndex = 0;
+        var bridges = MapUtility.GetAllObjectsOnlyInScene().Where(x => x.name.Contains("Bridge")).ToList();   
         MapUtility.collisionMapBaseSetup();
+
+        //per ogni lowPin trovato, creo un'istanza di Pin
+        var pinIndex = 0;
         foreach (var pin in lowPins)
         {
             var attachmentPosition = pin.transform.GetChild(0).position;
@@ -77,6 +77,7 @@ public class GameManager : MonoBehaviour
             pinIndex++;
         }
 
+        //per ogni upperPin trovato, creo un'istanza di Pin
         pinIndex = 0;
         foreach (var pin in upperPins)
         {
@@ -122,8 +123,10 @@ public class GameManager : MonoBehaviour
             MapUtility.Bridges.Add(bridgeInstance);
             MapUtility.setCollisionMap(bridge.transform.position.x, bridge.transform.position.z, bridgeInstance);
         }
+        //flag per prevenire lo spawn dei flussi, == true nei tutorial
         if (!preventFluxSpawning)
         {
+            //il livello 7 prevede la possibilità di spawnare due flussi contemporaneamente su due pin diversi
             if (SceneManager.GetActiveScene().name == "Level 7")
             {
                 StartCoroutine(spawnRandomFluxesForeverWithDoubleFlux());
@@ -139,12 +142,14 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        /*canWin == true se non è un tutorial, e quindi il 'level complete' è lanciato dal game manager raggiunta la condizione di vittoria */
         if (CanWin && fluxesDepletedToWin <= numberFluxesDepleteded && !levelCompleted)
         {
             levelCompleted = true;
             Dude.LevelCompletedBehaviour();
         }
 
+        //se premo Esc e non sono attivi altri menu => vado in pausa
         if (Input.GetKeyDown(KeyCode.Escape) && !MenuManager.Instance().GetMenusStatus())
         {
             MapUtility.GamePaused = true;
@@ -153,15 +158,18 @@ public class GameManager : MonoBehaviour
 
         if (!MapUtility.GamePaused)
         {
+            //quando collego un lower pin, controllo se il rispettivo upper pin ha un flusso in attesa
             foreach (var lPin in MapUtility.LowerPins.Where(pin => pin.IsConnected))
                 CheckForPossibleDepletion(lPin);
 
+            //attivo il suono zap e aggiorno il timer di richiesta per ogni flusso in Idle
             foreach (var flux in idleFluxes)
             {
                 AudioManager.Instance().PlayZap();
 
                 flux.requestTimer += Time.deltaTime;
 
+                //se il timer è sopra la soglia, si perde una vita
                 if (flux.requestTimer >= 5)
                 {
                     if (!preventLoosingLife)
@@ -198,7 +206,6 @@ public class GameManager : MonoBehaviour
     }
     public void LoseLives(int amount)
     {
-        ////Debug.Log("loseLife: " + lives);
         lives -= amount;
         if (lives > 0)
         {
@@ -306,7 +313,6 @@ public class GameManager : MonoBehaviour
         Dude.fluxStartedDepletion = true;
         idleFluxes.Remove(flux);
         depletingFluxes.Add(flux);
-        //onFluxDepletion();
     }
 
     //Pauses depletion of the flux when the cable is detached somewhere
@@ -338,6 +344,7 @@ public class GameManager : MonoBehaviour
             spawnablePins.Add(MapUtility.UpperPins.ElementAt(flux.index));
         }
     }
+
     //Function to delete a flux (used in tutorials only)
     public void DeleteFlux(Flux flux)
     {
@@ -347,25 +354,24 @@ public class GameManager : MonoBehaviour
     }
     public void CheckForPossibleDepletion(Pin lPin)
     {
-        //Debug.Assert(lPin != null, "It is null");
-        //var uPin = MapUtility.UpperPins.First(pin => pin.CableConnected.index == lPin.CableConnected.index);
         Pin uPin = new Pin();
         foreach (var pin in MapUtility.UpperPins)
         {
+            //estraggo il rispettivo upper pin collegato al lower pin
             if (pin.CableConnected != null)
             {
                 if (pin.CableConnected.index == lPin.CableConnected.index)
-                {
                     uPin = pin;
-                }
             }
         }
-        var possibleFluxWaiting = idleFluxes.FirstOrDefault(flux => flux.index == uPin.Index);
 
+        //vedo se c'è un flusso in attesa
+        var possibleFluxWaiting = idleFluxes.FirstOrDefault(flux => flux.index == uPin.Index);
         if (possibleFluxWaiting != null)
         {
+            //vedo se c'è un altro flusso nello stesso pin che nello stesso momento sta venendo esaurito
             var fluxDepletingSameIndex = depletingFluxes.FirstOrDefault(flux => flux.index == possibleFluxWaiting.index);
-
+            //se non lo trovo, e i pin collegati sono dello stesso colore, incomincio ad esaurire il flusso
             if (lPin.Instance.GetComponent<Renderer>().material.color == uPin.Instance.GetComponent<Renderer>().material.color &&
                 fluxDepletingSameIndex == null)
                 StartFluxDepletion(possibleFluxWaiting);
@@ -373,17 +379,16 @@ public class GameManager : MonoBehaviour
     }
     public void CheckForPossibleDepletionAtArrival(Flux arrivalFlux)
     {
+        //estraggo il rispettivo upper pin collegato al flusso
         var uPin = MapUtility.UpperPins.First(pin => pin.Index == arrivalFlux.index);
-
         if (uPin.IsConnected)
         {
+            //estraggo il rispettivo lower pin collegato al flusso
             var possibleLPin = MapUtility.LowerPins.FirstOrDefault(pin => pin.CableConnected == uPin.CableConnected);
-
-
             if (possibleLPin != null && possibleLPin.IsConnected)
             {
+                //se non c'è un altro flusso nello stesso pin che nello stesso momento sta venendo esaurito e se i pin collegati sono dello stesso colore
                 var fluxDepletingSameIndex = depletingFluxes.FirstOrDefault(flux => flux.index == arrivalFlux.index);
-
                 if (possibleLPin.Instance.GetComponent<Renderer>().material.color == uPin.Instance.GetComponent<Renderer>().material.color &&
                     fluxDepletingSameIndex == null)
                     StartFluxDepletion(arrivalFlux);
@@ -391,13 +396,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //funzione per stoppare l'esaurimento in corso di un flusso
     public void CheckForPossibleDepletionPauses(Pin lPin)
     {
         var uPin = MapUtility.UpperPins.FirstOrDefault(pin => pin.CableConnected == lPin.CableConnected);
         if (uPin != null)
         {
             var possibleDepletingFlux = depletingFluxes.FirstOrDefault(flux => flux.index == uPin.Index);
-
             if (possibleDepletingFlux != null)
                 PauseFluxDepletion(possibleDepletingFlux);
         }

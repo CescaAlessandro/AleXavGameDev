@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    //riferimenti agli audiosources
     public AudioSource electricZap;
     public AudioSource lifeLoss;
     public AudioSource startDownload;
@@ -41,6 +42,8 @@ public class AudioManager : MonoBehaviour
     {
         return am;
     }
+
+    #region Zap
     public void PlayZap()
     {
         electricZap.loop = false;
@@ -55,6 +58,13 @@ public class AudioManager : MonoBehaviour
         if (!electricZap.isPlaying)
             electricZap.Play();
     }
+    public void StopZap()
+    {
+        if (electricZap.isPlaying)
+            electricZap.Stop();
+    }
+    #endregion
+    #region Attach n' Detach
     public void PlayAttachDetach()
     {
         //Debug.Log(attachDetach.volume);
@@ -62,11 +72,8 @@ public class AudioManager : MonoBehaviour
 
         attachDetach.Play();
     }
-    public void StopZap()
-    {
-        if(electricZap.isPlaying)
-            electricZap.Stop();
-    }
+    #endregion
+    #region Download
     public void PlayStartDownload()
     {
         startDownload.loop = false;
@@ -77,6 +84,8 @@ public class AudioManager : MonoBehaviour
         if(startDownload.isPlaying)
             startDownload.Stop();
     }
+    #endregion
+    #region GameOver
     public void PlayGameOver()
     {
         gameOver.loop = false;
@@ -87,6 +96,8 @@ public class AudioManager : MonoBehaviour
         if(gameOver.isPlaying)
             gameOver.Stop();
     }
+    #endregion
+    #region Level Completed
     public void PlayLevelCompleted()
     {
         levelCompleted.loop = false;
@@ -94,9 +105,11 @@ public class AudioManager : MonoBehaviour
     }
     public void StopLevelCompleted()
     {
-        if(levelCompleted.isPlaying)
+        if (levelCompleted.isPlaying)
             levelCompleted.Stop();
     }
+    #endregion
+    #region Dude
     public void PlayDudeVoice()
     {
         dudeVoice.loop = false;
@@ -107,11 +120,15 @@ public class AudioManager : MonoBehaviour
         if(dudeVoice.isPlaying)
             dudeVoice.Stop();
     }
+    #endregion
+    #region Lose Life
     public void PlayLoseLife()
     {
         lifeLoss.loop = false;
         lifeLoss.Play();
     }
+    #endregion
+    #region General Methods
     public void SetMusicVolume(float volume)
     {
         music.volume = volume * musicMaxVolume;
@@ -134,4 +151,5 @@ public class AudioManager : MonoBehaviour
         StopStartDownload();
         StopZap();
     }
+    #endregion
 }

@@ -22,6 +22,7 @@ public class ChipController : MonoBehaviour
                 Vector3 MouseworldPoint = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 65.0f));
                 var currentPosition = grid.GetCellCenterWorld(grid.WorldToCell(new Vector3(MouseworldPoint.x, pickedUpObject.transform.position.y, MouseworldPoint.z)));
 
+                //muri invisibili
                 if (currentPosition.x < -400)
                     currentPosition.x = -400;
                 if (currentPosition.x > 400)
@@ -36,7 +37,7 @@ public class ChipController : MonoBehaviour
                 //eventuali collisioni vanno controllate solo se 
                 //Cip sta maneggiando un cavo 
                 //AND
-                //� presente pi� di un cavo sulla mappa
+                //è presente più di un cavo sulla mappa
                 if (currentPosition.x != transform.position.x || currentPosition.z != transform.position.z)
                 {
                     if (MapUtility.IsChipWiring)//&& MapUtility.Cables.Count >= 2)
@@ -52,7 +53,7 @@ public class ChipController : MonoBehaviour
                     }
                     else
                     {
-                        //durante il drag, se Chip � vicino ad un pin (e non sta collegando) viene automaticamente attaccato a quest'ultimo
+                        //durante il drag, se Chip è vicino ad un pin (e non sta collegando) viene automaticamente attaccato a quest'ultimo
                         //(drop on mobile)
                         if (MapUtility.IsPositionNearPin(currentPosition).Item1)
                         {
@@ -117,7 +118,7 @@ public class ChipController : MonoBehaviour
                                 IsConnectedToCip = true,
                                 index = pin.Index
                             };
-                            //cableIndex++;
+
                             MapUtility.Cables.Add(newCable);
 
                             MapUtility.SetWiring(true);
@@ -245,6 +246,8 @@ public class ChipController : MonoBehaviour
                     Ray m_ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                     RaycastHit m_hit;
                     bool result = Physics.Raycast(m_ray, out m_hit);
+                    //se l'hit del raycast è troppo lontano da Chip, non aggiorno il transform di Chip
+                    //(per evitare teletrasporti di Chip al click sullo schermo)
                     if (result &&
                         Math.Abs(transform.position.x - m_hit.point.x) < 50 && Math.Abs(transform.position.z - m_hit.point.z) < 50)
                         pickedUpObject = m_hit.transform.gameObject;

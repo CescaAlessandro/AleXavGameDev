@@ -13,10 +13,7 @@ public class SaveManager : MonoBehaviour
     public static SaveManager sm;
     public void Setup()
     {
-        //Add loading saves here
         sm = this;
-        
-        //menuManager.loadMainMenu();
         float musVol = PlayerPrefs.GetFloat("MusicVolume",1f);
         float sfxVol = PlayerPrefs.GetFloat("SfxVolume",1f);
         MenuManager.Instance().changeMusicVolumeWidgetValue(musVol);

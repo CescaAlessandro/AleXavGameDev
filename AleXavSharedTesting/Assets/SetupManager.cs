@@ -23,11 +23,8 @@ public class SetupManager : MonoBehaviour
     public void Setup() 
     {
         cb.Setup();
-
         am.Setup();
-
         mm.Setup();
-
         sm.Setup();
     }
 }

@@ -147,7 +147,7 @@ public class DudeBehaviour : MonoBehaviour
             textMesh.text = DialogsUtility.dialogs[DialogInstance.Pissed];
         }
 
-        //Dude ti da la possibilit� di rimediare (l'hai gi� fatto arrabbiare almeno una volta)
+        //Dude ti da la possibilità di rimediare (l'hai già fatto arrabbiare almeno una volta)
         if (nextDialogTimer >= 8 && !upperPin.IsConnected && !lowerPin.IsConnected &&
             dialogFlowState == 5)
         {
@@ -667,7 +667,7 @@ public class DudeBehaviour : MonoBehaviour
         var pinkLowerPin = MapUtility.LowerPins.ElementAt(0);
         var redLowerPin = MapUtility.LowerPins.ElementAt(1);
         var bridge = MapUtility.Bridges.ElementAt(0);
-        //primo dialogo
+
         if (nextDialogTimer >= 12 && dialogFlowState == 0)
         {
             dialogFlowState = 1;
@@ -1150,8 +1150,12 @@ public class DudeBehaviour : MonoBehaviour
 
             if (lives == 3 && nextDialogTimer > 2)
             {
+                //condizione per evitare che con l'update 
+                //l'audio venga chiamato all'infinito
                 if (dudeHasSpokenDialogOne == false)
                 {
+                    /* setto gli altri due dialoghi a false per 
+                       notificare il passaggio tra uno stato (dialogo) all'altro */
                     dudeHasSpokenDialogOne = true;
                     dudeHasSpokenDialogTwo = false;
                     dudeHasSpokenDialogThree = false;
@@ -1215,6 +1219,8 @@ public class DudeBehaviour : MonoBehaviour
                 break;
         }
 
+        /* una volta notificata la partenza del flusso, Dude torna al dialogo 
+           corrispondente alla vita corrente */
         dudeHasSpokenDialogOne = false;
         dudeHasSpokenDialogTwo = false;
         dudeHasSpokenDialogThree = false;
