@@ -195,12 +195,15 @@ public static class MapUtility
         return new Tuple<bool, Pin>(false, null);
     }
 
+    //converte x e y nelle coordinate della cella corrispondente della griglia, rende quella cella del tipo di collisione passato
     public static void setCollisionMap(float x,float y, CollisionEntity ce)
     {
         var MapConvertionX = ((-x) + 400) / 100;
         var MapConvertionY = (y + 500) / 100;
         collisionMap[(int)Math.Round(MapConvertionY, 0), (int)Math.Round(MapConvertionX, 0)] = ce;
     }
+    
+    //restituisce l'entita' di collisione relativa alla cella di coordinate x, y
     public static CollisionEntity getCollisionMap(float x, float y)
     {
         var MapConvertionX = ((-x) + 400) / 100;
@@ -259,6 +262,8 @@ public static class MapUtility
         else
             return int.Parse(result);
     }
+
+    //restituisce true se la cella indicata in point è occupata da un buco
     public static bool isCollisionOnPointHole(Vector3 point)
     {
         //Debug.Log("Hole Check");

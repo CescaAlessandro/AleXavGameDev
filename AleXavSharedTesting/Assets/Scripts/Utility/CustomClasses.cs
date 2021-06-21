@@ -42,17 +42,21 @@ public class Dialog
     public bool AlreadyShowed { get; set; } = false;
 }
 
+//classe root delle collisioni sulla board,
 public class CollisionEntity
 {
+    //questi bool indicano se si puo' entrare in questa casella da una specifica direzione
     public bool collidesFromAbove;
     public bool collidesFromBelow;
     public bool collidesFromLeft;
     public bool collidesFromRight;
+    //questi bool indicano se si puo' uscire dalla cella verso una specifica direzione
     public bool canBeExitedAbove;
     public bool canBeExitedBelow;
     public bool canBeExitedLeft;
     public bool canBeExitedRight;
 
+    //Costruttori per tipi standard di collisioni
     public static CollisionEntity getNoCollisionEntity()
     {
         var ent = new CollisionEntity();
@@ -114,22 +118,31 @@ public class CollisionEntity
         }
 
     }
+
+    //modifica i bool delle collisioni quando Chip entra in questa casella da una specifica direzione
     public virtual void PassingThrough(directions dir)
     {
+        //per le collsioni base la direzione e' indifferente
         collidesFromAbove = true;
         collidesFromBelow = true;
         collidesFromLeft = true;
         collidesFromRight = true;
     }
+    
+    //modifica i bool delle collisioni quando Chip esce da questa casella verso una direzione
     public virtual void Exiting(directions dir)
     {
+        //per le collsioni base la direzione e' indifferente
         collidesFromAbove = false;
         collidesFromBelow = false;
         collidesFromLeft = false;
         collidesFromRight = false;
     }
+
+    //restituisce un'eventuale modifica alla posizione di chip quando entra in questa casella
     public virtual Vector3 PassingThroughModifications(directions dir)
     {
+        //per le collsioni base non vi e' modifica
         return new Vector3(0, 0, 0);
     }
 }
@@ -146,10 +159,13 @@ public class Bridge : CollisionEntity
         collidesFromLeft = false;
         collidesFromRight = false;
     }
+
+    //
     public override void PassingThrough(directions dir)
     {
         switch (dir)
         {
+            //Se Chip entra da sopra o sotto, puo' comunque entrare lateralmente ma non puo' uscire lateralmente ("scendere dal ponte non dalle scale")
             case directions.Top:
                 isTraversedVertical = true;
                 collidesFromAbove = true;
@@ -168,6 +184,7 @@ public class Bridge : CollisionEntity
                 canBeExitedLeft = false;
                 canBeExitedRight = false;
                 break;
+            //Se Chip entra da destra o sinistra, puo' comunque entrare verticalmente ma non puo' uscire verticalmente ("attraversare le la parte delle scale da sotto")
             case directions.Left:
                 isTraversedHoriz = true;
                 collidesFromLeft = true;
@@ -190,6 +207,7 @@ public class Bridge : CollisionEntity
                 break;
         }
     }
+
     public override void Exiting(directions dir)
     {
         switch (dir)
@@ -218,6 +236,8 @@ public class Bridge : CollisionEntity
                 break;
         }
     }
+
+    //se Chip entra nel ponte verticalemente allora deve sollevarsi per passare sopra altrimenti non fare niente per passare sotto
     public override Vector3 PassingThroughModifications(directions dir)
     {
         if (dir == directions.Bottom || dir == directions.Top)
@@ -236,6 +256,9 @@ public class Hole : CollisionEntity
     public GameObject Instance { get; set; }
     public bool IsConnected { get; set; }
     public Cable CableConnected { get; set; }
+
+    //Le collisioni dei buchi soni come quelle di un full colision base ma non è possibile uscirne solo verso la direzione da cui si entra 
+    //(perche' quando si annulla la last move le collisioni sono ignorate)
     public Hole()
     {
         collidesFromAbove = false;
